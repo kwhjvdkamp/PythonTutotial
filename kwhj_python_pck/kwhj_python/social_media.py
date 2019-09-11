@@ -1,9 +1,11 @@
-# Import ParentClass object
-from .document import Document
-
 from collections import Counter
 
-# Private function
+# parent class
+from .document import Document
+
+# -------------------------------------------------------------------
+
+# private function
 def filter_word_counts(word_counts, first_char):
     """Filter Document.word_counts by the first character of the word
     
@@ -15,8 +17,9 @@ def filter_word_counts(word_counts, first_char):
     """
     return Counter({k: v for k, v in word_counts.items() if k[0] == first_char})
 
+# ===================================================================
 
-# Create a child class with inheritance
+# inherited class
 class SocialMedia(Document):
     def __init__(self, text):
         Document.__init__(self, text)
@@ -31,5 +34,8 @@ class SocialMedia(Document):
     def _count_mentions(self):
         # Filter attribute so only words starting with '@' remain
         return filter_word_counts(self.word_counts, first_char='@')
+
+# ===================================================================
+
 
 

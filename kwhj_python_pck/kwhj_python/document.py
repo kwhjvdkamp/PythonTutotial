@@ -3,7 +3,7 @@ from tokenizer import tokenize
 from collections import Counter
 
 
-# Define Document class
+# -------------------------------------------------------------------
 class Document:
     """A class for text analysis
     
@@ -26,3 +26,6 @@ class Document:
     def _count_words(self):
         # Use collections.Counter to count the document's tokens
         return Counter(self.tokens)
+
+# ===================================================================
+
