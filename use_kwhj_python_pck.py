@@ -16,10 +16,13 @@ from repository_lists import word_counts
 we_need_to_talk(break_up=False)
 
 
+# -------------------------------------------------------------------
 # Sum word_counts using sum_counters from text_analyzer
 word_count_totals = sum_counters(word_counts)
 print("word_count_totals: ", word_count_totals)
 
+
+# -------------------------------------------------------------------
 plot_counter(word_count_totals, 10)
 
 # ===================================================================
