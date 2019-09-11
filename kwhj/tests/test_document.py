@@ -1,7 +1,7 @@
 from collections import Counter
 
-# import kwhj
-from kwhj.kwhj_python import Document
+from kwhj.kwhj_python.document import Document
+
 # Tests on Document object
 # -------------------------------------------------------------------
 # blank document
@@ -10,12 +10,14 @@ def test_document_empty():
     assert doc.tokens == []
     assert doc.word_counts == Counter()
 
+
 # ------------------------------------------------------------------- 
 # attribute
 def test_document_tokens():
     doc = Document('a e i o u')
     assert doc.tokens == ['a', 'e', 'i', 'o', 'u']
-    
+
+  
 # ------------------------------------------------------------------- 
 # attribute
 def test_document_word_counts():

@@ -5,10 +5,13 @@ from collections import Counter
 
 # -------------------------------------------------------------------
 class Document:
-    """A class for text analysis
+    """Analyze text data from document
+
+    :param text: text to analyze
     
-    :param text: string of text to be analyzed
-    :ivar text: string of text to be analyzed; set by `text` parameter
+    :ivar text: text originally passed to the instance on creation
+    :ivar tokens: Parsed list of words from text
+    :ivar word_counts: Counter containing counts of hashtags used in text
     """
     # Method to create a new instance of Document
     def __init__(self, text, token_regex=r'[a-zA-z]+'):
