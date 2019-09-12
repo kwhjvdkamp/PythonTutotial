@@ -329,3 +329,35 @@
 # l1 = ['07/06/2019', '07/08/2019', '07/10/2019']
 # l1_time = pd.to_datetime(l1)
 # print(max(l1_time))
+
+# ==================================
+
+# import numpy as np
+# x = np.array([14, 21, 24, 24])
+# y = np.array([12, 6, 23, 29])
+# z = np.array([x, y])
+# print(z.shape)
+
+# ==================================
+
+# import numpy as np
+# y = np.array([[4, 5, 6],
+#               [11, 12, 13]])
+# print(np.transpose(y))
+# # OUTPUT
+# # # [[ 4 11]
+# # #  [ 5 12]
+# # #  [ 6 13]]
+
+# ==================================
+
+# import pandas as pd
+# planets = { 'planet': ['earth','mars'], 'dist_from_sun': ['1', '1.52'] } 
+# planets_df = pd.DataFrame(planets)
+# print(planets_df)
+# # # OUTPUT
+# # #    planet   dist_from_sun
+# # # 0   earth               1
+# # # 1    mars            1.52
+
+# ==================================
