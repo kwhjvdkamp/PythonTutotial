@@ -1,0 +1,3 @@
+collections
+numpy==1.15.4
+pycodestyle>=2.4.0

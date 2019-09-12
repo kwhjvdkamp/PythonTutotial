@@ -206,12 +206,14 @@
 # mean_costs = np.mean(costs[:,1])
 # print(mean_costs)
 
+# ==================================
 
 # # Remove the correct number from the list x
 # x = [9, 2, 8, 4, 5]
 # x.remove(9)
 # print(x)
 
+# ==================================
 
 # import numpy as np
 # x = np.array([14, 21, 24, 24])
@@ -221,6 +223,7 @@
 # print(z.dimensions) # OUTPUT: AttributeError: 'numpy.ndarray' object has no attribute 'dimensions'
 # print(z.shape) # OUTPUT: (2,4)
 
+# ==================================
 
 # import numpy as np
 # x = np.array([9, 5])
@@ -233,34 +236,40 @@
 # y = 'Data '
 # print(x + y)
 
+# ==================================
 
 # def find_type(**y):
 #     return type(y)
 # print(find_type(a = 'alpha', b = 'beta'))
 # # OUTPUT: <class 'dict'>
 
+# ==================================
 
 # int_list = [-2, 4, 1, 6, -3]
 # y = [x for x in int_list if x > 0]
 # print(x for x in int_list if x > 0)  #OUTPUT: <generator object <genexpr> at....>
 # print(y)    #OUTPUT: [4,1,6]
 
+# ==================================
 
 # x = [7, 'D', 'E', 8, 9, 'F']
 # strings = [x for x in x if type(x) == str]
 # print(strings)
 
+# ==================================
 
 # x = [2, 4, 1, 5]
 # squares = { i: i ** 2 for i in x}
 # print(squares)
 # {1: 1, 2: 4, 4: 16, 5: 25}
 
+# ==================================
 
 # x = [8, 'M', 'N', 3, 1, 'A']
 # integers = [j for j in x if type(j) == int ]
 # print(integers)
 
+# ==================================
 
 # x = [1, 2, 3, 4, 5]
 # print("First  (", x[0], ") item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
@@ -276,18 +285,33 @@
 # print("x[-5] ", x[-5], " item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("x[-6] >>> OUTPUT: list index out of range, length = ", len(x) ) 
 
+# ==================================
 
 # pip 19.2.2 from c:\xxx\xxx\appdata\local\programs\python\python37\lib\site-packages\pip (python 3.7)
-class NewClass:
-    num = 0
-    def __init__(self, num):
-        self.num = num
-    def __str__(self):
-        # return str(num) 
-        # is NOT CORRECT because NameError: name 'num' is not defined
-        return str(self.num)
+# class NewClass:
+#     num = 0
+#     def __init__(self, num):
+#         self.num = num
+#     def __str__(self):
+#         # return str(num) 
+#         # is NOT CORRECT because NameError: name 'num' is not defined
+#         return str(self.num)
 
+# nc = NewClass(3)
+# str(nc)
+# print("str(nc): ", str(nc))
 
-nc = NewClass(3)
-str(nc)
-print("str(nc): ", str(nc))
+# ==================================
+
+class Answers:
+    def __init__(self, girl_ans, boy_ans):
+        self.girl_ans = girl_ans
+        self.boy_ans = boy_ans
+    
+    def breakup(self):
+        if self.girl_ans == "yes" and self.boy_ans == 'yes':
+            return("i love you")
+        else:
+            return("break up")
+    
+Answers("no", "yes").breakup()
