@@ -130,15 +130,13 @@
 # print(z.shape)
 
 # import numpy as np
-# costs = np.column_stack(([2, 1, 2, 1], 
-#                          [4, 6, 5, 5]))
+# costs = np.column_stack(([2, 1, 2, 1], [4, 6, 5, 5]))
 # mean_costs = np.mean(costs[:,1])
 # print(mean_costs)
 
 
 # import numpy as np
-# x = np.array([[4, 1, 1],
-#               [5, 9, 0]])
+# x = np.array([[4, 1, 1], [5, 9, 0]])
 # for j in np.nditer(x):
 #     print(j)
 
@@ -193,8 +191,7 @@
 
 # # Find the mean of the second column of costs
 # import numpy as np
-# costs = np.column_stack(([2, 1, 2, 1], 
-#                          [4, 6, 5, 5]))
+# costs = np.column_stack(([2, 1, 2, 1], [4, 6, 5, 5]))
 # print(costs)
 # # [[2 4
 # #   1 6
@@ -303,15 +300,32 @@
 
 # ==================================
 
-class Answers:
-    def __init__(self, girl_ans, boy_ans):
-        self.girl_ans = girl_ans
-        self.boy_ans = boy_ans
+# class Answers:
+#     def __init__(self, girl_ans, boy_ans):
+#         self.girl_ans = girl_ans
+#         self.boy_ans = boy_ans
     
-    def breakup(self):
-        if self.girl_ans == "yes" and self.boy_ans == 'yes':
-            return("i love you")
-        else:
-            return("break up")
+#     def breakup(self):
+#         if self.girl_ans == "yes" and self.boy_ans == 'yes':
+#             return("I love you, yes!!!")
+#         else:
+#             return("Break up!!!")
     
-Answers("no", "yes").breakup()
+# print(Answers("no", "yes").breakup())
+
+# ==================================
+
+# import pandas as pd
+# p = ["SF", "PG", "PF"]
+# q= ["X", "Y", "Z"]
+# d = {'player': q, 'position': p}
+# df = pd.DataFrame(data = d)
+# print(df)
+
+# ==================================
+
+# import pandas as pd
+# from numpy import max
+# l1 = ['07/06/2019', '07/08/2019', '07/10/2019']
+# l1_time = pd.to_datetime(l1)
+# print(max(l1_time))

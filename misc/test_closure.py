@@ -16,6 +16,7 @@
 #   # Show that my_func()'s closure is not None
 #   print([cell.cell_contents for cell in my_func.__closure__])
   
+#============================================
   
 def return_a_func(arg1, arg2):
     def new_func():
