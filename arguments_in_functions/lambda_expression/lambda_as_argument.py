@@ -6,6 +6,7 @@ print("List of words: ", words)
 words.sort(key = lambda s: len(s))
 print("Words sorted by string length: ", words)
 
+
 print("#------------------------------")
 
 # Sort words by the last character in a string

@@ -1,35 +1,42 @@
+# Use on DataCamp to view a function which is preloaded into the environment of the example
 # import inspect
 # print(inspect.getsource(filter_word_counts)) 
 
-
-# msg = "Hello World"
-# print(msg)
+# ==================================
 
 # numbers = [1,2,7,0]
 # numbers_cumbed = [ n**3 for n in numbers]
-# 
 # print(list(zip(numbers, numbers_cumbed)))
+
+# ==================================
 
 # d = {}
 # d[3] = 6
 # print(d)
+
+# ==================================
 
 # d = {'a':0, 'b':1, 'c':2, 'd':3}
 # # insert the appropriate brackets
 # v = d['d']
 # print(v)
 
+# ==================================
+
 # n1 = [3, 5, 8, 1]
 # n2 = [n ** 2 for n in n1]
-
 # pairs = zip(n1, n2)
 # for idx, pair in enumerate(pairs):
 #     n, m = pair
 #     print('{} ^ {} = {}'.format(n, 2, m))
 
+# ==================================
+
 # d = {'a':20, 'b':21, 'c':22, 'd':23}
 # d['b'] = 2
 # print(d)
+
+# ==================================
 
 # escape_velocity = {
 #     'earth': 1,
@@ -39,9 +46,12 @@
 # del(escape_velocity['jupiter'])
 # print(escape_velocity)
 
+# ==================================
+
 # x = list(range(3))
 # print(x)
 
+# ==================================
 
 # def store_lower(_dict, _string):
 #     """Add a mapping between `_string` and a lowercased version of `_string` to `_dict`
@@ -54,15 +64,14 @@
 #     _string = _string.lower()
 #     _dict[orig_string] = _string
  
-
 # d = {}
 # s = 'Hello'
 # bla = store_lower(d, s)
 # print(bla)
 
+# ==================================
 
 # x = 50
-
 # def one():
 #   x = 10
 
@@ -78,6 +87,8 @@
 #   func()
 #   print(x)def return_a_func(arg1, arg2):
 
+# ==================================
+
 # import numpy as np
 
 # # np.correlation
@@ -87,11 +98,15 @@
 # y = np.array([0, 3, 8, 7])
 # print(np.corrcoef(x, y))
 
+# ==================================
+
 # import numpy as np
 # x = np.array([14, 21, 24, 24])
 # y = np.array([12, 6, 23, 29])
 # z = np.array([x, y])
 # print(z.shape)
+
+# ==================================
 
 # import collections
 # od = [('a',20), ('b',21), ('c',22)]
@@ -99,15 +114,18 @@
 # d.popitem()
 # print(d.items())
 
+# ==================================
 
 # z = [8,3,3,4,7,6]
 # p = z.pop(0)
 # print(p)
 
+# ==================================
 
 # l = [0, 3, 0, 3]
 # print(sorted(l))
 
+# ==================================
 
 # d = {'a':20, 'b':21, 'c':22, 'd':23}
 # for k,v in d.items():
@@ -117,11 +135,13 @@
 # for v in d.values():
 #     print(v)
 
+# ==================================
 
 # d = {'a':10, 'b':11, 'c':12, 'd':13}
 # v = d.get('a', 'Beep beep, error!')
 # print(v)
 
+# ==================================
 
 # import numpy as np
 # x = np.array([14, 21, 24, 24])
@@ -129,17 +149,21 @@
 # z = np.array([x, y])
 # print(z.shape)
 
+# ==================================
+
 # import numpy as np
 # costs = np.column_stack(([2, 1, 2, 1], [4, 6, 5, 5]))
 # mean_costs = np.mean(costs[:,1])
 # print(mean_costs)
 
+# ==================================
 
 # import numpy as np
 # x = np.array([[4, 1, 1], [5, 9, 0]])
 # for j in np.nditer(x):
 #     print(j)
 
+# ==================================
 
 # ratio_to_earth = { 
 #     'mercury': {'gravity': 0.378},
@@ -147,10 +171,14 @@
 # }
 # print(ratio_to_earth)
 
+# ==================================
+
 # import numpy as np
 # x = np.random.seed(42)
 # print(x)
 # # print(np.random.randint(14, 20))
+
+# ==================================
 
 # def add_zeros(string):
 #     """Returns a string padded with zeros to ensure consistent length"""
@@ -166,11 +194,13 @@
 
 # print ((add_zeros('3.4'), add_zeros('2.345')))
 
+# ==================================
 
 # x = [2, -6, 10, -7, 1]
 # greater_than_zero = filter(lambda n: (n > 0), x)
 # print(list(greater_than_zero))
 
+# ==================================
 
 # def add_numbers(x, y, z):
 #     print('x', x)
@@ -178,8 +208,10 @@
 #     print('z', z)
 #     a = x + y + z
 #     return a
+# 
 # add_numbers(2, 3, 4)
 
+# ==================================
 
 # def sorted_elements(x, desc=True, n=2):
 #     new_x = sorted(x, reverse=desc)[0:n]
@@ -188,15 +220,19 @@
 # a = [5, 5, 12, 12, 14, 7]
 # print(sorted_elements(a, desc = False))
 
+# ==================================
 
 # # Find the mean of the second column of costs
 # import numpy as np
 # costs = np.column_stack(([2, 1, 2, 1], [4, 6, 5, 5]))
 # print(costs)
+# # OUTPUT:
 # # [[2 4
 # #   1 6
 # #   2 5
 # #   1 5]]
+
+# ==================================
 
 # # [0,:] <>  [1,:] <> [:,0] <>  [:,1]
 # #   3   <>   3,5  <>  1,5  <>   5.0

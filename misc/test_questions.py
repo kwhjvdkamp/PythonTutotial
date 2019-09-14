@@ -1,8 +1,8 @@
 import numpy as np
-# OUTPUT needs to be [3.  4.  1.  0.  5.2]
 
-# x = np.array([3, 4, True, False, 5.2])
-# print(x)
+x = np.array([3, 4, True, False, 5.2])
+print(x)
+# OUTPUT needs to be [3.  4.  1.  0.  5.2]
 
 #============================================
 
@@ -72,7 +72,7 @@ import numpy as np
 # #   ..      print(next(generator_object))
 # #   ..      StopIteration
 
-# # ========================================================
+# ==================================
 
 # names = ['Thor Odinson', 'Steve Rogers']
 # avengers = list(enumerate(names, start = 2))
