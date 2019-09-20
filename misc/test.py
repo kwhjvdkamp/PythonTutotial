@@ -397,3 +397,36 @@
 # # # 1    mars            1.52
 
 # ==================================
+
+# scarlet_speedster = iter('Barry Allen')
+# print(*scarlet_speedster)   
+# # # prints the whole string stored in the iter-object at once, 
+# # there is the next functioni called a StopIteration-error is returned 
+# # when the preceding call on scarlet_speedster is prefixed with an asterix
+# print(next(scarlet_speedster))
+
+
+# ==================================
+
+# import numpy as np
+# m = np.array([2, 4, 6])
+# n = np.array([2, True, False])
+# print(m+n)      # OUTPUT: [4 5 6]
+# # print(m**n)     # OUTPUT: [4 4 1]
+# # print(m*n)      # OUTPUT: [4 4 0]
+
+# ==================================
+
+# teams = [['barry', 'cisco', 'caitlin'], ['oliver', 'john', 'felicity']]
+# print([member[-1] for member in teams])
+
+# ==================================
+
+# s1 = set([90, 4, 92, 91])
+# s2 = set([89, 7, 34, 84])
+# res = s1.difference(s2)       # OUTPUT: {90, 91, 4, 92} 
+# res = s1.intersection(s2)     # OUTPUT: set()
+# print(res)
+
+# ==================================
+
