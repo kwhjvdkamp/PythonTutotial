@@ -219,18 +219,64 @@
 
 # a = [5, 5, 12, 12, 14, 7]
 # print(sorted_elements(a, desc = False))
+# # OUTPUT: [5, 5]
 
 # ==================================
 
-# # Find the mean of the second column of costs
-# import numpy as np
-# costs = np.column_stack(([2, 1, 2, 1], [4, 6, 5, 5]))
+# p = [0, 5, 15, 5, 10, 8]
+# print(sorted(p, reverse=False))
+# # OUTPUT: [0, 5, 5, 8, 10, 15]
+
+# ==================================
+
+# x = 1
+# print(bool(x))
+# # OUTPUT: True
+# # print(int(x))
+# # OUTPUT: 1
+# # print(float(x))
+# # OUTPUT: 1.0
+# # print(log(x))
+# # OUTPUT: NameError: name 'log' is not defined
+
+# ==================================
+
+# x = [11, 12, 13, 14]
+# y = x
+# y[2:4] = [15, 16]
+# print(x)
+# # OUTPUT: [11, 12, 15, 16]
+
+# ==================================
+
+# Find the mean of the second column of costs
+import numpy as np
+costs = np.column_stack(([2, 1, 2, 1],  
+                         [4, 6, 5, 5]))
+#   |c1 c2
+# --|------                    
+#r1 | 2  4
+#r2 | 1  6
+#r3 | 2  5
+#r4 | 1  5
 # print(costs)
 # # OUTPUT:
 # # [[2 4
 # #   1 6
 # #   2 5
 # #   1 5]]
+# mean_costs_a = np.mean(costs[1, :]) #  all elements of row 2 >> (1+6)/2=3.5
+# print(mean_costs_a)
+# # OUTPUT: 3.5
+# mean_costs_b = np.mean(costs[:, 0]) #  all elements of column 1 >> (2+1+2+1)/4=1.5)
+# print(mean_costs_b)
+# # OUTPUT: 1.5
+# mean_costs_c = np.mean(costs[:, 1]) #  all elements of column 2 >> (4+6+5+5)/4=5.0)
+# print(mean_costs_c)
+# # OUTPUT: 5.0
+# mean_costs_d = np.mean(costs[0, :]) #  all elements of row 1 >> (2+4)/2=3.0)
+# print(mean_costs_d)
+# # OUTPUT: 3.0
 
 # ==================================
 
