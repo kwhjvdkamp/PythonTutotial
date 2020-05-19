@@ -4,7 +4,7 @@ def shift_string(string, shift):
     # Define a for loop with the yield statement
     for idx in range(0, len_string):
         yield string[(idx - shift) % len_string]
-       
+
 # Create a generator
 string = 'DataCamp'
 shift = 5
