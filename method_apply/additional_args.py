@@ -3,7 +3,7 @@ import pandas as pd
 from functools import reduce
 
 
-scores = {['gender': 
+scores = {'gender': 
 ['female', 'female', 'male', 'female', 'male', 'female', 'male', 'female', 'male', 'male', 
 'male', 'male', 'female', 'female', 'male', 'male', 'male', 'male', 'male', 'female', 
 'female', 'female', 'male', 'male', 'female', 'male', 'female', 'male', 'female', 'female', 
@@ -28,7 +28,7 @@ scores = {['gender':
 
 def rank(series):
     # Calculate the mean of the input series
-    mean = np.mean(series)
+    mean = pd.mean(series)
     # Return the mean and its rank as a list
     if mean > 90:
         return [mean, 'high']

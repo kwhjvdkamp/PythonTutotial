@@ -16,4 +16,4 @@ def calc_pi(n):
   
 
 # Compare the approximated Pi value to the theoretical one
-print("approx = {}, theor = {}".format(calc_pi(500), math.pi))
+print("approx = {}, theoretical = {}".format(calc_pi(500), math.pi))
