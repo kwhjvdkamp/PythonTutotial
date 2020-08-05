@@ -1,2 +1,66 @@
-msg = "Hello World"
-print(msg)
+
+# class Answer:
+#     def __init__(self, girl_ans, boy_ans):
+#         self.girl_ans = girl_ans
+#         self.boy_ans = boy_ans
+
+#     def breakup(self):
+#         if self.girl_ans == "yes" and self.boy_ans == "yes":
+#             return print("i love you")
+#         else: 
+#             return print('break up')
+
+# Answer('no', 'yes').breakup()
+
+
+# y = print(float('6'))
+# print (type(y))
+# help('Nonetype')
+
+# def sqrt(x):
+#     """Returns the square root of a number"""
+#     try:
+#         return x**(1/2)
+#     except #____:
+#         print('x must be int or float')
+# #____ = TypeError
+# print(sqrt('a'))
+
+# def cube(y):
+#     x = y ** 3
+#     return x
+
+# x=3
+# cube(x)
+# print(x)
+# # Answer is '3' because x is global defined cube(x) will deliver 27 but is not printed
+# y = cube(x)
+# print(y)
+
+# def rectangle(length, width):
+#     """Returns the area and perimeter of a rectangle"""
+#     a = length * width
+#     p = 2 * (length + width)
+#     return a, p
+
+# area, perimeter = rectangle(15 ,3)
+# print ((area, perimeter))
+
+# team = ['Barry', 'Dr. Wells', 'Cisco', 'Caitlin']
+# flash = iter(team)
+# print(next(flash))
+# print(next(flash))
+# # output
+# # Barry
+# # Dr. Wells
+
+# names = ['Thor Odinson', 'Steve Rogers']
+# avengers = list(enumerate(names, start = 2))
+# # output
+# # [(2, 'Thor Odinson', (3, 'Steve Rogers'))]
+
+# x = [7, 'D', 'E', 8, 9, 'F']
+# strings = [y for y in x if type(y) == str]
+# print(strings)
+
+
