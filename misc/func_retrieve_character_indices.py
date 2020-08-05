@@ -13,7 +13,7 @@ def retrieve_character_indices(string):
             print("Key: ", character)
             print("Index: ", index)
             character_indices[character] = [index]
-            
+
     return character_indices
-  
+
 print(retrieve_character_indices('enumerate an Iterable'))
