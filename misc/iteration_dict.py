@@ -1,21 +1,30 @@
-pets = {'Harry': 'Hedwig the owl', 'Hermione': 'Crookshanks the cat', 'Ron': 'Scabbers the rat'}
+pets = {
+    'Harry': 'Hedwig the owl', 
+    'Hermione': 'Crookshanks the cat', 
+    'Ron': 'Scabbers the rat'
+}
 
-# for key, value in pets.items():
-#     print("key:",key, "| value:", value)
+for key, value in pets.items():
+    print("key: ", key, "| value: ", value)
 
-# print("----------")
+print("----------")
 
 iter_pets = iter(pets)
-# next(iter_pets)
-# next(iter_pets)
-print(list(iter_pets))
-print(next(list(iter_pets)))
+print(next(iter_pets))
+print(next(iter_pets))
+print(next(iter_pets))
 
-# print("----------")
+print("----------")
 
-# print("Count items: ", len(pets.items()))
-# for i in range(len(pets.items())):
-#     print("Next ", i+1, " >> ", list(next(iter_pets)))
+# print(list(iter_pets))        # prints an empty list ([])
+# print(next(list(iter_pets)))    # prints TypeError: 'list' object is not an iterator
+
+print("----------")
+
+print("Count items: ", len(pets.items()))
+
+for i in range(len(pets.items())):
+    print("Next ", i+1, " >> ", list(next(iter_pets)))
 
 # print("Twice next(iter_pets): ", list(iter_pets))
 
