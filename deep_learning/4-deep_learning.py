@@ -1,44 +1,44 @@
 import numpy as np
 
-#----------------------------------------------------------------------- 
+#-----------------------------------------------------------------------
 #                        node_0
 # [0] --------(2)_------> |[]|xx
-#     xx      (1)zz-----> |  |  xx       
-#       xx  zz            |  |    (1)--->                   
+#     xx      (1)zz-----> |  |  xx
+#       xx  zz            |  |    (1)--->
 #         xz              |  |            []
-#       zz  xx            |  |    (1)-->  
+#       zz  xx            |  |    (1)-->
 #     zz      (1)xx----> |  |  ZZ
 # [3] --------(2)-------> |[]|zz
 #                        node_1
-#----------------------------------------------------------------------- 
+#-----------------------------------------------------------------------
 
 def relu(input):
     """Define your relu activation function here"""
     # Calculate the value for the output of the relu function: output
     # max(): called with an iterable, returns the largest item in it.
     output = max(0, input)
-    
+
     # Return the value just calculated
     return(output)
 
-#----------------------------------------------------------------------- 
+#-----------------------------------------------------------------------
 input_data = np.array([0, 3])
 weights =  {
-        "node_0":np.array([2, 1]), 
-        "node_1":np.array([1, 2]), 
+        "node_0":np.array([2, 1]),
+        "node_1":np.array([1, 2]),
         "output":np.array([1, 1])
 }
 
 print("input_data: ", input_data)
 print("weights: ", weights)
-#-----------------------------------------------------------------------        
+#-----------------------------------------------------------------------
 # Calculate node 0 value: node_0_value
 # print("weights[\"node_0\"]: ", weights["node_0"])
 node_0_value = (input_data * weights["node_0"]).sum()
 print("node_0_value: ", node_0_value)
 node_0_output = relu(node_0_value)
 print("node_0_output: (", input_data, " * " , weights["node_0"], ").sum() ) = ", node_0_output)
-    
+
 # Calculate node 1 value: node_1_value
 # print("weights[\"node_1\"]", weights["node_1"])
 node_1_value = (input_data * weights["node_1"]).sum()

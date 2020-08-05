@@ -1,13 +1,14 @@
-# Define the function with an arbitrary number of arguments
+# Define a function with an arbitrary number of arguments
 def sort_types(*args):
     nums, strings, bools = [], [], []
     for arg in args:
-        # Check if 'arg' is a number and add it to 'nums'
+        # Check if 'arg' is a number, add it to 'nums'-list
         if isinstance(arg, (int, float)):
             nums.append(arg)
+        # Check if 'arg' is a number, add it to 'bools'-list
         if isinstance(arg, (bool)):
             bools.append(arg)
-        # Check if 'arg' is a string and add it to 'strings'
+        # Check if 'arg' is a string, add it to 'strings'-list
         elif isinstance(arg, str):
             strings.append(arg)
     
