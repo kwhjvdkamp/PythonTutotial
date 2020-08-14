@@ -63,6 +63,7 @@ for i in range(1000):
 bins = np.arange(0, max(n_defaults) + 1.5) - 0.5
 
 # Plot the histogram with default number of bins; label your axes
+_ = plt.title('Probability according Bernoulli trials')
 _ = plt.hist(n_defaults, density = True, bins = bins)
 _ = plt.xlabel('Number of \'defaults\' (\'in gebreke zijnde\' ) out of 100 provided loans')
 _ = plt.ylabel('Probability')

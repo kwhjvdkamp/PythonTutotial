@@ -2,80 +2,81 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm
-from mpl_toolkits.mplot3d import Axes3D
-import seaborn as sns
 import pandas as pd
+import seaborn as sns
 
-# ==[1]======================
-from sklearn import datasets
+from mpl_toolkits.mplot3d import Axes3D
 from sklearn.decomposition import PCA
+
+# Import learning dataset from scikit-learn.org
+from def_iris import iris
 
 # Set default Seaborn style
 sns.set()
 
-# import some data to play with
-# https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html#sphx-glr-auto-examples-datasets-plot-iris-dataset-py
-iris = datasets.load_iris()
-# print (iris)
-# output: the complete dataframe
-
-# get the key names of the dataframe
-dataframe_keys = iris.keys()
-print('dataframe_keys:\r\n', dataframe_keys)
-# OUTPUT: dict_keys(['data', 'target', 'frame', 'target_names', 'DESCR', 'feature_names', 'filename'])
-
-# retrieve value of 'data'
-data = iris["data"][:, :3]
-print('dataframe_key: \'data\':\r\n', data)
-# # OUTPUT: all rows according [:,<column(s)>] and the first three columns according [<row(s)>, :3]
-# NOTE ['<row(s)>','<column(s)>']
-
-# retrieve what's in 'target'
+iris = iris()
+data = iris["data"][:, :4]
+# print(data)
 target = iris["target"]
-print('dataframe_key: \'target\':\r\n', target)
-
+# print(target)
 target_names = iris["target_names"]
-print('dataframe_key: \'target_names\':\r\n', target_names)
+print(target_names)
+df = pd.DataFrame(data, columns = ["sepal length (cm)", "sepal width (cm)", "petal length (cm)", "petal width (cm)"])
+# print(df)
 
-# subtract dataframe 'df'
-df = pd.DataFrame(data, columns = iris["target_names"])
-print('dataframe: \'df.head()\':\r\n', df.head())
-print('dataframe: \'statistics\': ', df.describe())
 
-# define scatter-plot: range of xAxis (Setosa) and yAxis (Versicolor)
-x_min, x_max = data[:, 0].min() - .5, data[:, 0].max() + .5
-print(x_min, x_max)
-y_min, y_max = data[:, 1].min() - .5, data[:, 1].max() + .5
-print(y_min, y_max)
-# z_min, z_max = data[:, 2].min() - .5, data[:, 2].max() + .5
-# print(z_min, z_max)
+# define scatter-plot:
+# Sepal (kelkblad) length (cm) <==> column 0 => X-Axis
+# Sepal (kelkblad) width (cm)  <==> column 1 => Y-Axis
 
+# ==[1]======================
 plt.figure(1, figsize = (8, 6))
 plt.clf()
 
+# print('============================')
+# Learning POINTS:
+# 1) df.iloc[:, 0:1] is the dataframe of the complete first column (incl. column_name)
+# 2) df.iloc[:, 0:1].values is its list of values
+sepal_length = df.iloc[:, 0:1].values
+# print(sepal_length[0:3])
+sepal_width = df.iloc[:, 1:2].values
+# print(sepal_width[0:3])
+# print('============================')
+
 # Plot the training points
-plt.scatter(data[:, 0], data[:, 1], c = target, edgecolor = 'k')
+plt.scatter(sepal_length, sepal_width, c = target, edgecolor = 'k', marker='.')
+
 plt.xlabel('Sepal (Kelkblad) length (cm)')
 plt.ylabel('Sepal (Kelkblad) width (cm)')
+
+x_min = df.iloc[:-1, 0:1].values.min() - .5
+x_max = df.iloc[:-1, 0:1].values.max() + .5
+print('X-axis\r\n', x_min, x_max)
+y_min = df.iloc[:-1, 1:2].values.min() - .5
+y_max = df.iloc[:-1, 1:2].values.max() + .5
+print('Y-axis\r\n', y_min, y_max)
 
 plt.xlim(x_min, x_max)
 plt.ylim(y_min, y_max)
 
-plt.xticks(())
-plt.yticks(())
+plt.xticks(sepal_length)
+plt.yticks(sepal_width)
+
+# plt.legend((target_names[0], target_names[1], target_names[2]), loc='upper left')
+plt.legend((target_names[0]), loc='upper left')
+# plt.legend((target_names[1]), loc='upper left')
+# plt.legend((target_names[2]), loc='upper left')
 
 # Plot histogram of versicolor petal lengths
-_ = plt.hist(iris)
-
 # ==[2]======================
-# Compute number of data points for versicolor: n_data
-data_versicolor = iris["data"][:, 1:2]
-n_data = len(data_versicolor)
-print('Versicolor: (', n_data,')\r\n', data_versicolor)
+# Compute number of df points for versicolor: n_data
+data_versicolor = df.iloc[:, 1:2].values
+n_flowers = len(data_versicolor)
+print('Versicolor: (', n_flowers,')\r\n', data_versicolor)
 
 # Number of bins is the square root of number of data points: n_bins, and
 # convert it to an integer: n_bins
-n_bins = int(np.sqrt(n_data))
+n_bins = int(np.sqrt(n_flowers))
 
 plt.figure(2, figsize=(8, 6))
 plt.clf()
@@ -89,7 +90,7 @@ _ = plt.ylabel('count')
 # ==[3]===============================================================
 # To getter a better understanding of interaction of the dimensions
 # plot the first three PCA dimensions
-pca = PCA(n_components = 3).fit_transform(iris["data"])
+pca = PCA(n_components = 3).fit_transform(df)
 print('Principal Component Analysis:\r\n', pca)
 
 fig = plt.figure(3, figsize = (8, 6))

@@ -1,80 +1,5 @@
 
 
-# Seed random number generator
-np.random.seed(42)
-
-# Initialize the number of defaults: n_defaults
-n_defaults = np.empty(1000)
-
-# Compute the number of defaults
-for i in range(1000):
-    n_defaults[i] = perform_bernoulli_trials(100, 0.05)
-
-# Plot the histogram with default number of bins; label your axes
-_ = plt.hist(n_defaults, normed=True)np.random.poisson((251/115), size=10000)
-_ = plt.xlabel('number of defaults out of 100 loans')
-_ = plt.ylabel('probability')
-
-# Show the plot
-plt.show()
-
-=================================================================================
-
-# In a histogram, the total range of data set (i.e from minimum value to maximum value)
-# is divided into 8 to 15 equal parts. These equal parts are known as bins or class intervals.
-
-# Compute bin edges: bins
-bins = np.arange(0, max(n_defaults) + 1.5) - 0.5
-
-# Generate histogram
-plt.hist(n_defaults, normed=True, bins=bins)
-
-# Label axes
-_ = plt.xlabel('petal length (cm)')
-_ = plt.ylabel('count')
-
-# Show the plot
-plt.show()
-
-
-# =========================================
-
-# Draw 100000 samples from Normal distribution with stds of interest: samples_std1, samples_std3, samples_std10
-samples_std1 = np.random.normal(20, 1, size=100000)
-samples_std3 = np.random.normal(20, 3, size=100000)
-samples_std10 = np.random.normal(20, 10, size=100000)
-
-b = 100
-# Make histograms
-plt.hist(samples_std1, normed=True, histtype='step', bins=b)
-plt.hist(samples_std3, normed=True, histtype='step', bins=b)
-plt.hist(samples_std10, normed=True, histtype='step', bins=b)
-_ = plt.xlabel('X (std)')
-_ = plt.ylabel('Y (probability)')
-
-# Make a legend, set limits and show plot
-_ = plt.legend(('std = 1', 'std = 3', 'std = 10'))
-plt.ylim(-0.01, 0.42)
-plt.show()
-
-# =======================================
-
-
-import numpy as np
-
-x = np.sort(df[key])
-
-y = np.arange(1, len(x) + 1) / len(x)
-
-_ = plt.plot(x, y, marker='.', linestyle='none')
-
-_ = plt.xlabel('label')
-_ = plt.ylabel('ECDF')
-
-plt.margins(0.02)	# Keeps data off plot edges
-plt.show()
-
-
 ======ECDF Function==============================================
 
 # (E)CDF	(Empirical) Cumulative Distribution Function
@@ -539,7 +464,7 @@ inter_nohitter_time = np.random.exponential(tau, 100000)
 
 # Plot the PDF and label axes
 _ = plt.hist(inter_nohitter_time,
-             normed=True, histtype='step', bins=50)
+             density=True, histtype='step', bins=50)
 _ = plt.xlabel('Games between no-hitters')
 _ = plt.ylabel('PDF')
 
@@ -838,7 +763,7 @@ for i in range(10000):
     bs_replicates[i] = bootstrap_replicate_1d((michelson_speed_of_light, np.mean)
 
 # Creating a histogram [PDF = Probability Distribution Function]
-_ = plt.hist(bs_replicates, normed=True, bins=30)
+_ = plt.hist(bs_replicates, density=True, bins=30)
 _ = plt.xlabel('Mean speed of light (km/s)')
 _ = plt.ylabel('PDF')
 
@@ -890,7 +815,7 @@ bs_std = np.std(bs_replicates)
 print(bs_std)
 
 # Make a histogram of the results
-_ = plt.hist(bs_replicates, bins=50, normed=True)
+_ = plt.hist(bs_replicates, bins=50, density=True)
 _ = plt.xlabel('mean annual rainfall (mm)')
 _ = plt.ylabel('PDF')
 
@@ -915,7 +840,7 @@ print('95% confidence interval =', conf_int, 'rain fall')
 # 95% confidence interval = [114.87926838 179.45385568] rain fall
 
 # Make a histogram of the results
-_ = plt.hist(bs_replicates, normed=True, bins=50)
+_ = plt.hist(bs_replicates, density=True, bins=50)
 _ = plt.xlabel('variance of annual rainfall (sq. cm)')
 _ = plt.ylabel('PDF')
 
@@ -946,7 +871,7 @@ print('95% confidence interval =', conf_int, 'games')
 # 95% confidence interval = [660.67280876 871.63077689] games
 
 # Plot the histogram of the replicates
-_ = plt.hist(bs_replicates, bins=50, normed=True)
+_ = plt.hist(bs_replicates, bins=50, density=True)
 _ = plt.xlabel(r'$\tau$ (games)')
 _ = plt.ylabel('PDF')
 
@@ -999,7 +924,7 @@ bs_slope_reps, bs_intercept_reps = draw_bs_pairs_linreg(illiteracy, fertility, 1
 print(np.percentile(bs_slope_reps, [2.5, 97.5]))
 
 # Plot the histogram
-_ = plt.hist(bs_slope_reps, bins=50, normed=True)
+_ = plt.hist(bs_slope_reps, bins=50, density=True)
 _ = plt.xlabel('slope')
 _ = plt.ylabel('PDF')
 plt.show()
