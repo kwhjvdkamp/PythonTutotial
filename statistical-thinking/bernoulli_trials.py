@@ -48,7 +48,7 @@ np.random.seed(100)
 # Initialize the number of defaults: n_defaults
 n_defaults = np.empty(1000, dtype = np.int)
 
-print(perform_bernoulli_trials(100, 0.05))
+# print(perform_bernoulli_trials(100, 0.05))
 
 # Compute the number of defaults
 for i in range(1000):
@@ -57,8 +57,8 @@ for i in range(1000):
 # print('Defaults':', n_defaults)
 
 # Plot the histogram with default number of bins; label your axes
-_ = plt.hist(n_defaults, density=True, bins=100)
-_ = plt.xlabel('Number of \'defaults\' (\'in gebreke zijnde\' ) out of 100 loanes')
+_ = plt.hist(n_defaults, density=True, bins=10)
+_ = plt.xlabel('Number of \'defaults\' (\'in gebreke zijnde\' ) out of 100 provided loans')
 _ = plt.ylabel('Probability')
 
 # Show the plot
