@@ -63,7 +63,7 @@ plt.xticks(sepal_length)
 plt.yticks(sepal_width)
 
 # plt.legend((target_names[0], target_names[1], target_names[2]), loc='upper left')
-plt.legend((target_names[0]), loc='upper left')
+plt.legend((target_names[0].iloc[0]), loc='upper left')
 # plt.legend((target_names[1]), loc='upper left')
 # plt.legend((target_names[2]), loc='upper left')
 
