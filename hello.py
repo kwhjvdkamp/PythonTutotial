@@ -65,3 +65,6 @@ import numpy as np
 # print(strings)
 sample = np.random.choice([5,6,7,8,9], size=5)
 print (sample, np.median(sample))
+
+random_number = np.random.random()
+print(random_number)
