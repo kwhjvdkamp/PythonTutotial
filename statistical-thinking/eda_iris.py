@@ -114,7 +114,7 @@ _ = plt.figure(figure_number, figsize = (8, 6))
 _ = plt.clf()
 
 _ = plt.scatter(iris_sepal_length, iris_sepal_width, c = target, edgecolor = 'face', marker='.')
-# _ = plt.scatter(iris_petal_length, iris_petal_width, c = target, edgecolor = 'face', marker='.')
+_ = plt.title('Distribution of Iris sepals (\'falls\') of three species')
 _ = plt.xlabel('Sepals (\'falls\') length (cm)')
 _ = plt.ylabel('Sepals (\'falls\') width (cm)')
 
@@ -127,9 +127,6 @@ y_max = df_iris_data.iloc[:, 1:2].values.max() + .5
 # print('Y-axis:', y_min, y_max)
 
 # Assign on each Axis the min and max value
-_ = plt.title('Distribution of Iris Sepals (\'falls\') length (cm) and width (cm) of three species')
-# _ = plt.legend((target_names[0], target_names[1], target_names[2]), loc='upper left')
-# _ = plt.legend('Iris', loc='upper right')
 _ = plt.xlim(x_min, x_max)
 _ = plt.ylim(y_min, y_max)
 
@@ -144,6 +141,7 @@ _ = plt.figure(figure_number, figsize = (8, 6))
 _ = plt.clf()
 
 _ = plt.scatter(iris_petal_length, iris_petal_width, c = target, edgecolor = 'face', marker='.')
+_ = plt.title('Distribution of Iris petals (\'standards\') of three species')
 _ = plt.xlabel('petals (\'standards\') length (cm)')
 _ = plt.ylabel('petals (\'standards\') width (cm)')
 
@@ -156,9 +154,6 @@ y_max = df_iris_data.iloc[:, 3:4].values.max() + .5
 # print('Y-axis:', y_min, y_max)
 
 # Assign on each Axis the min and max value
-_ = plt.title('Distribution of Iris petals length (cm) and width (cm) of three species')
-# _ = plt.legend((target_names[0], target_names[1], target_names[2]), loc='upper left')
-# _ = plt.legend('Iris', loc='upper right')
 _ = plt.xlim(x_min, x_max)
 _ = plt.ylim(y_min, y_max)
 
@@ -304,8 +299,6 @@ _ = plt.title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') i
 _ = plt.plot(x_setosa_sepal_width, y_setosa_sepal_width, marker='.', linestyle='none', color='black')
 _ = plt.plot(x_versicolor_sepal_width, y_versicolor_sepal_width, marker='.', linestyle='none', color='yellow')
 _ = plt.plot(x_virginica_sepal_width, y_virginica_sepal_width, marker='.', linestyle='none', color='red')
-
-# Label the axes
 _ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('ECDF')
@@ -332,8 +325,6 @@ _ = plt.title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\
 _ = plt.plot(x_setosa_length, y_setosa_length, marker='.', linestyle='none', color='black')
 _ = plt.plot(x_versicolor_length, y_versicolor_length, marker='.', linestyle='none', color='yellow')
 _ = plt.plot(x_virginica_length, y_virginica_length, marker='.', linestyle='none', color='red')
-
-# Label the axes
 _ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('ECDF')
@@ -360,8 +351,6 @@ _ = plt.title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\
 _ = plt.plot(x_setosa_width, y_setosa_width, marker='.', linestyle='none', color='black')
 _ = plt.plot(x_versicolor_width, y_versicolor_width, marker='.', linestyle='none', color='yellow')
 _ = plt.plot(x_virginica_width, y_virginica_width, marker='.', linestyle='none', color='red')
-
-# Label the axes
 _ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') width (cm)')
 _ = plt.ylabel('ECDF')
@@ -388,7 +377,7 @@ ax = Axes3D(fig, elev = -150, azim = 110)
 #             cmap=plt.cm.get_cmap('Reds'), edgecolor='k', s=40)
 ax.scatter(pca[:, 0], pca[:, 1], pca[:, 2], pca[:, 3], c = target,
             cmap=plt.cm.get_cmap('Reds'), edgecolor='k', s=40)
-
+ax.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 ax.set_title("Principal Component Analysis on Iris dataset")
 ax.set_xlabel("1st eigenvector")
 ax.w_xaxis.set_ticklabels([])
