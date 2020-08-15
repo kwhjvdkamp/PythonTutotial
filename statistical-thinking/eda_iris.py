@@ -25,7 +25,7 @@ figure_number = 0
 
 iris = iris()
 data = iris["data"][:, :4]
-print(data)
+# print(data)
 target = iris["target"]
 # print(target)
 target_names = iris["target_names"]
