@@ -107,6 +107,7 @@ virginica_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist(
 # print('Length\r'. virginica_petal_length, 'Width\r', virginica_petal_width)
 
 
+
 # Scatter Iris Sepals lengths
 # ==[1]=====================================================================================================
 figure_number = figure_number + 1
@@ -115,6 +116,7 @@ _ = plt.clf()
 
 _ = plt.scatter(iris_sepal_length, iris_sepal_width, c = target, edgecolor = 'face', marker='.')
 _ = plt.title('Distribution of Iris sepals (\'falls\') of three species')
+_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
 _ = plt.xlabel('Sepals (\'falls\') length (cm)')
 _ = plt.ylabel('Sepals (\'falls\') width (cm)')
 
@@ -134,6 +136,7 @@ _ = plt.xticks(np.arange(x_min, x_max, step=1))
 _ = plt.yticks(np.arange(y_min, y_max, step=1))
 
 
+
 # Scatter Iris petal lengths
 # ==[2]=====================================================================================================
 figure_number = figure_number + 1
@@ -142,6 +145,7 @@ _ = plt.clf()
 
 _ = plt.scatter(iris_petal_length, iris_petal_width, c = target, edgecolor = 'face', marker='.')
 _ = plt.title('Distribution of Iris petals (\'standards\') of three species')
+_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
 _ = plt.xlabel('petals (\'standards\') length (cm)')
 _ = plt.ylabel('petals (\'standards\') width (cm)')
 
@@ -160,7 +164,7 @@ _ = plt.ylim(y_min, y_max)
 _ = plt.xticks(np.arange(x_min, x_max, step=1))
 _ = plt.yticks(np.arange(y_min, y_max, step=1))
 
-# +++
+
 
 # Histogram of Iris sepal lengths (all three species)
 # ==[3]=====================================================================================================
@@ -270,8 +274,6 @@ _ = plt.title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') i
 _ = plt.plot(x_setosa_sepal_length, y_setosa_sepal_length, marker='.', linestyle='none', color='black')
 _ = plt.plot(x_versicolor_sepal_length, y_versicolor_sepal_length, marker='.', linestyle='none', color='yellow')
 _ = plt.plot(x_virginica_sepal_length, y_virginica_sepal_length, marker='.', linestyle='none', color='red')
-
-# Label the axes
 _ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('ECDF')
@@ -305,6 +307,7 @@ _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
 
 
+
 # (E)CDF) of petal lengths of the species
 # ==[9]=======================================================================================================
 figure_number = figure_number + 1
@@ -329,6 +332,7 @@ _ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper 
 _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
+
 
 
 # (E)CDF) of petal width of the species
@@ -363,7 +367,7 @@ _ = plt.locator_params(axis="both", integer=False, tight=True)
 # To getter a better understanding of interaction of the dimensions
 # plot the first three PCA dimensions
 pca = PCA(n_components = 4).fit_transform(df_iris_data)
-print('Principal Component Analysis:\r\n', pca)
+# print('Principal Component Analysis:\r\n', pca)
 # print(pca[:, 0], pca[:, 0:1])
 
 fig = plt.figure(figure_number + 1, figsize = (8, 6))
