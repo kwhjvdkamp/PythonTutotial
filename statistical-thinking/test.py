@@ -1,11 +1,11 @@
 # (E)CDF	(Empirical) Cumulative Distribution Function
 
-# Compute ECDFs
+# Compute ECDF
 x_set, y_set = ecdf(setosa_petal_length)
 x_vers, y_vers = ecdf(versicolor_petal_length)
 x_virg, y_virg = ecdf(virginica_petal_length)
 
-# Plot all ECDFs on the same plot
+# Plot all ECDF on the same plot
 _ = plt.plot(x_set, y_set, marker='.', linestyle='none')
 _ = plt.plot(x_vers, y_vers, marker='.', linestyle='none')
 _ = plt.plot(x_virg, y_virg, marker='.', linestyle='none')
