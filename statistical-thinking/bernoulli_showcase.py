@@ -20,11 +20,11 @@ def perform_bernoulli_trials(n, p):
         random_number = np.random.random()
         # If less than 'p', store a 'True' as 1 into 'n_success'-list
         if random_number < p :
-            # print('Loop', i + 1, 'of', n, '| p:',
-            #       p, '| Randomly chosen number:',  round(random_number, 5))
+            print('Loop', i + 1, 'of', n, '| p:',
+                  p, '| Randomly chosen number:',  round(random_number, 5))
             n_success.append(1)
 
-    # print('After the for-loop (\'for i in range(n)\'): ', n_success)
+    print('After the for-loop (\'for i in range(n)\'): ', n_success)
 
     return n_success
 # == [ BERNOULLI FUNCTION  END  ] ===============================================
