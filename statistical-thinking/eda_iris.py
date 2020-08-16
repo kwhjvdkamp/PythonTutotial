@@ -94,37 +94,46 @@ pd_df = pd.merge(df_iris_data, df_target, right_index=True, left_index=True)
 setosa_sepal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 2:3].values
-setosa_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_setosa))].iloc[:, 3:4].values
-# print('Length\r'. setosa_sepal_length, 'Width\r', setosa_sepal_width)
-versicolor_sepal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_versicolor))].iloc[:, 2:3].values
-versicolor_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_versicolor))].iloc[:, 3:4].values
-# print('Length\r'. versicolor_sepal_length, 'Width\r', versicolor_sepal_width)
-virginica_sepal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_virginica))].iloc[:, 2:3].values
-virginica_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_virginica))].iloc[:, 3:4].values
-# print('Length\r'. virginica_sepal_length, 'Width\r', virginica_sepal_width)
+setosa_sepal_width = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_setosa))].iloc[:, 3:4].values
+versicolor_sepal_length = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_versicolor))].iloc[:, 2:3].values
+versicolor_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_versicolor))].iloc[:, 3:4].values
+virginica_sepal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_virginica))].iloc[:, 2:3].values
+virginica_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_virginica))].iloc[:, 3:4].values
 
 # --[Petals]-------------------------------------------------
-setosa_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_setosa))].iloc[:, 2:3].values
-setosa_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_setosa))].iloc[:, 3:4].values
-# print('Length\r'. setosa_petal_length, 'Width\r', setosa_petal_width)
-versicolor_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_versicolor))].iloc[:, 2:3].values
-versicolor_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_versicolor))].iloc[:, 3:4].values
-# print('Length\r'. versicolor_petal_length, 'Width\r', versicolor_petal_width)
-virginica_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_virginica))].iloc[:, 2:3].values
-virginica_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_virginica))].iloc[:, 3:4].values
-# print('Length\r'. virginica_petal_length, 'Width\r', virginica_petal_width)
+setosa_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_setosa))].iloc[:, 2:3].values
+setosa_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_setosa))].iloc[:, 3:4].values
+versicolor_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_versicolor))].iloc[:, 2:3].values
+versicolor_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_versicolor))].iloc[:, 3:4].values
+virginica_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_virginica))].iloc[:, 2:3].values
+virginica_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_virginica))].iloc[:, 3:4].values
 
 
 
 # Scatter Iris Sepals lengths
-# ==[1]=====================================================================================================
+# ==[1]==================================================================================
 figure_number = figure_number + 1
 _ = plt.figure(figure_number, figsize = (8, 6))
 _ = plt.clf()
 
-_ = plt.scatter(iris_sepal_length, iris_sepal_width, c = target, edgecolor = 'face', marker='.')
+_ = plt \
+    .scatter(iris_sepal_length, iris_sepal_width, c = target, edgecolor = 'face', marker='.')
 _ = plt.title('Distribution of Iris sepals (\'falls\') of three species')
-_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
+_ = plt \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
 _ = plt.xlabel('Sepals (\'falls\') length (cm)')
 _ = plt.ylabel('Sepals (\'falls\') width (cm)')
 
@@ -146,14 +155,17 @@ _ = plt.yticks(np.arange(y_min, y_max, step=1))
 
 
 # Scatter Iris petal lengths
-# ==[2]=====================================================================================================
+# ==[2]==================================================================================
 figure_number = figure_number + 1
 _ = plt.figure(figure_number, figsize = (8, 6))
 _ = plt.clf()
 
-_ = plt.scatter(iris_petal_length, iris_petal_width, c = target, edgecolor = 'face', marker='.')
-_ = plt.title('Distribution of Iris petals (\'standards\') of three species')
-_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
+_ = plt \
+    .scatter(iris_petal_length, iris_petal_width, c = target, edgecolor = 'face', marker='.')
+_ = plt \
+    .title('Distribution of Iris petals (\'standards\') of three species')
+_ = plt \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
 _ = plt.xlabel('petals (\'standards\') length (cm)')
 _ = plt.ylabel('petals (\'standards\') width (cm)')
 
@@ -175,7 +187,7 @@ _ = plt.yticks(np.arange(y_min, y_max, step=1))
 
 
 # Histogram of Iris sepal lengths (all three species)
-# ==[3]=====================================================================================================
+# ==[3]==================================================================================
 # Compute number of df_iris_data points for versicolor: n_data
 
 figure_number = figure_number + 1
@@ -190,14 +202,15 @@ _ = plt.title('Distribution of Iris sepals (\'falls\') length (cm)')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
-_ = plt.legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+_ = plt \
+    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
 
 
 # Histogram of Iris sepal widths (all three species)
-# ==[4]=====================================================================================================
+# ==[4]==================================================================================
 # Compute number of df_iris_data points for versicolor: n_data
 
 figure_number = figure_number + 1
@@ -212,14 +225,15 @@ _ = plt.title('Distribution of Iris sepals (\'falls\') width (cm)')
 _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
-_ = plt.legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+_ = plt \
+    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
 
 
 # Histogram of Iris petal lengths (all three species)
-# ==[5]=====================================================================================================
+# ==[5]==================================================================================
 # Compute number of df_iris_data points for versicolor: n_data
 
 figure_number = figure_number + 1
@@ -234,14 +248,15 @@ _ = plt.title('Distribution of Iris petals (\'standards\') length (cm)')
 _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
-_ = plt.legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+_ = plt \
+    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
 
 
 # Histogram of Iris petal widths (all three species)
-# ==[6]=====================================================================================================
+# ==[6]==================================================================================
 # Compute number of df_iris_data points for versicolor: n_data
 
 figure_number = figure_number + 1
@@ -256,14 +271,15 @@ _ = plt.title('Distribution of Iris petals (\'standards\') width (cm)')
 _ = plt.xlabel('Iris petals (\'standards\') width (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
-_ = plt.legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+_ = plt \
+    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
 
 
 # (E)CDF) of sepal lengths of the species
-# ==[7]=======================================================================================================
+# ==[7]==================================================================================
 figure_number = figure_number + 1
 _ = plt.figure(figure_number, figsize=(8, 6))
 _ = plt.clf()
@@ -278,11 +294,16 @@ x_virginica_sepal_length, y_virginica_sepal_length = ecdf(virginica_sepal_length
 # Generate plot
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
-_ = plt.title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') in three species')
-_ = plt.plot(x_setosa_sepal_length, y_setosa_sepal_length, marker='.', linestyle='none', color='black')
-_ = plt.plot(x_versicolor_sepal_length, y_versicolor_sepal_length, marker='.', linestyle='none', color='yellow')
-_ = plt.plot(x_virginica_sepal_length, y_virginica_sepal_length, marker='.', linestyle='none', color='red')
-_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+_ = plt \
+    .title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') in three species')
+_ = plt \
+    .plot(x_setosa_sepal_length, y_setosa_sepal_length, marker='.', linestyle='none', color='black')
+_ = plt \
+    .plot(x_versicolor_sepal_length, y_versicolor_sepal_length, marker='.', linestyle='none', color='yellow')
+_ = plt \
+    .plot(x_virginica_sepal_length, y_virginica_sepal_length, marker='.', linestyle='none', color='red')
+_ = plt \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -290,7 +311,7 @@ _ = plt.locator_params(axis="both", integer=False, tight=True)
 
 
 # (E)CDF) of sepal width of the species
-# ==[8]=======================================================================================================
+# ==[8]==================================================================================
 figure_number = figure_number + 1
 _ = plt.figure(figure_number, figsize=(8, 6))
 _ = plt.clf()
@@ -305,11 +326,16 @@ x_virginica_sepal_width, y_virginica_sepal_width = ecdf(virginica_sepal_width)
 # Generate plot
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
-_ = plt.title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') in three species')
-_ = plt.plot(x_setosa_sepal_width, y_setosa_sepal_width, marker='.', linestyle='none', color='black')
-_ = plt.plot(x_versicolor_sepal_width, y_versicolor_sepal_width, marker='.', linestyle='none', color='yellow')
-_ = plt.plot(x_virginica_sepal_width, y_virginica_sepal_width, marker='.', linestyle='none', color='red')
-_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+_ = plt \
+    .title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') in three species')
+_ = plt \
+    .plot(x_setosa_sepal_width, y_setosa_sepal_width, marker='.', linestyle='none', color='black')
+_ = plt \
+    .plot(x_versicolor_sepal_width, y_versicolor_sepal_width, marker='.', linestyle='none', color='yellow')
+_ = plt \
+    .plot(x_virginica_sepal_width, y_virginica_sepal_width, marker='.', linestyle='none', color='red')
+_ = plt \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -317,7 +343,7 @@ _ = plt.locator_params(axis="both", integer=False, tight=True)
 
 
 # (E)CDF) of petal lengths of the species
-# ==[9]=======================================================================================================
+# ==[9]==================================================================================
 figure_number = figure_number + 1
 _ = plt.figure(figure_number, figsize=(8, 6))
 _ = plt.clf()
@@ -332,11 +358,16 @@ x_virginica_length, y_virginica_length = ecdf(virginica_petal_length)
 # Generate plot
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
-_ = plt.title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\') in three species')
-_ = plt.plot(x_setosa_length, y_setosa_length, marker='.', linestyle='none', color='black')
-_ = plt.plot(x_versicolor_length, y_versicolor_length, marker='.', linestyle='none', color='yellow')
-_ = plt.plot(x_virginica_length, y_virginica_length, marker='.', linestyle='none', color='red')
-_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+_ = plt \
+    .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\') in three species')
+_ = plt \
+    .plot(x_setosa_length, y_setosa_length, marker='.', linestyle='none', color='black')
+_ = plt \
+    .plot(x_versicolor_length, y_versicolor_length, marker='.', linestyle='none', color='yellow')
+_ = plt \
+    .plot(x_virginica_length, y_virginica_length, marker='.', linestyle='none', color='red')
+_ = plt \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -344,7 +375,7 @@ _ = plt.locator_params(axis="both", integer=False, tight=True)
 
 
 # (E)CDF) of petal width of the species
-# ==[10]=======================================================================================================
+# ==[10]=================================================================================
 figure_number = figure_number + 1
 _ = plt.figure(figure_number, figsize=(8, 6))
 _ = plt.clf()
@@ -359,11 +390,16 @@ x_virginica_width, y_virginica_width = ecdf(virginica_petal_width)
 # Generate plot
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
-_ = plt.title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\') in three species')
-_ = plt.plot(x_setosa_width, y_setosa_width, marker='.', linestyle='none', color='black')
-_ = plt.plot(x_versicolor_width, y_versicolor_width, marker='.', linestyle='none', color='yellow')
-_ = plt.plot(x_virginica_width, y_virginica_width, marker='.', linestyle='none', color='red')
-_ = plt.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+_ = plt \
+    .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\') in three species')
+_ = plt \
+    .plot(x_setosa_width, y_setosa_width, marker='.', linestyle='none', color='black')
+_ = plt \
+    .plot(x_versicolor_width, y_versicolor_width, marker='.', linestyle='none', color='yellow')
+_ = plt \
+    .plot(x_virginica_width, y_virginica_width, marker='.', linestyle='none', color='red')
+_ = plt \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') width (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
