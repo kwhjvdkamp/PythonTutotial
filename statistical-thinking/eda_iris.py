@@ -176,8 +176,8 @@ _ = plt.clf()
 
 # Plot the histogram and label axes
 _ = plt.hist(setosa_sepal_length, bins=round(n_bins/3), color='black')
-_ = plt.hist(versicolor_sepal_length, bins=n_bins, color='yellow')
-_ = plt.hist(virginica_sepal_length, bins=n_bins, color='red')
+_ = plt.hist(versicolor_sepal_length, bins=round(n_bins/3), color='yellow')
+_ = plt.hist(virginica_sepal_length, bins=round(n_bins/3), color='red')
 _ = plt.title('Distribution of Iris sepals (\'falls\') length (cm)')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('count')
