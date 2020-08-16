@@ -130,7 +130,8 @@ _ = plt.figure(figure_number, figsize = (8, 6))
 _ = plt.clf()
 
 _ = plt \
-    .scatter(iris_sepal_length, iris_sepal_width, c = target, edgecolor = 'face', marker='.')
+    .scatter(iris_sepal_length, iris_sepal_width, \
+        c = target, edgecolor = 'face', marker='.')
 _ = plt.title('Distribution of Iris sepals (\'falls\') of three species')
 _ = plt \
     .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper left')
@@ -161,7 +162,8 @@ _ = plt.figure(figure_number, figsize = (8, 6))
 _ = plt.clf()
 
 _ = plt \
-    .scatter(iris_petal_length, iris_petal_width, c = target, edgecolor = 'face', marker='.')
+    .scatter(iris_petal_length, iris_petal_width, \
+        c = target, edgecolor = 'face', marker='.')
 _ = plt \
     .title('Distribution of Iris petals (\'standards\') of three species')
 _ = plt \
@@ -203,7 +205,9 @@ _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
 _ = plt \
-    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+    .legend((target_names[0].capitalize() + bin_number, \
+        target_names[1].capitalize() + bin_number, \
+        target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
@@ -226,7 +230,9 @@ _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
 _ = plt \
-    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+    .legend((target_names[0].capitalize() + bin_number, \
+        target_names[1].capitalize() + bin_number, \
+        target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
@@ -249,7 +255,9 @@ _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
 _ = plt \
-    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+    .legend((target_names[0].capitalize() + bin_number, \
+        target_names[1].capitalize() + bin_number, \
+        target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
@@ -272,7 +280,9 @@ _ = plt.xlabel('Iris petals (\'standards\') width (cm)')
 _ = plt.ylabel('count')
 bin_number = ' (bins=' + str((n_bins / 3)) + ')'
 _ = plt \
-    .legend((target_names[0].capitalize() + bin_number , target_names[1].capitalize() + bin_number , target_names[2].capitalize() + bin_number ), loc='upper right')
+    .legend((target_names[0].capitalize() + bin_number, \
+        target_names[1].capitalize() + bin_number, \
+        target_names[2].capitalize() + bin_number ), loc='upper right')
 # use axis={'both', 'x', 'y'} to choose axis
 _ = plt.locator_params(axis="y", integer=True, tight=True)
 
@@ -295,15 +305,19 @@ x_virginica_sepal_length, y_virginica_sepal_length = ecdf(virginica_sepal_length
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
 _ = plt \
-    .title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') in three species')
+    .title('(Empirical) Cumulative Distribution\n of Iris sepals (\'falls\')')
 _ = plt \
-    .plot(x_setosa_sepal_length, y_setosa_sepal_length, marker='.', linestyle='none', color='black')
+    .plot(x_setosa_sepal_length, y_setosa_sepal_length, \
+        marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_sepal_length, y_versicolor_sepal_length, marker='.', linestyle='none', color='yellow')
+    .plot(x_versicolor_sepal_length, y_versicolor_sepal_length,  \
+        marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_sepal_length, y_virginica_sepal_length, marker='.', linestyle='none', color='red')
+    .plot(x_virginica_sepal_length, y_virginica_sepal_length,  \
+        marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+        loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -327,15 +341,19 @@ x_virginica_sepal_width, y_virginica_sepal_width = ecdf(virginica_sepal_width)
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
 _ = plt \
-    .title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\') in three species')
+    .title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\')')
 _ = plt \
-    .plot(x_setosa_sepal_width, y_setosa_sepal_width, marker='.', linestyle='none', color='black')
+    .plot(x_setosa_sepal_width, y_setosa_sepal_width,  \
+        marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_sepal_width, y_versicolor_sepal_width, marker='.', linestyle='none', color='yellow')
+    .plot(x_versicolor_sepal_width, y_versicolor_sepal_width,  \
+        marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_sepal_width, y_virginica_sepal_width, marker='.', linestyle='none', color='red')
+    .plot(x_virginica_sepal_width, y_virginica_sepal_width,  \
+        marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+        loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -359,15 +377,19 @@ x_virginica_length, y_virginica_length = ecdf(virginica_petal_length)
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
 _ = plt \
-    .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\') in three species')
+    .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\')')
 _ = plt \
-    .plot(x_setosa_length, y_setosa_length, marker='.', linestyle='none', color='black')
+    .plot(x_setosa_length, y_setosa_length,  \
+        marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_length, y_versicolor_length, marker='.', linestyle='none', color='yellow')
+    .plot(x_versicolor_length, y_versicolor_length,  \
+        marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_length, y_virginica_length, marker='.', linestyle='none', color='red')
+    .plot(x_virginica_length, y_virginica_length,  \
+        marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+        loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -391,15 +413,19 @@ x_virginica_width, y_virginica_width = ecdf(virginica_petal_width)
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
 # ---------------------------------------------------
 _ = plt \
-    .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\') in three species')
+    .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\')')
 _ = plt \
-    .plot(x_setosa_width, y_setosa_width, marker='.', linestyle='none', color='black')
+    .plot(x_setosa_width, y_setosa_width,  \
+        marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_width, y_versicolor_width, marker='.', linestyle='none', color='yellow')
+    .plot(x_versicolor_width, y_versicolor_width,  \
+        marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_width, y_virginica_width, marker='.', linestyle='none', color='red')
+    .plot(x_virginica_width, y_virginica_width,  \
+        marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+        loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') width (cm)')
 _ = plt.ylabel('ECDF')
 _ = plt.locator_params(axis="both", integer=False, tight=True)
@@ -425,7 +451,8 @@ ax = Axes3D(fig, elev = -150, azim = 110)
 #             cmap=plt.cm.get_cmap('Reds'), edgecolor='k', s=40)
 ax.scatter(pca[:, 0], pca[:, 1], pca[:, 2], pca[:, 3], c = target,
             cmap=plt.cm.get_cmap('Reds'), edgecolor='k', s=40)
-ax.legend((legend_setosa, legend_versicolor, legend_virginica), loc='upper right')
+ax.legend((legend_setosa, legend_versicolor, legend_virginica), \
+        loc='upper right')
 ax.set_title("Principal Component Analysis on Iris dataset")
 ax.set_xlabel("1st eigenvector")
 ax.w_xaxis.set_ticklabels([])
