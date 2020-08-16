@@ -93,33 +93,93 @@ pd_df = pd.merge(df_iris_data, df_target, right_index=True, left_index=True)
 # --[Sepals]-------------------------------------------------
 setosa_sepal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
-        .index(name_setosa))].iloc[:, 2:3].values
+        .index(name_setosa))].iloc[:, 0:1].values
+print(setosa_sepal_length)
 setosa_sepal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
-        .index(name_setosa))].iloc[:, 3:4].values
+        .index(name_setosa))].iloc[:, 1:2].values
+print(setosa_sepal_width)
 versicolor_sepal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
-        .index(name_versicolor))].iloc[:, 2:3].values
-versicolor_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
-        .index(name_versicolor))].iloc[:, 3:4].values
-virginica_sepal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
-        .index(name_virginica))].iloc[:, 2:3].values
-virginica_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
-        .index(name_virginica))].iloc[:, 3:4].values
+        .index(name_versicolor))].iloc[:, 0:1].values
+print(versicolor_sepal_length)
+versicolor_sepal_width = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_versicolor))].iloc[:, 1:2].values
+print(versicolor_sepal_width)
+virginica_sepal_length = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_virginica))].iloc[:, 0:1].values
+print(virginica_sepal_length)
+virginica_sepal_width = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_virginica))].iloc[:, 1:2].values
+print(virginica_sepal_width)
 
 # --[Petals]-------------------------------------------------
-setosa_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+setosa_petal_length = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 2:3].values
-setosa_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+print(setosa_petal_length)
+setosa_petal_width = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 3:4].values
-versicolor_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+print(setosa_petal_width)
+versicolor_petal_length = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_versicolor))].iloc[:, 2:3].values
-versicolor_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+print(versicolor_petal_length)
+versicolor_petal_width = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_versicolor))].iloc[:, 3:4].values
-virginica_petal_length = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+print(versicolor_petal_width)
+virginica_petal_length = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_virginica))].iloc[:, 2:3].values
-virginica_petal_width = pd_df[(pd_df[column_name_target] == target_names.tolist() \
+print(virginica_petal_length)
+virginica_petal_width = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_virginica))].iloc[:, 3:4].values
+print(virginica_petal_width)
+
+
+data_three_percentiles = np.percentile(data, [25,50,75])
+percentiles = np.array([2.5, 25, 50, 75, 97.5])
+data_five_percentiles = np.percentile(data, percentiles)
+print(' ', data_three_percentiles,'\n ',data_five_percentiles)
+
+
+percentiles_setosa_sepal_length = np \
+    .percentile(setosa_sepal_length, data_five_percentiles)
+percentiles_setosa_sepal_width = np \
+    .percentile(setosa_sepal_width, data_five_percentiles)
+percentiles_setosa_petal_length = np \
+    .percentile(setosa_petal_length, data_five_percentiles)
+percentiles_setosa_petal_width = np \
+    .percentile(versicolor_petal_width, data_five_percentiles)
+print(' ',\
+     percentiles_setosa_sepal_length, \
+    '\n ', percentiles_setosa_sepal_width, \
+    '\n ', percentiles_setosa_petal_length, \
+    '\n ', percentiles_setosa_petal_width)
+
+percentiles_versicolor_sepal_length = np \
+    .percentile(versicolor_sepal_length, data_five_percentiles)
+percentiles_versicolor_sepal_width = np \
+    .percentile(versicolor_sepal_width, data_five_percentiles)
+percentiles_versicolor_petal_length = np \
+    .percentile(versicolor_petal_length, data_five_percentiles)
+percentiles_versicolor_petal_width = np \
+    .percentile(versicolor_petal_width, data_five_percentiles)
+
+percentiles_virginica_sepal_length = np \
+    .percentile(virginica_sepal_length, data_five_percentiles)
+percentiles_virginica_sepal_width = np \
+    .percentile(virginica_sepal_width, data_five_percentiles)
+percentiles_virginica_petal_length = np \
+    .percentile(virginica_petal_length, data_five_percentiles)
+percentiles_virginica_petal_width = np \
+    .percentile(virginica_petal_width, data_five_percentiles)
 
 
 
@@ -197,9 +257,9 @@ _ = plt.figure(figure_number, figsize=(8, 6))
 _ = plt.clf()
 
 # Plot the histogram and label axes
-_ = plt.hist(setosa_sepal_length, bins=round(n_bins/3), color='black')
-_ = plt.hist(versicolor_sepal_length, bins=round(n_bins/3), color='yellow')
-_ = plt.hist(virginica_sepal_length, bins=round(n_bins/3), color='red')
+_ = plt.hist(setosa_sepal_length, bins=round(n_bins), color='black')
+_ = plt.hist(versicolor_sepal_length, bins=round(n_bins), color='yellow')
+_ = plt.hist(virginica_sepal_length, bins=round(n_bins), color='red')
 _ = plt.title('Distribution of Iris sepals (\'falls\') length (cm)')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('count')
@@ -222,9 +282,9 @@ _ = plt.figure(figure_number, figsize=(8, 6))
 _ = plt.clf()
 
 # Plot the histogram and label axes
-_ = plt.hist(setosa_sepal_width, bins=round(n_bins/3), color='black')
-_ = plt.hist(versicolor_sepal_width, bins=n_bins, color='yellow')
-_ = plt.hist(virginica_sepal_width, bins=n_bins, color='red')
+_ = plt.hist(setosa_sepal_width, bins=round(n_bins), color='black')
+_ = plt.hist(versicolor_sepal_width, bins=round(n_bins), color='yellow')
+_ = plt.hist(virginica_sepal_width, bins=round(n_bins), color='red')
 _ = plt.title('Distribution of Iris sepals (\'falls\') width (cm)')
 _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('count')
@@ -310,13 +370,13 @@ _ = plt \
     .plot(x_setosa_sepal_length, y_setosa_sepal_length, \
         marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_sepal_length, y_versicolor_sepal_length,  \
+    .plot(x_versicolor_sepal_length, y_versicolor_sepal_length, \
         marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_sepal_length, y_virginica_sepal_length,  \
+    .plot(x_virginica_sepal_length, y_virginica_sepal_length, \
         marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), \
         loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') length (cm)')
 _ = plt.ylabel('ECDF')
@@ -343,16 +403,16 @@ x_virginica_sepal_width, y_virginica_sepal_width = ecdf(virginica_sepal_width)
 _ = plt \
     .title('(Empirical) Cumulative Distribution\nof Iris sepals (\'falls\')')
 _ = plt \
-    .plot(x_setosa_sepal_width, y_setosa_sepal_width,  \
+    .plot(x_setosa_sepal_width, y_setosa_sepal_width, \
         marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_sepal_width, y_versicolor_sepal_width,  \
+    .plot(x_versicolor_sepal_width, y_versicolor_sepal_width, \
         marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_sepal_width, y_virginica_sepal_width,  \
+    .plot(x_virginica_sepal_width, y_virginica_sepal_width, \
         marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), \
         loc='upper right')
 _ = plt.xlabel('Iris sepals (\'falls\') width (cm)')
 _ = plt.ylabel('ECDF')
@@ -369,9 +429,9 @@ _ = plt.clf()
 # Compute ECDF for versicolor data: x_vers, y_vers
 # x_iris, y_iris = ecdf(iris_petal_length)
 # ---------------------------------------------------
-x_setosa_length, y_setosa_length = ecdf(setosa_petal_length)
-x_versicolor_length, y_versicolor_length = ecdf(versicolor_petal_length)
-x_virginica_length, y_virginica_length = ecdf(virginica_petal_length)
+x_setosa_petal_length, y_setosa_petal_length = ecdf(setosa_petal_length)
+x_versicolor_petal_length, y_versicolor_petal_length = ecdf(versicolor_petal_length)
+x_virginica_petal_length, y_virginica_petal_length = ecdf(virginica_petal_length)
 
 # Generate plot
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
@@ -379,16 +439,16 @@ x_virginica_length, y_virginica_length = ecdf(virginica_petal_length)
 _ = plt \
     .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\')')
 _ = plt \
-    .plot(x_setosa_length, y_setosa_length,  \
+    .plot(x_setosa_petal_length, y_setosa_petal_length, \
         marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_length, y_versicolor_length,  \
+    .plot(x_versicolor_petal_length, y_versicolor_petal_length, \
         marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_length, y_virginica_length,  \
+    .plot(x_virginica_petal_length, y_virginica_petal_length, \
         marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), \
         loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') length (cm)')
 _ = plt.ylabel('ECDF')
@@ -405,9 +465,9 @@ _ = plt.clf()
 # Compute ECDF for versicolor data: x_vers, y_vers
 # x_iris, y_iris = ecdf(iris_petal_width)
 # ---------------------------------------------------
-x_setosa_width, y_setosa_width = ecdf(setosa_petal_width)
-x_versicolor_width, y_versicolor_width = ecdf(versicolor_petal_width)
-x_virginica_width, y_virginica_width = ecdf(virginica_petal_width)
+x_setosa_petal_width, y_setosa_petal_width = ecdf(setosa_petal_width)
+x_versicolor_petal_width, y_versicolor_petal_width = ecdf(versicolor_petal_width)
+x_virginica_petal_width, y_virginica_petal_width = ecdf(virginica_petal_width)
 
 # Generate plot
 # _ = plt.plot(x_iris, y_iris, marker='.', linestyle='none')
@@ -415,16 +475,16 @@ x_virginica_width, y_virginica_width = ecdf(virginica_petal_width)
 _ = plt \
     .title('(Empirical) Cumulative Distribution\nof Iris petals (\'standards\')')
 _ = plt \
-    .plot(x_setosa_width, y_setosa_width,  \
+    .plot(x_setosa_petal_width, y_setosa_petal_width, \
         marker='.', linestyle='none', color='black')
 _ = plt \
-    .plot(x_versicolor_width, y_versicolor_width,  \
+    .plot(x_versicolor_petal_width, y_versicolor_petal_width, \
         marker='.', linestyle='none', color='yellow')
 _ = plt \
-    .plot(x_virginica_width, y_virginica_width,  \
+    .plot(x_virginica_petal_width, y_virginica_petal_width, \
         marker='.', linestyle='none', color='red')
 _ = plt \
-    .legend((legend_setosa, legend_versicolor, legend_virginica),  \
+    .legend((legend_setosa, legend_versicolor, legend_virginica), \
         loc='upper right')
 _ = plt.xlabel('Iris petals (\'standards\') width (cm)')
 _ = plt.ylabel('ECDF')
