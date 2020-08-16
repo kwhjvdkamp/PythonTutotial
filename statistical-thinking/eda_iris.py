@@ -94,60 +94,60 @@ pd_df = pd.merge(df_iris_data, df_target, right_index=True, left_index=True)
 setosa_sepal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 0:1].values
-print(setosa_sepal_length)
+# print(setosa_sepal_length)
 setosa_sepal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 1:2].values
-print(setosa_sepal_width)
+# print(setosa_sepal_width)
 versicolor_sepal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_versicolor))].iloc[:, 0:1].values
-print(versicolor_sepal_length)
+# print(versicolor_sepal_length)
 versicolor_sepal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_versicolor))].iloc[:, 1:2].values
-print(versicolor_sepal_width)
+# print(versicolor_sepal_width)
 virginica_sepal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_virginica))].iloc[:, 0:1].values
-print(virginica_sepal_length)
+# print(virginica_sepal_length)
 virginica_sepal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_virginica))].iloc[:, 1:2].values
-print(virginica_sepal_width)
+# print(virginica_sepal_width)
 
 # --[Petals]-------------------------------------------------
 setosa_petal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 2:3].values
-print(setosa_petal_length)
+# print(setosa_petal_length)
 setosa_petal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_setosa))].iloc[:, 3:4].values
-print(setosa_petal_width)
+# print(setosa_petal_width)
 versicolor_petal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_versicolor))].iloc[:, 2:3].values
-print(versicolor_petal_length)
+# print(versicolor_petal_length)
 versicolor_petal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_versicolor))].iloc[:, 3:4].values
-print(versicolor_petal_width)
+# print(versicolor_petal_width)
 virginica_petal_length = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_virginica))].iloc[:, 2:3].values
-print(virginica_petal_length)
+# print(virginica_petal_length)
 virginica_petal_width = \
     pd_df[(pd_df[column_name_target] == target_names.tolist() \
         .index(name_virginica))].iloc[:, 3:4].values
-print(virginica_petal_width)
+# print(virginica_petal_width)
 
 
 data_three_percentiles = np.percentile(data, [25,50,75])
 percentiles = np.array([2.5, 25, 50, 75, 97.5])
 data_five_percentiles = np.percentile(data, percentiles)
-print(' ', data_three_percentiles,'\n ',data_five_percentiles)
-
+print('3 percentiles: ', data_three_percentiles)
+print('5 percentiles: ', data_five_percentiles)
 
 percentiles_setosa_sepal_length = np \
     .percentile(setosa_sepal_length, data_five_percentiles)
@@ -156,12 +156,11 @@ percentiles_setosa_sepal_width = np \
 percentiles_setosa_petal_length = np \
     .percentile(setosa_petal_length, data_five_percentiles)
 percentiles_setosa_petal_width = np \
-    .percentile(versicolor_petal_width, data_five_percentiles)
-print(' ',\
-     percentiles_setosa_sepal_length, \
-    '\n ', percentiles_setosa_sepal_width, \
-    '\n ', percentiles_setosa_petal_length, \
-    '\n ', percentiles_setosa_petal_width)
+    .percentile(setosa_petal_width, data_five_percentiles)
+# print('P', percentiles_setosa_sepal_length, \
+    # '\n ', percentiles_setosa_sepal_width, \
+    # '\n ', percentiles_setosa_petal_length, \
+    # '\n ', percentiles_setosa_petal_width)
 
 percentiles_versicolor_sepal_length = np \
     .percentile(versicolor_sepal_length, data_five_percentiles)
