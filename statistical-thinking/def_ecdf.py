@@ -1,7 +1,9 @@
 import numpy as np
 
 def ecdf(data):
-    """Compute ECDF for a one-dimensional array of measurements"""
+    """
+    Compute ECDF for a one-dimensional array of measurements
+    """
     # (E)CDF = (Empirical) Cumulative Distribution Function
     # Number of data points: n
     n = len(data)

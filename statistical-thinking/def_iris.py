@@ -5,7 +5,7 @@ from sklearn import datasets
 
 def iris():
     """
-        Import Iris dataset from scikit
+    Import Iris dataset from scikit
     """
 
     iris = datasets.load_iris()
