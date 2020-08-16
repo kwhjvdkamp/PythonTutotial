@@ -1,4 +1,6 @@
-# == [ BERNOULLI FUNCTION START ] ===============================================
+# SHOWCASE-ONE-SHOWCASE-ONE-SHOWCASE-ONE-SHOWCASE-ONE-SHOWCASE-ONE-SHOWCASE-ONE
+
+# == [ BERNOULLI FUNCTION START ] =============================================
 import array
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +11,7 @@ def perform_bernoulli_trials(n, p):
         Determination of the probability p (success)
         returning the number of success finding a 'default'
     """
-    
+
     n_success = []
 
     for i in range(n):
@@ -24,9 +26,9 @@ def perform_bernoulli_trials(n, p):
     print('Probability (p) of \'defaults\':', n_success)
 
     return n_success
-# == [ BERNOULLI FUNCTION  END  ] ===============================================
+# == [ BERNOULLI FUNCTION  END  ] =============================================
 
-# == [ BERNOULLI   TEST   START ] ===============================================
+# == [ BERNOULLI   TEST   START ] =============================================
 # Initialize number of successes:
 # n_success
 # Start with 0 items in an array, which is going to be filled-up
@@ -105,4 +107,4 @@ _ = plt.ylabel('Probability (p) on \'defaulted\' mussels')
 
 # Show the plot
 plt.show()
-# == [ BERNOULLI   TEST    END  ] ===============================================
+# == [ BERNOULLI   TEST    END  ] =============================================

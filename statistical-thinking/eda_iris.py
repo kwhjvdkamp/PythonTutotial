@@ -40,7 +40,13 @@ legend_setosa = target_names[0].capitalize()
 legend_versicolor = target_names[1].capitalize()
 legend_virginica = target_names[2].capitalize()
 
-df_iris_data = pd.DataFrame(data, columns = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)'])
+df_iris_data = pd.DataFrame(data, \
+     columns = [ \
+         'sepal length (cm)', \
+        'sepal width (cm)', \
+        'petal length (cm)', \
+        'petal width (cm)' \
+    ])
 # print(df_iris_data.head())
 df_target = pd.DataFrame(target, columns = ['target'])
 # print(df_target.head())
@@ -51,8 +57,8 @@ column_name_target = df_target.columns[0]  # is 'target'
 n_bins = int(np.sqrt(len(target)))
 
 
-# 1) df_iris_data.iloc[:, 0:1] is the dataframe of the complete first column (incl. column_name)
-# 2) df_iris_data.iloc[:, 0:1].values is its list of values
+# 1) df_iris_data.iloc[:, 0:1] = dataframe of 1st column (incl. column_name)
+# 2) df_iris_data.iloc[:, 0:1].values = list of values
 iris_sepal_length = df_iris_data.iloc[:, 0:1].values
 iris_sepal_width = df_iris_data.iloc[:, 1:2].values
 iris_petal_length = df_iris_data.iloc[:, 2:3].values
@@ -71,21 +77,23 @@ pd_df = pd.merge(df_iris_data, df_target, right_index=True, left_index=True)
 # print(pd_df.values[100:101, 0:5])
 
 # OUTPUT
-# ============================================================================================
-#         sepal        sepal       petal       petal    |
-#        length        width      length       width    |  target
-#       [:, 0:1]    [:, 1:2]    [:, 2:3]    [:, 3:4]    |       0   [0:50, 4:5]
-# --------------------------------------------------------------------------------------------
-#           5.1          3.5         1.4         0.2    |       0   [0:50, 4:5]         setosa
-# --------------------------------------------------------------------------------------------
-#           7.0          3.2         4.7         1.4    |       1   [50:100, 4:5]   versicolor
-# --------------------------------------------------------------------------------------------
-#           6.3          3.3         6.0         2.5    |       2   [100:150, 4:5]  virginica
-# ============================================================================================
+# =========================================================================
+#    sepal      sepal     petal     petal |
+#   length      width    length     width | target
+#  [:, 0:1]  [:, 1:2]  [:, 2:3]  [:, 3:4] |   0     [0:50, 4:5]
+# -------------------------------------------------------------------------
+#      5.1        3.5       1.4       0.2 |   0     [0:50, 4:5]  setosa
+# -------------------------------------------------------------------------
+#      7.0        3.2       4.7     1.4   |   1   [50:100, 4:5]  versicolor
+# -------------------------------------------------------------------------
+#      6.3        3.3       6.0     2.5   |   2  [100:150, 4:5]  virginica
+# =========================================================================
 
 
 # --[Sepals]-------------------------------------------------
-setosa_sepal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_setosa))].iloc[:, 2:3].values
+setosa_sepal_length = \
+    pd_df[(pd_df[column_name_target] == target_names.tolist() \
+        .index(name_setosa))].iloc[:, 2:3].values
 setosa_sepal_width = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_setosa))].iloc[:, 3:4].values
 # print('Length\r'. setosa_sepal_length, 'Width\r', setosa_sepal_width)
 versicolor_sepal_length = pd_df[(pd_df[column_name_target] == target_names.tolist().index(name_versicolor))].iloc[:, 2:3].values
