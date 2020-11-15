@@ -1,3 +1,4 @@
+import numpy as np
 
 # class Answer:
 #     def __init__(self, girl_ans, boy_ans):
@@ -7,7 +8,7 @@
 #     def breakup(self):
 #         if self.girl_ans == "yes" and self.boy_ans == "yes":
 #             return print("i love you")
-#         else: 
+#         else:
 #             return print('break up')
 
 # Answer('no', 'yes').breakup()
@@ -62,5 +63,8 @@
 # x = [7, 'D', 'E', 8, 9, 'F']
 # strings = [y for y in x if type(y) == str]
 # print(strings)
+sample = np.random.choice([5,6,7,8,9], size=5)
+print (sample, np.median(sample))
 
-
+random_number = np.random.random()
+print(random_number)
