@@ -1,6 +1,6 @@
 # Use on DataCamp to view a function which is preloaded into the environment of the example
 # import inspect
-# print(inspect.getsource(filter_word_counts)) 
+# print(inspect.getsource(filter_word_counts))
 
 # ==================================
 
@@ -55,7 +55,7 @@
 
 # def store_lower(_dict, _string):
 #     """Add a mapping between `_string` and a lowercased version of `_string` to `_dict`
-  
+
 #     Args:
 #       _dict (dict): The dictionary to update.
 #       _string (str): The string to add.
@@ -63,7 +63,7 @@
 #     orig_string = _string
 #     _string = _string.lower()
 #     _dict[orig_string] = _string
- 
+
 # d = {}
 # s = 'Hello'
 # bla = store_lower(d, s)
@@ -165,7 +165,7 @@
 
 # ==================================
 
-# ratio_to_earth = { 
+# ratio_to_earth = {
 #     'mercury': {'gravity': 0.378},
 #     'mars': {'gravity': 0.377}
 # }
@@ -187,7 +187,7 @@
 #         """Adds more zeros if necessary"""
 #         nonlocal updated_string
 #         updated_string = updated_string + '0'
-    
+
 #     while len(updated_string) < 6:
 #         add_more()
 #     return updated_string
@@ -208,7 +208,7 @@
 #     print('z', z)
 #     a = x + y + z
 #     return a
-# 
+#
 # add_numbers(2, 3, 4)
 
 # ==================================
@@ -251,10 +251,10 @@
 
 # Find the mean of the second column of costs
 import numpy as np
-costs = np.column_stack(([2, 1, 2, 1],  
+costs = np.column_stack(([2, 1, 2, 1],
                          [4, 6, 5, 5]))
 #   |c1 c2
-# --|------                    
+# --|------
 #r1 | 2  4
 #r2 | 1  6
 #r3 | 2  5
@@ -356,13 +356,13 @@ costs = np.column_stack(([2, 1, 2, 1],
 # print("Third  (", x[2], ") item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("Fourth (", x[3], ") item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("Fifth  (", x[4], ") item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
-# print("Sixth >>> OUTPUT: list index out of range, length = ", len(x) ) 
+# print("Sixth >>> OUTPUT: list index out of range, length = ", len(x) )
 # print("x[-1] ", x[-1], " item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("x[-2] ", x[-2], " item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("x[-3] ", x[-3], " item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("x[-4] ", x[-4], " item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
 # print("x[-5] ", x[-5], " item of list (x=[1, 2, 3, 4, 5], length = ", len(x) )
-# print("x[-6] >>> OUTPUT: list index out of range, length = ", len(x) ) 
+# print("x[-6] >>> OUTPUT: list index out of range, length = ", len(x) )
 
 # ==================================
 
@@ -372,7 +372,7 @@ costs = np.column_stack(([2, 1, 2, 1],
 #     def __init__(self, num):
 #         self.num = num
 #     def __str__(self):
-#         # return str(num) 
+#         # return str(num)
 #         # is NOT CORRECT because NameError: name 'num' is not defined
 #         return str(self.num)
 
@@ -386,13 +386,13 @@ costs = np.column_stack(([2, 1, 2, 1],
 #     def __init__(self, girl_ans, boy_ans):
 #         self.girl_ans = girl_ans
 #         self.boy_ans = boy_ans
-    
+
 #     def breakup(self):
 #         if self.girl_ans == "yes" and self.boy_ans == 'yes':
 #             return("I love you, yes!!!")
 #         else:
 #             return("Break up!!!")
-    
+
 # print(Answers("no", "yes").breakup())
 
 # ==================================
@@ -434,7 +434,7 @@ costs = np.column_stack(([2, 1, 2, 1],
 # ==================================
 
 # import pandas as pd
-# planets = { 'planet': ['earth','mars'], 'dist_from_sun': ['1', '1.52'] } 
+# planets = { 'planet': ['earth','mars'], 'dist_from_sun': ['1', '1.52'] }
 # planets_df = pd.DataFrame(planets)
 # print(planets_df)
 # # # OUTPUT
@@ -445,9 +445,9 @@ costs = np.column_stack(([2, 1, 2, 1],
 # ==================================
 
 # scarlet_speedster = iter('Barry Allen')
-# print(*scarlet_speedster)   
-# # # prints the whole string stored in the iter-object at once, 
-# # there is the next functioni called a StopIteration-error is returned 
+# print(*scarlet_speedster)
+# # # prints the whole string stored in the iter-object at once,
+# # there is the next functioni called a StopIteration-error is returned
 # # when the preceding call on scarlet_speedster is prefixed with an asterix
 # print(next(scarlet_speedster))
 
@@ -470,9 +470,17 @@ costs = np.column_stack(([2, 1, 2, 1],
 
 # s1 = set([90, 4, 92, 91])
 # s2 = set([89, 7, 34, 84])
-# res = s1.difference(s2)       # OUTPUT: {90, 91, 4, 92} 
+# res = s1.difference(s2)       # OUTPUT: {90, 91, 4, 92}
 # res = s1.intersection(s2)     # OUTPUT: set()
 # print(res)
 
 # ==================================
+
+names = ['Victor','Jan','Karel','Kees','Koen','Koen','Piet','Koos']
+print(names[1:])    #['Jan', 'Karel', 'Kees', 'Koen', 'Koen', 'Piet', 'Koos']
+print(names[:4])    #['Victor', 'Jan', 'Karel', 'Kees']
+print(names[1:5])   #['Jan', 'Karel', 'Kees', 'Koen']
+
+
+print(1+1)
 
