@@ -101,3 +101,12 @@ print('[',i,'] > ', names['Koen'])                  # 5
 # print(names['Tom'])                               # KeyError: 'Tom'
 i += 1
 print('[',i,'] > ', len(names))                     # 7
+i += 1
+names['Koen'] += 3
+print('[',i,'] > ', names['Koen'] )                     # 8
+i += 1
+names['Koos'] = 5
+print('[',i,'] > ', names['Koos'],' <=> [', names,']')  #5  <=> [ {'Victor': 1, 'Jan': 2, 'Karel': 3, 'Kees': 4, 'Koen': 8, 'Piet': 6, 'Koos': 5} ]
+i += 1
+del names['Jan']
+print('[',i,'] > ', '[', names,']')                     #[ {'Victor': 1, 'Karel': 3, 'Kees': 4, 'Koen': 8, 'Piet': 6, 'Koos': 5} ]
