@@ -1,6 +1,6 @@
 # 01 Lists
 i = 1
-names =['Jan','Kees','Koen','Piet','Koen']
+names = ['Jan','Kees','Koen','Piet','Koen']
 print('[',i,'] > ', len(names))                     # 5
 
 # =========================================================
