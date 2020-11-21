@@ -58,7 +58,5 @@ numbers = {1:'one', 2:'two', 3:'three', 4:'four', 5:'five', 6:'six', 7:'seven', 
 number = 0
 while number -1 not in range(len(numbers)) :
     number = int(input("Enter a whole number from 1 till 9 in : "))
-# Within the while construct it is tested the entered number is 'not in' the given range, if so the question to enter a number is repeated
+# Within the 'while' construct, it is tested if the entered number is 'not in' the given range, if so the question to enter a number is repeated
 print('[',i,'] > number entered: ', number)
-
-
