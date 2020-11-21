@@ -91,7 +91,8 @@ x=32
 i += 1
 print('[',i,'] > ', (212-x)*5/9)                # 100.0
 
-print(20*1.8+32)                                # 68.0
+i += 1
+print('[',i,'] > ', 20*1.8+32)                  # 68.0
 
 # operator '**' means 'exponentiation' (machtsverheffen)
 i += 1
@@ -129,7 +130,6 @@ print('[',i,'] > ', type(7.5//2.1))             # <class 'float'>
 i += 1
 print('[',i,'] > ', type(7//3))                 # <class 'int'>
 # answer is 2 note only integers has been used in the calculation
-
 
 # 07 Variables
 _ = 7/3
