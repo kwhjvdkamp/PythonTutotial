@@ -1,3 +1,6 @@
+## https://stackoverflow.com/questions/17071871/how-to-select-rows-from-a-dataframe-based-on-column-values
+
+
 # Downloading *.csv file from GitHub
 # > Bing-COVID19-Data.csv
 
@@ -9,7 +12,6 @@ import io
 import time
 import progressbar
 
-
 def convert_dtype(x):
     if not x:
         return ''
@@ -17,7 +19,6 @@ def convert_dtype(x):
         return str(x)
     except:
         return ''
-
 
 class Bing:
 
@@ -64,17 +65,37 @@ class Bing:
 bing = Bing()
 bing_df = bing.data
 
-print('BING Dataframe\r\n', bing_df.tail())
+# Keys of the dictionary
+print(bing.data.keys())
 
-# TEST
+#Filter dataframe for value 'Worldwide' in column 'Country_Region'
+worldwide_df = bing_df.loc[(bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+netherlands_df = bing_df.loc[(bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+
+# Save dataframes to csv
+# TODO add if exist overwrite
+path=r'C:\HomeProjects\Bing-COVID-19-Data\bing-data'
+
+worldwide_df.to_csv(os.path.join(path, r'Bing-WLD-Data.csv'))
+print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
+netherlands_df.to_csv(os.path.join(path, r'Bing-NLD-Data.csv'))
+print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
+
+
+
+
+
+
+# # TEST
+# # Combining progressbars with print output
 # for i in progressbar.progressbar(range(100), redirect_stdout=True):
-#     # Returns data as dictionary with DataFrames as Values
-#     bing = Bing()
-#     bing_df = bing.data
-
-#     # Keys of the dictionary
-#     print(bing.data.keys())
-
 #     # Printing out the first 5 rows of the dataframe
-#     # print('BING Dataframe\r\n', bing_df.tail(), i)
+#     print('Combining progressbars with print output', i)
 #     time.sleep(0.02)
+
+# # Progressbar with unknown length
+# bar = progressbar.ProgressBar(max_value=progressbar.UnknownLength)
+# for i in range(20):
+#     print('Progressbar with unknown length', i)
+#     time.sleep(0.02)
+#     bar.update(i)
