@@ -6,6 +6,7 @@ import pandas as pd
 import requests
 import io
 
+
 class Csse:
 
     def __init__(self):
@@ -21,11 +22,12 @@ class Csse:
         CSV_CONFIRMED_GLOBAL = 'time_series_covid19_confirmed_global.csv',
         CSV_DECEASED_GLOBAL = 'time_series_covid19_deaths_global.csv',
         CSV_RECOVERED_RECOVERED = 'time_series_covid19_recovered_global.csv'
+        REQUEST_QUERY = '?raw=true'
 
         self.URLS = {
             'confirmed': f'{URL_PATH}/{CSV_CONFIRMED_GLOBAL}',
             'deaths': f'{URL_PATH}/{CSV_DECEASED_GLOBAL}',
-            'recovered':f'{URL_PATH}/{CSV_RECOVERED_RECOVERED}',
+            'recovered': f'{URL_PATH}/{CSV_RECOVERED_RECOVERED}',
         }
 
         self.data = {case:pd.read_csv(url) for case, url in self.URLS.items()}
@@ -36,9 +38,12 @@ class Csse:
         pass
 
 
+
 # =============================================================
 # Returns data as dictionary with DataFrames as Values
 csse = Csse()
+
+# print(csse.current_status())
 
 # Keys of the dictionary
 print(csse.data.keys())
