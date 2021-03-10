@@ -58,26 +58,47 @@ print(bing.data.keys())
 # 2) value 'Worldwide' in column 'Country_Region'
 # 3) empty cell in column 'AdminRegion1'
 
-# dateTimeObj = datetime.now()
-dateTimeObj = datetime(2021, 2, 21, 0, 0)
-FROM_DATE = dateTimeObj.strftime("%m/%d/%Y)")
+formatUSDate ="%m/%d/%Y"
+epochDate = datetime(1970, 1, 1)
 
-p = '%m/%d/%YT%H:%M:%S.%fZ'
-myTime = "02/21/2021T00:00:00.000Z"
-epoch = datetime(1970, 1, 1)
-print((datetime.strptime(myTime, p) - epoch))
+inputDate = datetime(2021, 2, 21)
+strFROM_DATE = inputDate.strftime(formatUSDate)
+searchDate = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)
+epochData = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)
 
-worldwide_df = bing_df.loc[((datetime.strptime(bing_df['Updated'], p) - epoch) > (datetime.strptime(FROM_DATE, p) - epoch)) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-netherlands_df = bing_df.loc[((datetime.strptime(bing_df['Updated'], p) - epoch) > (datetime.strptime(FROM_DATE, p) - epoch)) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+# string of format '01/01/2020' (mm/dd/yyyy)
+firstRowValue = bing_df.iloc[0]['Updated']
+print(firstRowValue, type(firstRowValue))
+monthPart = firstRowValue[0:2]
+dayPart = firstRowValue[3:5]
+yearPart = firstRowValue[6:10]
 
-# Save dataframes to csv
-# TODO add if exist overwrite
-path=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+print('mm', monthPart)
+print('dd', dayPart)
+print('yyyy', yearPart)
 
-worldwide_df.to_csv(os.path.join(path, r'WLD-COVID19-Data.csv'))
-print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
-netherlands_df.to_csv(os.path.join(path, r'NLD-COVID19-Data.csv'))
-print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
+# daysUpdatedDate = (datetime.strptime(datetime(yearPart, monthPart, dayPart).strftime(formatUSDate), formatUSDate) - epochDate).days
+# print(daysUpdatedDate, type(daysUpdatedDate))
+
+daysCheckDate = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate).days
+print(daysCheckDate, type(daysCheckDate))
+
+# worldwide_df = bing_df.loc[(checkDate > checkDate-1) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+# netherlands_df = bing_df.loc[(checkDate > checkDate-1) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+
+
+# worldwide_df = bing_df.loc[(bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+# netherlands_df = bing_df.loc[(bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+
+
+# # Save dataframes to csv
+# # TODO add if exist overwrite
+# path=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+
+# worldwide_df.to_csv(os.path.join(path, r'WLD-COVID19-Data.csv'))
+# print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
+# netherlands_df.to_csv(os.path.join(path, r'NLD-COVID19-Data.csv'))
+# print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
 
 
 
