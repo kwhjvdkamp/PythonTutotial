@@ -58,17 +58,58 @@ print(bing.data.keys())
 # 2) value 'Worldwide' in column 'Country_Region'
 # 3) empty cell in column 'AdminRegion1'
 
-# dateTimeObj = datetime.now()
-dateTimeObj = datetime(2021, 2, 21, 0, 0)
-FROM_DATE = dateTimeObj.strftime("%m/%d/%Y)")
+formatUSDate ="%m/%d/%Y"
+epochDate = datetime(1970, 1, 1)
 
-p = '%m/%d/%YT%H:%M:%S.%fZ'
-myTime = "02/21/2021T00:00:00.000Z"
-epoch = datetime(1970, 1, 1)
-print((datetime.strptime(myTime, p) - epoch))
+referenceDate = datetime(2021, 2, 21).strftime(formatUSDate)
+# searchDate = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)
+# epochData = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)
 
-worldwide_df = bing_df.loc[((datetime.strptime(bing_df['Updated'], p) - epoch) > (datetime.strptime(FROM_DATE, p) - epoch)) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-netherlands_df = bing_df.loc[((datetime.strptime(bing_df['Updated'], p) - epoch) > (datetime.strptime(FROM_DATE, p) - epoch)) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+# string of format '01/01/2020' (mm/dd/yyyy)
+# firstRowValue = bing_df.iloc[0]['Updated']
+# print(firstRowValue, type(firstRowValue))
+# monthPart = firstRowValue[0:2]
+# dayPart = firstRowValue[3:5]
+# yearPart = firstRowValue[6:10]
+# print('mm', monthPart)
+# print('dd', dayPart)
+# print('yyyy', yearPart)
+# firstRowValueDate = datetime(int(yearPart), int(monthPart), int(dayPart))
+
+# print('firstRowValueDate (', type(firstRowValueDate), ')', firstRowValueDate)
+
+# daysUpdatedDate = (datetime.strptime(firstRowValueDate.strftime(formatUSDate), formatUSDate) - epochDate).days
+# print('daysUpdatedDate (', type(daysUpdatedDate), ')', daysUpdatedDate)
+
+daysReferenceDate = (datetime.strptime(referenceDate, formatUSDate) - epochDate).days
+print('daysReferenceDate (', type(daysReferenceDate), ')', daysReferenceDate)
+
+
+def convert_dfItemUpdated(x):
+    return (datetime.strptime(datetime(int(x[6:10]), int(x[0:2]), int(x[3:5])).strftime(formatUSDate), formatUSDate) - epochDate).days
+
+
+# worldwide_df = bing_df.loc[( convert_dfItemUpdated(bing_df['Updated']) > daysReferenceDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+# netherlands_df = bing_df.loc[( convert_dfItemUpdated(bing_df['Updated']) > daysReferenceDate) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+# # OUTPUT
+# # Index(['ID', 'Updated', 'Confirmed', 'ConfirmedChange', 'Deaths',
+# #        'DeathsChange', 'Recovered', 'RecoveredChange', 'Latitude', 'Longitude',
+# #        'ISO2', 'ISO3', 'Country_Region', 'AdminRegion1', 'AdminRegion2'],
+# #       dtype='object')
+# # daysReferenceDate ( <class 'int'> ) 18679
+# # Traceback (most recent call last):
+# #   File "c:/HomeProjects/Python/PythonTutorial/download_csv/from_github.py", line 92, in <module>
+# #     worldwide_df = bing_df.loc[( convert_dfItemUpdated(bing_df['Updated']) > daysReferenceDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+# #   File "c:/HomeProjects/Python/PythonTutorial/download_csv/from_github.py", line 89, in convert_dfItemUpdated
+# #     return (datetime.strptime(datetime(int(x[6:10]), int(x[0:2]), int(x[3:5])).strftime(formatUSDate), formatUSDate) - epochDate).days
+# #   File "C:\Python38\lib\site-packages\pandas\core\series.py", line 129, in wrapper
+# #     raise TypeError(f"cannot convert the series to {converter}")
+# # TypeError: cannot convert the series to <class 'int'>
+
+
+worldwide_df = bing_df.loc[(bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+netherlands_df = bing_df.loc[(bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+
 
 # Save dataframes to csv
 # TODO add if exist overwrite
