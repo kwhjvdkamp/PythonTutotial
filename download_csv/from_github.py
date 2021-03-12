@@ -11,7 +11,7 @@ import io
 from datetime import datetime
 
 import time
-import progressbar
+# import progressbar
 
 
 def convert_dtype(x):
@@ -113,11 +113,12 @@ netherlands_df = bing_df.loc[(bing_df['Country_Region'] == 'Netherlands') & (bin
 
 # Save dataframes to csv
 # TODO add if exist overwrite
-path=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+# lt_path=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+dt_path=r'C:\GitHubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing'
 
-worldwide_df.to_csv(os.path.join(path, r'WLD-COVID19-Data.csv'))
+worldwide_df.to_csv(os.path.join(dt_path, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
-netherlands_df.to_csv(os.path.join(path, r'NLD-COVID19-Data.csv'))
+netherlands_df.to_csv(os.path.join(dt_path, r'NLD-COVID19-Data.csv'))
 print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
 
 
