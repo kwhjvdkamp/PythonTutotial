@@ -11,7 +11,7 @@ import io
 from datetime import datetime
 
 import time
-import progressbar
+# import progressbar
 
 
 def convert_dtype(x):
@@ -59,65 +59,19 @@ print(bing.data.keys())
 # 3) empty cell in column 'AdminRegion1'
 
 formatUSDate ="%m/%d/%Y"
-epochDate = datetime(1970, 1, 1)
 
-referenceDate = datetime(2021, 2, 21).strftime(formatUSDate)
-# searchDate = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)
-# epochData = (datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)
+bing_df['Updated'] = pd.to_datetime(bing_df['Updated'], format=formatUSDate)
 
-# string of format '01/01/2020' (mm/dd/yyyy)
-# firstRowValue = bing_df.iloc[0]['Updated']
-# print(firstRowValue, type(firstRowValue))
-# monthPart = firstRowValue[0:2]
-# dayPart = firstRowValue[3:5]
-# yearPart = firstRowValue[6:10]
-# print('mm', monthPart)
-# print('dd', dayPart)
-# print('yyyy', yearPart)
-# firstRowValueDate = datetime(int(yearPart), int(monthPart), int(dayPart))
-
-# print('firstRowValueDate (', type(firstRowValueDate), ')', firstRowValueDate)
-
-# daysUpdatedDate = (datetime.strptime(firstRowValueDate.strftime(formatUSDate), formatUSDate) - epochDate).days
-# print('daysUpdatedDate (', type(daysUpdatedDate), ')', daysUpdatedDate)
-
-daysReferenceDate = (datetime.strptime(referenceDate, formatUSDate) - epochDate).days
-print('daysReferenceDate (', type(daysReferenceDate), ')', daysReferenceDate)
-
-
-def convert_dfItemUpdated(x):
-    return (datetime.strptime(datetime(int(x[6:10]), int(x[0:2]), int(x[3:5])).strftime(formatUSDate), formatUSDate) - epochDate).days
-
-
-# worldwide_df = bing_df.loc[( convert_dfItemUpdated(bing_df['Updated']) > daysReferenceDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-# netherlands_df = bing_df.loc[( convert_dfItemUpdated(bing_df['Updated']) > daysReferenceDate) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
-# # OUTPUT
-# # Index(['ID', 'Updated', 'Confirmed', 'ConfirmedChange', 'Deaths',
-# #        'DeathsChange', 'Recovered', 'RecoveredChange', 'Latitude', 'Longitude',
-# #        'ISO2', 'ISO3', 'Country_Region', 'AdminRegion1', 'AdminRegion2'],
-# #       dtype='object')
-# # daysReferenceDate ( <class 'int'> ) 18679
-# # Traceback (most recent call last):
-# #   File "c:/HomeProjects/Python/PythonTutorial/download_csv/from_github.py", line 92, in <module>
-# #     worldwide_df = bing_df.loc[( convert_dfItemUpdated(bing_df['Updated']) > daysReferenceDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-# #   File "c:/HomeProjects/Python/PythonTutorial/download_csv/from_github.py", line 89, in convert_dfItemUpdated
-# #     return (datetime.strptime(datetime(int(x[6:10]), int(x[0:2]), int(x[3:5])).strftime(formatUSDate), formatUSDate) - epochDate).days
-# #   File "C:\Python38\lib\site-packages\pandas\core\series.py", line 129, in wrapper
-# #     raise TypeError(f"cannot convert the series to {converter}")
-# # TypeError: cannot convert the series to <class 'int'>
-
-
-worldwide_df = bing_df.loc[(bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-netherlands_df = bing_df.loc[(bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
-
+worldwide_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
 
 # Save dataframes to csv
 # TODO add if exist overwrite
-path=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+path_lt=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
 
-worldwide_df.to_csv(os.path.join(path, r'WLD-COVID19-Data.csv'))
+worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
-netherlands_df.to_csv(os.path.join(path, r'NLD-COVID19-Data.csv'))
+netherlands_df.to_csv(os.path.join(path_lt, r'NLD-COVID19-Data.csv'))
 print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
 
 
