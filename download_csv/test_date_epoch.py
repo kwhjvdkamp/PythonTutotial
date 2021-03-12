@@ -41,7 +41,7 @@ print(type((datetime.strptime(strFROM_DATE, formatUSDate) - epochDate)))
 intDays = (dtFROM_DATE - epochDate).days
 print('Delta From epoch (in days)', (dtFROM_DATE - epochDate).days)
 print(type((dtFROM_DATE - epochDate).days))
-print('Days', intDays)
+print('Days (', type(intDays), '):', intDays)
 
 
 # print('From a datetime.strptime-string (\'1234 days\'): cut-off \' days\' and converted to int', type(int (datetime.strptime(FROM_DATE, formatUSDate) - epoch)[:-2]) )
