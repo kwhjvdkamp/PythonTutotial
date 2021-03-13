@@ -68,10 +68,11 @@ netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Cou
 # Save dataframes to csv
 # TODO add if exist overwrite
 path_lt=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+path_dt=r'C:\GitHubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing'
 
-worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
+worldwide_df.to_csv(os.path.join(path_dt, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
-netherlands_df.to_csv(os.path.join(path_lt, r'NLD-COVID19-Data.csv'))
+netherlands_df.to_csv(os.path.join(path_dt, r'NLD-COVID19-Data.csv'))
 print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
 
 
