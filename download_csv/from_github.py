@@ -83,6 +83,8 @@ currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
 path_lt = convertToWindowsPath(path.replace('\Python\PythonTutorial\download_csv', ''))
 
+print(path_lt)
+
 worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
 netherlands_df.to_csv(os.path.join(path_lt, r'NLD-COVID19-Data.csv'))
