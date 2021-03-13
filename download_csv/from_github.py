@@ -4,13 +4,16 @@
 # Downloading *.csv file from GitHub
 # > Bing-COVID19-Data.csv
 
+import io
 import os
+import pathlib
 import pandas as pd
 import requests
-import io
+
+from typing import Union
 from datetime import datetime
 
-import time
+# import time
 # import progressbar
 
 
@@ -27,6 +30,14 @@ def convert_dtype(x):
 def current_status(self):
     # function to show current status
     pass
+
+
+def convertToWindowsPath(string: Union[str, pathlib.Path]):
+    # This converts a str to a Path (if already a Path, nothing changes)
+    path = pathlib.Path(string)
+    # print(type(path))
+    # print(path)
+    return path
 
 
 class Bing:
@@ -67,7 +78,10 @@ netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Cou
 
 # Save dataframes to csv
 # TODO add if exist overwrite
-path_lt=r'C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing'
+
+currentContainer = pathlib.Path(__file__).parent.absolute()
+path = str(currentContainer)
+path_lt = convertToWindowsPath(path.replace('\Python\PythonTutorial\download_csv', ''))
 
 worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
