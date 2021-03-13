@@ -1,8 +1,33 @@
 import os
+from typing import Union
 import pandas as pd
 import requests
 import io
+import pathlib
+
+
 from datetime import datetime
+
+def convertToWindowsPath(string: Union[str, pathlib.Path]):
+    # This converts a str to a Path (if already a Path, nothing changes)
+    path = pathlib.Path(string)
+    # print(type(path))
+    # print(path)
+    return path
+
+
+currentContainer = pathlib.Path(__file__).parent.absolute()
+subPathFromHomeProjectsToCurrentContainer = '\Python\PythonTutorial\download_csv'
+print('Current container: (', type(currentContainer), ') ', currentContainer)
+strCurrentContainer = str(currentContainer)
+strCurrentContainer = strCurrentContainer.replace(subPathFromHomeProjectsToCurrentContainer, '')
+print('--')
+print('Current container: (', type(strCurrentContainer), ') ', strCurrentContainer)
+print('--')
+windowsPathContainer = convertToWindowsPath(strCurrentContainer)
+print('Current container: (', type(windowsPathContainer), ') ' , windowsPathContainer)
+
+
 
 formatUSDate ="%m/%d/%Y"
 formatUSDateTimeLong ="%m/%d/%YT00:00:00.000Z"
