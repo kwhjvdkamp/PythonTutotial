@@ -22,15 +22,20 @@ class Csse:
         # time_series_covid19_deaths_global.csv
         # time_series_covid19_recovered_global.csv
 
-        URL_PATH = 'https://github.com/kwhjvdkamp/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/'
-        CSV_CONFIRMED_GLOBAL = 'time_series_covid19_confirmed_global.csv',
-        CSV_DECEASED_GLOBAL = 'time_series_covid19_deaths_global.csv',
-        CSV_RECOVERED_RECOVERED = 'time_series_covid19_recovered_global.csv'
 
+        # URL_PATH = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series'
+
+        URL_PATH = 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
+
+        # f-strings provide a way to embed expressions inside string literals,
+        # using a minimal syntax. It should be noted that an f-string is really an expression
+        # evaluated at run time, not a constant value.
+        # In Python source code, an f-string is a literal string, prefixed with 'f',
+        # which contains expressions inside braces. The expressions are replaced with their values.
         self.URLS = {
-            'confirmed': f'{URL_PATH}{CSV_CONFIRMED_GLOBAL}',
-            # 'deaths': f'{URL_PATH}{CSV_DECEASED_GLOBAL}',
-            # 'recovered': f'{URL_PATH}{CSV_RECOVERED_RECOVERED}',
+            'confirmed': f'{URL_PATH}/time_series_covid19_confirmed_global.csv',
+            'deaths': f'{URL_PATH}/time_series_covid19_deaths_global.csv',
+            'recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
         }
 
         self.data = {case:pd.read_csv(url) for case, url in self.URLS.items()}
@@ -57,7 +62,7 @@ recovered_df = csse.data['recovered']
 
 # Save dataframes to csv
 # TODO add if exist overwrite
-path=r'C:\HomeProjects\Bing-COVID-19-Data\csse-data'
+path=r'C:\HomeProjects\COVID-19-Data\csse-data'
 
 # ==================
 
@@ -67,23 +72,23 @@ print(confirmed_df.head())
 # Last five rows
 print(confirmed_df.tail())
 
-# # ==================
+# ==================
 
-# deaths_df.to_csv(os.path.join(path, r'csse_deaths.csv'))
-# # First five rows
-# print(deaths_df.head())
-# # Last five rows
-# print(deaths_df.tail())
+deaths_df.to_csv(os.path.join(path, r'csse_deaths.csv'))
+# First five rows
+print(deaths_df.head())
+# Last five rows
+print(deaths_df.tail())
 
-# # ==================
+# ==================
 
-# recovered_df.to_csv(os.path.join(path, r'csse_recovered.csv'))
-# # First five rows
-# print(recovered_df.head())
-# # Last five rows
-# print(recovered_df.tail())
+recovered_df.to_csv(os.path.join(path, r'csse_recovered.csv'))
+# First five rows
+print(recovered_df.head())
+# Last five rows
+print(recovered_df.tail())
 
-# # ==================
+# ==================
 
 # with open(os.path.join(path, r'csse_confirmed.csv'), 'w+') as f:
 #     f.write(r'csse_confirmed.csv')
