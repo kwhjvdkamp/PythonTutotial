@@ -57,6 +57,7 @@ class Bing:
         # =============================================================
 
 
+
 # Returns data as dictionary with DataFrames as Values
 bing = Bing()
 bing_df = bing.data
@@ -82,9 +83,9 @@ netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Cou
 currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
 path_dt = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\csse-data'))
-path_lt = convertToWindowsPath(path.replace('\Python\PythonTutorial\download_csv', ''))
-# COVID-19-Data\csse-data
-print(path_lt)
+# path_lt = convertToWindowsPath(path.replace('\Python\PythonTutorial\download_csv', ''))
+# # COVID-19-Data\csse-data
+# print(path_lt)
 
 worldwide_df.to_csv(os.path.join(path_dt, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
