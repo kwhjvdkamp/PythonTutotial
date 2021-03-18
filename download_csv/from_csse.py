@@ -68,7 +68,7 @@ path_dt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
 
 # ==================
 
-confirmed_df.to_csv(os.path.join(path_dt, r'csse_confirmed.csv'))
+confirmed_df.to_csv(os.path.join(path_lt, r'csse_confirmed.csv'))
 # First five rows
 print(confirmed_df.head())
 # Last five rows
@@ -76,7 +76,7 @@ print(confirmed_df.tail())
 
 # ==================
 
-deaths_df.to_csv(os.path.join(path_dt, r'csse_deaths.csv'))
+deaths_df.to_csv(os.path.join(path_lt, r'csse_deaths.csv'))
 # First five rows
 print(deaths_df.head())
 # Last five rows
@@ -84,7 +84,7 @@ print(deaths_df.tail())
 
 # ==================
 
-recovered_df.to_csv(os.path.join(path_dt, r'csse_recovered.csv'))
+recovered_df.to_csv(os.path.join(path_lt, r'csse_recovered.csv'))
 # First five rows
 print(recovered_df.head())
 # Last five rows
