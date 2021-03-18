@@ -10,11 +10,16 @@ import pathlib
 import pandas as pd
 import requests
 
-from typing import Union
-from datetime import datetime
-
-# import time
+import calendar;
+import time;
 # import progressbar
+
+from typing import Union
+import datetime
+
+ts = calendar.timegm(time.gmtime())
+timeOfWritingFile = datetime.datetime.fromtimestamp(ts).isoformat()
+print(timeOfWritingFile, ' | ', timeOfWritingFile.split("T", 1)[0])
 
 
 def convert_dtype(x):
@@ -71,11 +76,15 @@ print(bing.data.keys())
 # 3) empty cell in column 'AdminRegion1'
 
 formatUSDate ="%m/%d/%Y"
+fromDate = '01/21/2021'
+
+
+
 
 bing_df['Updated'] = pd.to_datetime(bing_df['Updated'], format=formatUSDate)
 
-worldwide_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+worldwide_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+netherlands_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
 
 # Save dataframes to csv
 # TODO add if exist overwrite
@@ -84,19 +93,27 @@ currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
 # path_dt = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\bing-data\accumulation\csv-data-bing'))
 
+
 # C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
 path_lt = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\bing-data\\accumulation\\csv-data-bing'))
 # # COVID-19-Data\csse-data
 # print(path_lt)
 
+isoDate = pd.to_datetime(fromDate)
+strIsoDate = str(isoDate.strftime('%Y-%m-%d'))
+isoDateShort = strIsoDate.split("T", 1)[0]
+
+print('Time of file writing:', timeOfWritingFile.split("T", 1)[0])
+
+lastUpdatedDayWld = str(worldwide_df['Updated'].iloc[-1])
+print('DataFrame from \'first\' day', isoDateShort, 'till \'last\' day \'[Updated]\':', lastUpdatedDayWld.split(" ", 1)[0])
 worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
-print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
+print('BING Dataframe WLD Count:', worldwide_df['Country_Region'].count())
+
+lastUpdatedDayNld = str(netherlands_df['Updated'].iloc[-1])
+print('DataFrame from \'first\' day', isoDateShort, 'till \'last\' day \'[Updated]\':', lastUpdatedDayNld.split(" ", 1)[0])
 netherlands_df.to_csv(os.path.join(path_lt, r'NLD-COVID19-Data.csv'))
-print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
-
-
-
-
+print('BING Dataframe NLD Count:', netherlands_df['Country_Region'].count())
 
 
 # # TEST
