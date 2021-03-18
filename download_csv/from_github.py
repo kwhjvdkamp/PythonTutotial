@@ -96,7 +96,7 @@ netherlands_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country
 
 currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
-print('Y', path)
+# print('Y', path)
 
 # path_dt = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\bing-data\accumulation\csv-data-bing'))
 
