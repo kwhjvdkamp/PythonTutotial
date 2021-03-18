@@ -82,14 +82,16 @@ netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Cou
 
 currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
-path_dt = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\csse-data'))
-# path_lt = convertToWindowsPath(path.replace('\Python\PythonTutorial\download_csv', ''))
+# path_dt = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\bing-data\accumulation\csv-data-bing'))
+
+# C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
+path_lt = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\bing-data\\accumulation\\csv-data-bing'))
 # # COVID-19-Data\csse-data
 # print(path_lt)
 
-worldwide_df.to_csv(os.path.join(path_dt, r'WLD-COVID19-Data.csv'))
+worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
 print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
-netherlands_df.to_csv(os.path.join(path_dt, r'NLD-COVID19-Data.csv'))
+netherlands_df.to_csv(os.path.join(path_lt, r'NLD-COVID19-Data.csv'))
 print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
 
 
