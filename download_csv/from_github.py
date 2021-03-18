@@ -10,11 +10,16 @@ import pathlib
 import pandas as pd
 import requests
 
-from typing import Union
-from datetime import datetime
-
-# import time
+import calendar;
+import time;
 # import progressbar
+
+from typing import Union
+import datetime
+
+ts = calendar.timegm(time.gmtime())
+timeOfWritingFile = datetime.datetime.fromtimestamp(ts).isoformat()
+print(timeOfWritingFile, ' | ', timeOfWritingFile.split("T", 1)[0])
 
 
 def convert_dtype(x):
@@ -57,6 +62,7 @@ class Bing:
         # =============================================================
 
 
+
 # Returns data as dictionary with DataFrames as Values
 bing = Bing()
 bing_df = bing.data
@@ -70,29 +76,60 @@ print(bing.data.keys())
 # 3) empty cell in column 'AdminRegion1'
 
 formatUSDate ="%m/%d/%Y"
+fromDate = '01/21/2021'
 
 bing_df['Updated'] = pd.to_datetime(bing_df['Updated'], format=formatUSDate)
 
-worldwide_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-netherlands_df = bing_df.loc[(bing_df['Updated'] > '01/21/2021') & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+worldwide_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+netherlands_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
 
 # Save dataframes to csv
 # TODO add if exist overwrite
 
+# dir_path = os.path.dirname(os.path.realpath(__file__))
+# print('X1', dir_path)
+
+# dir_path = os.path.join(dir_path, '..', 'somefolder')
+# print('X2', dir_path)
+
+# With the resulting string you can do os.chdir(dir_path)
+
 currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
-path_lt = convertToWindowsPath(path.replace('\Python\PythonTutorial\download_csv', ''))
+# print('Y', path)
 
-print(path_lt)
+# path_dt = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\bing-data\accumulation\csv-data-bing'))
 
-worldwide_df.to_csv(os.path.join(path_lt, r'WLD-COVID19-Data.csv'))
-print('BING Dataframe WLD Count: ', worldwide_df['Country_Region'].count())
-netherlands_df.to_csv(os.path.join(path_lt, r'NLD-COVID19-Data.csv'))
-print('BING Dataframe NLD Count: ', netherlands_df['Country_Region'].count())
+# ======================
 
+pathToWriteTo = ''
+# current working folder
+if path.__contains__('HomeProjects'):
+    # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
+    pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\bing-data\\accumulation\\csv-data-bing'))
+    print('Laptop:', pathToWriteTo)
+elif path.__contains__('GitHubRepositories'):
+    # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
+    pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\bing-data\\accumulation\\csv-data-bing'))
+    print('Desktop:', pathToWriteTo)
+else:
+    print('Wrong:', path)
 
+isoDate = pd.to_datetime(fromDate)
+strIsoDate = str(isoDate.strftime('%Y-%m-%d'))
+isoDateShort = strIsoDate.split("T", 1)[0]
 
+print('Time of file writing:', timeOfWritingFile.split("T", 1)[0])
 
+lastUpdatedDayWld = str(worldwide_df['Updated'].iloc[-1])
+print('DataFrame from \'first\' day', isoDateShort, 'till \'last\' day \'[Updated]\':', lastUpdatedDayWld.split(" ", 1)[0])
+worldwide_df.to_csv(os.path.join(pathToWriteTo, r'WLD-COVID19-Data.csv'))
+print('BING Dataframe WLD Count:', worldwide_df['Country_Region'].count())
+
+lastUpdatedDayNld = str(netherlands_df['Updated'].iloc[-1])
+print('DataFrame from \'first\' day', isoDateShort, 'till \'last\' day \'[Updated]\':', lastUpdatedDayNld.split(" ", 1)[0])
+netherlands_df.to_csv(os.path.join(pathToWriteTo, r'NLD-COVID19-Data.csv'))
+print('BING Dataframe NLD Count:', netherlands_df['Country_Region'].count())
 
 
 # # TEST
