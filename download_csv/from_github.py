@@ -80,8 +80,8 @@ fromDate = '01/21/2021'
 
 bing_df['Updated'] = pd.to_datetime(bing_df['Updated'], format=formatUSDate)
 
-worldwide_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
-netherlands_df = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
+worldwideDf = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Worldwide') & (bing_df['AdminRegion1'] == '')]
+netherlandsDf = bing_df.loc[(bing_df['Updated'] > fromDate) & (bing_df['Country_Region'] == 'Netherlands') & (bing_df['AdminRegion1'] == '')]
 
 # Save dataframes to csv
 # TODO add if exist overwrite
@@ -121,15 +121,15 @@ isoDateShort = strIsoDate.split("T", 1)[0]
 
 print('Time of file writing:', timeOfWritingFile.split("T", 1)[0])
 
-lastUpdatedDayWld = str(worldwide_df['Updated'].iloc[-1])
+lastUpdatedDayWld = str(worldwideDf['Updated'].iloc[-1])
 print('DataFrame from \'first\' day', isoDateShort, 'till \'last\' day \'[Updated]\':', lastUpdatedDayWld.split(" ", 1)[0])
-worldwide_df.to_csv(os.path.join(pathToWriteTo, r'WLD-COVID19-Data.csv'))
-print('BING Dataframe WLD Count:', worldwide_df['Country_Region'].count())
+worldwideDf.to_csv(os.path.join(pathToWriteTo, r'WLD-COVID19-Data.csv'))
+print('BING Dataframe WLD Count:', worldwideDf['Country_Region'].count())
 
-lastUpdatedDayNld = str(netherlands_df['Updated'].iloc[-1])
+lastUpdatedDayNld = str(netherlandsDf['Updated'].iloc[-1])
 print('DataFrame from \'first\' day', isoDateShort, 'till \'last\' day \'[Updated]\':', lastUpdatedDayNld.split(" ", 1)[0])
-netherlands_df.to_csv(os.path.join(pathToWriteTo, r'NLD-COVID19-Data.csv'))
-print('BING Dataframe NLD Count:', netherlands_df['Country_Region'].count())
+netherlandsDf.to_csv(os.path.join(pathToWriteTo, r'NLD-COVID19-Data.csv'))
+print('BING Dataframe NLD Count:', netherlandsDf['Country_Region'].count())
 
 
 # # TEST
