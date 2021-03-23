@@ -2,6 +2,7 @@
 
 import os
 import pandas as pd
+from pandas.core import indexing
 import requests
 import io
 
@@ -38,7 +39,7 @@ class Csse:
             'recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
         }
 
-        self.data = {case:pd.read_csv(url) for case, url in self.URLS.items()}
+        self.data = {case:pd.read_csv(url, header=0, escapechar='\\') for case, url in self.URLS.items()}
 
     # create other useful functions to work with data
     def current_status(self):
@@ -56,9 +57,25 @@ csse = Csse()
 # Keys of the dictionary
 print(csse.data.keys())
 
+# pivoting columns to rows and vice versa
 confirmed_df = csse.data['confirmed']
+
+date_columns = confirmed_df.iloc[:, 4:].columns
+print('X', date_columns)
+# confirmed_df = confirmed_df.melt(id_vars=date_columns)
+# confirmed_df = confirmed_df.pivot(index = date_columns, columns = 'Country/region', values = confirmed_df.iloc[:, 4:].values)
+# print('X', confirmed_df)
+
+# confirmed_df.melt(id_vars=date_columns)
+
+
+
+# .pivot(index='1/22/20')
 deaths_df = csse.data['deaths']
+# .pivot('repeat_id', 'gtex_id', 'norm_exp')
 recovered_df = csse.data['recovered']
+# .pivot('repeat_id', 'gtex_id', 'norm_exp')
+
 
 # Save dataframes to csv
 # TODO add if exist overwrite
