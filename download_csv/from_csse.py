@@ -52,6 +52,8 @@ class Csse:
 # Returns data as dictionary with DataFrames as Values
 csse = Csse()
 
+# print(csse.current_status)
+
 # print(csse.current_status())
 
 # Keys of the dictionary
@@ -60,24 +62,27 @@ print(csse.data.keys())
 # pivoting columns to rows
 confirmedDf = csse.data['Confirmed']
 dateColumnsConfirmed = confirmedDf.iloc[:, 4:].columns
-confirmedDfWideToLong = pd.melt(confirmedDf, id_vars=confirmedDf.columns[:4],
-                        value_vars = confirmedDf.columns[4:],
-                        var_name = 'Updated',
-                        value_name = 'Confirmed')
+confirmedDfWideToLong = pd.melt(confirmedDf,
+                            id_vars=confirmedDf.columns[:4],
+                            value_vars = confirmedDf.columns[4:],
+                            var_name = 'Updated',
+                            value_name = 'Confirmed')
 
 deceasedDf = csse.data['Deceased']
 dateColumnsDeceased = deceasedDf.iloc[:, 4:].columns
-confirmedDfWideToLong = pd.melt(deceasedDf, id_vars=deceasedDf.columns[:4],
-                        value_vars = deceasedDf.columns[4:],
-                        var_name = 'Updated',
-                        value_name = 'Deceased')
+confirmedDfWideToLong = pd.melt(deceasedDf,
+                            id_vars=deceasedDf.columns[:4],
+                            value_vars = deceasedDf.columns[4:],
+                            var_name = 'Updated',
+                            value_name = 'Deceased')
 
 recoveredDf = csse.data['Recovered']
 dateColumnsRecovered = recoveredDf.iloc[:, 4:].columns
-recoveredDfWideToLong = pd.melt(recoveredDf, id_vars=recoveredDf.columns[:4],
-                        value_vars = recoveredDf.columns[4:],
-                        var_name = 'Updated',
-                        value_name = 'Recovered')
+recoveredDfWideToLong = pd.melt(recoveredDf,
+                            id_vars=recoveredDf.columns[:4],
+                            value_vars = recoveredDf.columns[4:],
+                            var_name = 'Updated',
+                            value_name = 'Recovered')
 
 
 # Save dataframes to csv
@@ -111,4 +116,3 @@ print('R', recoveredDfWideToLong.head())
 print('R', recoveredDfWideToLong.tail())
 
 # ==================
-
