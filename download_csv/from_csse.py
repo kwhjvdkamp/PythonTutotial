@@ -10,27 +10,19 @@ class Csse:
 
     def __init__(self):
 
+        # =============================================================
+        # Returns data as dictionary with DataFrames as Values
         # Make sure the url is the raw version of the file on GitHub
-
         # Note:
         # In case an image needs to be retrieved from GitHub
         # add '?raw=true' at the end of the link to the file
 
-        # URL_PATH = 'REPLACE-ME WITH RAW-VERSION-URL-TO-THE-CSV-FILE'
-
-        # https://github.com/kwhjvdkamp/COVID-19/raw/master/csse_covid_19_data/csse_covid_19_time_series/
-        # time_series_covid19_confirmed_global.csv
-        # time_series_covid19_deaths_global.csv
-        # time_series_covid19_recovered_global.csv
-
-
-        # URL_PATH = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series'
+        # Dataframe forked from 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
 
         URL_PATH = 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
 
-        # f-strings provide a way to embed expressions inside string literals,
-        # using a minimal syntax. It should be noted that an f-string is really an expression
-        # evaluated at run time, not a constant value.
+        # f-strings provide a way to embed expressions inside string literals using a minimal syntax.
+        # It should be noted that an f-string is really an expression evaluated at run time, not a constant value.
         # In Python source code, an f-string is a literal string, prefixed with 'f',
         # which contains expressions inside braces. The expressions are replaced with their values.
         self.URLS = {
@@ -48,18 +40,12 @@ class Csse:
 
 
 
-# =============================================================
-# Returns data as dictionary with DataFrames as Values
 csse = Csse()
-
-# print(csse.current_status)
-
-# print(csse.current_status())
 
 # Keys of the dictionary
 print(csse.data.keys())
 
-# pivoting columns to rows
+# Pivoting columns to rows
 confirmedDf = csse.data['Confirmed']
 dateColumnsConfirmed = confirmedDf.iloc[:, 4:].columns
 confirmedDfWideToLong = pd.melt(confirmedDf,
@@ -68,9 +54,10 @@ confirmedDfWideToLong = pd.melt(confirmedDf,
                             var_name = 'Updated',
                             value_name = 'Confirmed')
 
+print('==================================================')
 deceasedDf = csse.data['Deceased']
 dateColumnsDeceased = deceasedDf.iloc[:, 4:].columns
-confirmedDfWideToLong = pd.melt(deceasedDf,
+deceasedDfWideToLong = pd.melt(deceasedDf,
                             id_vars=deceasedDf.columns[:4],
                             value_vars = deceasedDf.columns[4:],
                             var_name = 'Updated',
@@ -93,19 +80,19 @@ pathDt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
 
 # ==================
 
-recoveredDfWideToLong.to_csv(os.path.join(pathLt, r'csse_confirmed.csv'))
+confirmedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_confirmed.csv'))
 # First five rows
-print('C', recoveredDfWideToLong.head())
+print('C', confirmedDfWideToLong.head())
 # Last five rows
-print('C', recoveredDfWideToLong.tail())
+print('C', confirmedDfWideToLong.tail())
 
 # ==================
 
-confirmedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_deceased.csv'))
+deceasedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_deceased.csv'))
 # First five rows
-print('D', confirmedDfWideToLong.head())
+print('D', deceasedDfWideToLong.head())
 # Last five rows
-print('D', confirmedDfWideToLong.tail())
+print('D', deceasedDfWideToLong.tail())
 
 # ==================
 
