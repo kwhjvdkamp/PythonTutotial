@@ -34,9 +34,9 @@ class Csse:
         # In Python source code, an f-string is a literal string, prefixed with 'f',
         # which contains expressions inside braces. The expressions are replaced with their values.
         self.URLS = {
-            'confirmed': f'{URL_PATH}/time_series_covid19_confirmed_global.csv',
-            'deaths': f'{URL_PATH}/time_series_covid19_deaths_global.csv',
-            'recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
+            'Confirmed': f'{URL_PATH}/time_series_covid19_confirmed_global.csv',
+            'Deceased': f'{URL_PATH}/time_series_covid19_deaths_global.csv',
+            'Recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
         }
 
         self.data = {case:pd.read_csv(url, header=0, escapechar='\\') for case, url in self.URLS.items()}
@@ -57,57 +57,58 @@ csse = Csse()
 # Keys of the dictionary
 print(csse.data.keys())
 
-# pivoting columns to rows and vice versa
-confirmed_df = csse.data['confirmed']
+# pivoting columns to rows
+confirmedDf = csse.data['Confirmed']
+dateColumnsConfirmed = confirmedDf.iloc[:, 4:].columns
+confirmedDfWideToLong = pd.melt(confirmedDf, id_vars=confirmedDf.columns[:4],
+                        value_vars = confirmedDf.columns[4:],
+                        var_name = 'Updated',
+                        value_name = 'Confirmed')
 
-date_columns = confirmed_df.iloc[:, 4:].columns
-print('X', date_columns)
-# confirmed_df = confirmed_df.melt(id_vars=date_columns)
-# confirmed_df = confirmed_df.pivot(index = date_columns, columns = 'Country/region', values = confirmed_df.iloc[:, 4:].values)
-# print('X', confirmed_df)
+deceasedDf = csse.data['Deceased']
+dateColumnsDeceased = deceasedDf.iloc[:, 4:].columns
+confirmedDfWideToLong = pd.melt(deceasedDf, id_vars=deceasedDf.columns[:4],
+                        value_vars = deceasedDf.columns[4:],
+                        var_name = 'Updated',
+                        value_name = 'Deceased')
 
-# confirmed_df.melt(id_vars=date_columns)
-
-
-
-# .pivot(index='1/22/20')
-deaths_df = csse.data['deaths']
-# .pivot('repeat_id', 'gtex_id', 'norm_exp')
-recovered_df = csse.data['recovered']
-# .pivot('repeat_id', 'gtex_id', 'norm_exp')
+recoveredDf = csse.data['Recovered']
+dateColumnsRecovered = recoveredDf.iloc[:, 4:].columns
+recoveredDfWideToLong = pd.melt(recoveredDf, id_vars=recoveredDf.columns[:4],
+                        value_vars = recoveredDf.columns[4:],
+                        var_name = 'Updated',
+                        value_name = 'Recovered')
 
 
 # Save dataframes to csv
 # TODO add if exist overwrite
-path_lt=r'C:\HomeProjects\COVID-19-Data\csse-data'
+pathLt=r'C:\HomeProjects\COVID-19-Data\csse-data'
 
-path_dt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
+pathDt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
 
 # ==================
 
-confirmed_df.to_csv(os.path.join(path_lt, r'csse_confirmed.csv'))
+recoveredDfWideToLong.to_csv(os.path.join(pathLt, r'csse_confirmed.csv'))
 # First five rows
-print(confirmed_df.head())
+print('C', recoveredDfWideToLong.head())
 # Last five rows
-print(confirmed_df.tail())
+print('C', recoveredDfWideToLong.tail())
 
 # ==================
 
-deaths_df.to_csv(os.path.join(path_lt, r'csse_deaths.csv'))
+confirmedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_deceased.csv'))
 # First five rows
-print(deaths_df.head())
+print('D', confirmedDfWideToLong.head())
 # Last five rows
-print(deaths_df.tail())
+print('D', confirmedDfWideToLong.tail())
 
 # ==================
 
-recovered_df.to_csv(os.path.join(path_lt, r'csse_recovered.csv'))
+recoveredDfWideToLong.to_csv(os.path.join(pathLt, r'csse_recovered.csv'))
 # First five rows
-print(recovered_df.head())
+print('R', recoveredDfWideToLong.head())
 # Last five rows
-print(recovered_df.tail())
+print('R', recoveredDfWideToLong.tail())
 
 # ==================
 
-# with open(os.path.join(path, r'csse_confirmed.csv'), 'w+') as f:
-#     f.write(r'csse_confirmed.csv')
