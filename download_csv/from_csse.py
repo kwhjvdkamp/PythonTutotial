@@ -96,7 +96,7 @@ print('C', recoveredDfWideToLong.tail())
 
 # ==================
 
-confirmedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_deaths.csv'))
+confirmedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_deceased.csv'))
 # First five rows
 print('D', confirmedDfWideToLong.head())
 # Last five rows
