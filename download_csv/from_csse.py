@@ -1,10 +1,22 @@
 # Downloading the csv file from CSSE
 
 import os
+import pathlib
 import pandas as pd
-from pandas.core import indexing
 import requests
 import io
+
+from pandas.core import indexing
+from typing import Union
+
+
+def convertToWindowsPath(string: Union[str, pathlib.Path]):
+    # This converts a str to a Path (if already a Path, nothing changes)
+    path = pathlib.Path(string)
+    # print(type(path))
+    # print(path)
+    return path
+
 
 class Csse:
 
@@ -74,13 +86,29 @@ recoveredDfWideToLong = pd.melt(recoveredDf,
 
 # Save dataframes to csv
 # TODO add if exist overwrite
-pathLt=r'C:\HomeProjects\COVID-19-Data\csse-data'
+# pathLt=r'C:\HomeProjects\COVID-19-Data\csse-data'
 
-pathDt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
+# pathDt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
+
+currentContainer = pathlib.Path(__file__).parent.absolute()
+path = str(currentContainer)
+
+pathToWriteTo = ''
+# current working folder
+if path.__contains__('HomeProjects'):
+    # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
+    pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+    print('Laptop:', pathToWriteTo)
+elif path.__contains__('GitHubRepositories'):
+    # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
+    pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+    print('Desktop:', pathToWriteTo)
+else:
+    print('Wrong:', path)
 
 # ==================
 
-confirmedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_confirmed.csv'))
+confirmedDfWideToLong.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
 # First five rows
 print('C', confirmedDfWideToLong.head())
 # Last five rows
@@ -88,7 +116,7 @@ print('C', confirmedDfWideToLong.tail())
 
 # ==================
 
-deceasedDfWideToLong.to_csv(os.path.join(pathLt, r'csse_deceased.csv'))
+deceasedDfWideToLong.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
 # First five rows
 print('D', deceasedDfWideToLong.head())
 # Last five rows
@@ -96,7 +124,7 @@ print('D', deceasedDfWideToLong.tail())
 
 # ==================
 
-recoveredDfWideToLong.to_csv(os.path.join(pathLt, r'csse_recovered.csv'))
+recoveredDfWideToLong.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 # First five rows
 print('R', recoveredDfWideToLong.head())
 # Last five rows
