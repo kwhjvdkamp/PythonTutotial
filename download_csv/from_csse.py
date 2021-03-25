@@ -6,6 +6,7 @@ import pandas as pd
 import requests
 import io
 
+from datetime import datetime
 from pandas.core import indexing
 from typing import Union
 
@@ -51,6 +52,11 @@ class Csse:
         pass
 
 
+# =========================================================================================
+
+
+# Original data contains dates formatted like m/d/jj (no preceding zero's and two digit year)
+format_str = '%m/%d/%y' # The original date format
 
 csse = Csse()
 
@@ -59,32 +65,56 @@ print(csse.data.keys())
 
 # Pivoting columns to rows
 confirmedDf = csse.data['Confirmed']
-dateColumnConfirmed = confirmedDf.iloc[:, 4:].columns
-
-isoDateColumnConfirmed = pd.to_datetime(dateColumnConfirmed).strftime('%Y-%m-%d')
-print(isoDateColumnConfirmed)
-
+# dateColumnConfirmed = confirmedDf.iloc[:, 4:].columns
+# isoDateColumnConfirmed = pd.to_datetime(dateColumnConfirmed).strftime('%Y-%m-%d')
+# print('isoDateColumnConfirmed', type(isoDateColumnConfirmed), isoDateColumnConfirmed)
 confirmedDfWideToLong = pd.melt(confirmedDf,
                             id_vars=confirmedDf.columns[:4],
                             value_vars = confirmedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Confirmed')
 confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
+dictConfirmed = {
+    'Date': pd.to_datetime(confirmedDfWideToLong['Updated'], format=format_str),
+    'Province_State': confirmedDfWideToLong['Province/State'],
+    'Country_Region': confirmedDfWideToLong['Country/Region'],
+    'Latitude': confirmedDfWideToLong['Lat'],
+    'Longitude': confirmedDfWideToLong['Long'],
+    'Confirmed': confirmedDfWideToLong['Confirmed']
+}
+dfConfirmed = pd.DataFrame(dictConfirmed)
+print(dfConfirmed.keys())
+dfConfirmed.sort_values(by=['Date'])
+# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
 
-print('>', confirmedDfWideToLong['Updated'])
 
-pd.to_datetime(confirmedDfWideToLong['Updated']).dt.strftime('%Y-%m-%d')
-
+# print('==================================================')
 
 
-print('==================================================')
 deceasedDf = csse.data['Deceased']
-dateColumnsDeceased = deceasedDf.iloc[:, 4:].columns
+# dateColumnsDeceased = deceasedDf.iloc[:, 4:].columns
 deceasedDfWideToLong = pd.melt(deceasedDf,
                             id_vars=deceasedDf.columns[:4],
                             value_vars = deceasedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Deceased')
+deceasedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
+dictDeceased = {
+    'Date': pd.to_datetime(deceasedDfWideToLong['Updated'], format=format_str),
+    'Province_State': deceasedDfWideToLong['Province/State'],
+    'Country_Region': deceasedDfWideToLong['Country/Region'],
+    'Latitude': deceasedDfWideToLong['Lat'],
+    'Longitude': deceasedDfWideToLong['Long'],
+    'Deceased': deceasedDfWideToLong['Deceased']
+}
+dfDeceased = pd.DataFrame(dictDeceased)
+print(dfDeceased.keys())
+dfDeceased.sort_values(by=['Date'])
+# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
+
+
+# print('==================================================')
+
 
 recoveredDf = csse.data['Recovered']
 dateColumnsRecovered = recoveredDf.iloc[:, 4:].columns
@@ -93,6 +123,22 @@ recoveredDfWideToLong = pd.melt(recoveredDf,
                             value_vars = recoveredDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Recovered')
+recoveredDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
+dictRecovered = {
+    'Date': pd.to_datetime(recoveredDfWideToLong['Updated'], format=format_str),
+    'Province_State': recoveredDfWideToLong['Province/State'],
+    'Country_Region': recoveredDfWideToLong['Country/Region'],
+    'Latitude': recoveredDfWideToLong['Lat'],
+    'Longitude': recoveredDfWideToLong['Long'],
+    'Recovered': recoveredDfWideToLong['Recovered']
+}
+dfRecovered = pd.DataFrame(dictRecovered)
+print(dfRecovered.keys())
+dfRecovered.sort_values(by=['Date'])
+# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
+
+
+# print('==================================================')
 
 
 # Save dataframes to csv
@@ -119,26 +165,26 @@ else:
 
 # ==================
 
-confirmedDfWideToLong.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
+dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
 # First five rows
-print('C', confirmedDfWideToLong.head())
+print('C', dfConfirmed.head())
 # Last five rows
-print('C', confirmedDfWideToLong.tail())
+print('C', dfConfirmed.tail())
 
 # ==================
 
-deceasedDfWideToLong.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
+dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
 # First five rows
-print('D', deceasedDfWideToLong.head())
+print('D', dfDeceased.head())
 # Last five rows
-print('D', deceasedDfWideToLong.tail())
+print('D', dfDeceased.tail())
 
 # ==================
 
-recoveredDfWideToLong.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
+dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 # First five rows
-print('R', recoveredDfWideToLong.head())
+print('R', dfRecovered.head())
 # Last five rows
-print('R', recoveredDfWideToLong.tail())
+print('R', dfRecovered.tail())
 
-# ==================
+# # ==================
