@@ -59,12 +59,23 @@ print(csse.data.keys())
 
 # Pivoting columns to rows
 confirmedDf = csse.data['Confirmed']
-dateColumnsConfirmed = confirmedDf.iloc[:, 4:].columns
+dateColumnConfirmed = confirmedDf.iloc[:, 4:].columns
+
+isoDateColumnConfirmed = pd.to_datetime(dateColumnConfirmed).strftime('%Y-%m-%d')
+print(isoDateColumnConfirmed)
+
 confirmedDfWideToLong = pd.melt(confirmedDf,
                             id_vars=confirmedDf.columns[:4],
                             value_vars = confirmedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Confirmed')
+confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
+
+print('>', confirmedDfWideToLong['Updated'])
+
+pd.to_datetime(confirmedDfWideToLong['Updated']).dt.strftime('%Y-%m-%d')
+
+
 
 print('==================================================')
 deceasedDf = csse.data['Deceased']
