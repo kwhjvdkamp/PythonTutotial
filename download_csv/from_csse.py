@@ -65,17 +65,11 @@ print(csse.data.keys())
 
 # Pivoting columns to rows
 confirmedDf = csse.data['Confirmed']
-# dateColumnConfirmed = confirmedDf.iloc[:, 4:].columns
-# isoDateColumnConfirmed = pd.to_datetime(dateColumnConfirmed).strftime('%Y-%m-%d')
-# print('isoDateColumnConfirmed', type(isoDateColumnConfirmed), isoDateColumnConfirmed)
 confirmedDfWideToLong = pd.melt(confirmedDf,
                             id_vars=confirmedDf.columns[:4],
                             value_vars = confirmedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Confirmed')
-# inplace=True means the original dataframe is changed
-# confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=true)
-confirmedDfWideToLong = confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'])
 dictConfirmed = {
     'Date': pd.to_datetime(confirmedDfWideToLong['Updated'], format=format_str),
     'Province_State': confirmedDfWideToLong['Province/State'],
@@ -85,22 +79,19 @@ dictConfirmed = {
     'Confirmed': confirmedDfWideToLong['Confirmed']
 }
 dfConfirmed = pd.DataFrame(dictConfirmed)
-print(dfConfirmed.keys())
+dfConfirmed = dfConfirmed.sort_values(by=['Country_Region', 'Date'])
+print('AFTER SORTING dfConfirmed', dfConfirmed)
 dfConfirmed.sort_values(by=['Date'])
 # print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
 
-
 # print('==================================================')
 
-
 deceasedDf = csse.data['Deceased']
-# dateColumnsDeceased = deceasedDf.iloc[:, 4:].columns
 deceasedDfWideToLong = pd.melt(deceasedDf,
                             id_vars=deceasedDf.columns[:4],
                             value_vars = deceasedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Deceased')
-deceasedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
 dictDeceased = {
     'Date': pd.to_datetime(deceasedDfWideToLong['Updated'], format=format_str),
     'Province_State': deceasedDfWideToLong['Province/State'],
@@ -110,22 +101,19 @@ dictDeceased = {
     'Deceased': deceasedDfWideToLong['Deceased']
 }
 dfDeceased = pd.DataFrame(dictDeceased)
-print(dfDeceased.keys())
+dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
+print('AFTER SORTING dfDeceased', dfDeceased)
 dfDeceased.sort_values(by=['Date'])
 # print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
 
-
 # print('==================================================')
 
-
 recoveredDf = csse.data['Recovered']
-dateColumnsRecovered = recoveredDf.iloc[:, 4:].columns
 recoveredDfWideToLong = pd.melt(recoveredDf,
                             id_vars=recoveredDf.columns[:4],
                             value_vars = recoveredDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Recovered')
-recoveredDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
 dictRecovered = {
     'Date': pd.to_datetime(recoveredDfWideToLong['Updated'], format=format_str),
     'Province_State': recoveredDfWideToLong['Province/State'],
@@ -135,9 +123,12 @@ dictRecovered = {
     'Recovered': recoveredDfWideToLong['Recovered']
 }
 dfRecovered = pd.DataFrame(dictRecovered)
-print(dfRecovered.keys())
+dfRecovered = dfRecovered.sort_values(by=['Country_Region', 'Date'])
+print('AFTER SORTING dfRecovered', dfRecovered)
 dfRecovered.sort_values(by=['Date'])
 # print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
+
+# print('==================================================')
 
 print('C', dfConfirmed.head())
 print('C', dfConfirmed.tail())
@@ -149,6 +140,7 @@ print('R', dfRecovered.head())
 print('R', dfRecovered.tail())
 
 # print('==================================================')
+
 doWrite = False
 if doWrite:
 
