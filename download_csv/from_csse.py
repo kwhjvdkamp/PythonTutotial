@@ -73,7 +73,9 @@ confirmedDfWideToLong = pd.melt(confirmedDf,
                             value_vars = confirmedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Confirmed')
-confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=True)
+# inplace=True means the original dataframe is changed
+# confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'], inplace=true)
+confirmedDfWideToLong = confirmedDfWideToLong.sort_values(by=['Country/Region', 'Updated'])
 dictConfirmed = {
     'Date': pd.to_datetime(confirmedDfWideToLong['Updated'], format=format_str),
     'Province_State': confirmedDfWideToLong['Province/State'],
@@ -141,12 +143,6 @@ dfRecovered.sort_values(by=['Date'])
 # print('==================================================')
 
 
-# Save dataframes to csv
-# TODO add if exist overwrite
-# pathLt=r'C:\HomeProjects\COVID-19-Data\csse-data'
-
-# pathDt=r'C:\GitHubRepositories\COVID-19-Data\csse-data'
-
 currentContainer = pathlib.Path(__file__).parent.absolute()
 path = str(currentContainer)
 
@@ -163,28 +159,14 @@ elif path.__contains__('GitHubRepositories'):
 else:
     print('Wrong:', path)
 
-# ==================
-
 dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
-# First five rows
 print('C', dfConfirmed.head())
-# Last five rows
 print('C', dfConfirmed.tail())
 
-# ==================
-
 dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
-# First five rows
 print('D', dfDeceased.head())
-# Last five rows
 print('D', dfDeceased.tail())
 
-# ==================
-
 dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
-# First five rows
 print('R', dfRecovered.head())
-# Last five rows
 print('R', dfRecovered.tail())
-
-# # ==================
