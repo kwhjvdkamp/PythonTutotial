@@ -139,34 +139,38 @@ print(dfRecovered.keys())
 dfRecovered.sort_values(by=['Date'])
 # print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
 
-
-# print('==================================================')
-
-
-currentContainer = pathlib.Path(__file__).parent.absolute()
-path = str(currentContainer)
-
-pathToWriteTo = ''
-# current working folder
-if path.__contains__('HomeProjects'):
-    # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
-    pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
-    print('Laptop:', pathToWriteTo)
-elif path.__contains__('GitHubRepositories'):
-    # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
-    pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
-    print('Desktop:', pathToWriteTo)
-else:
-    print('Wrong:', path)
-
-dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
 print('C', dfConfirmed.head())
 print('C', dfConfirmed.tail())
 
-dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
 print('D', dfDeceased.head())
 print('D', dfDeceased.tail())
 
-dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 print('R', dfRecovered.head())
 print('R', dfRecovered.tail())
+
+# print('==================================================')
+doWrite = False
+if doWrite:
+
+    currentContainer = pathlib.Path(__file__).parent.absolute()
+    path = str(currentContainer)
+
+    pathToWriteTo = ''
+    # current working folder
+    if path.__contains__('HomeProjects'):
+        # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
+        pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        print('Laptop:', pathToWriteTo)
+    elif path.__contains__('GitHubRepositories'):
+        # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
+        pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        print('Desktop:', pathToWriteTo)
+    else:
+        print('Wrong:', path)
+
+    dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
+    dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
+    dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
+
+else:
+    print('\r\n=====================\r\nNo file writing')
