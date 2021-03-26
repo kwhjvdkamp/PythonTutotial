@@ -30,7 +30,9 @@ class Csse:
         # In case an image needs to be retrieved from GitHub
         # add '?raw=true' at the end of the link to the file
 
-        # Dataframe forked from 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
+        # Dataframe forked
+        # from 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
+        # into 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
 
         URL_PATH = 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
 
