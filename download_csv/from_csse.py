@@ -1,4 +1,4 @@
-# type: ignore
+# //type: ignore
 # ========================================================
 # Above line tells Pylance to ignore particular file?
 # > At the top of the file to ignore the file
@@ -22,7 +22,7 @@ from datetime import datetime
 from pandas.core import indexing
 from typing import Union
 
-print("Count {0}".format(len(CC)))
+# print("1-Count {0}".format(len(CC)))
 
 def convertToWindowsPath(string: Union[str, pathlib.Path]):
     # This converts a str to a Path (if already a Path, nothing changes)
@@ -31,18 +31,18 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
     # print(path)
     return path
 
-
-def columnIterator(column):
-    for item in column:
-        getIsoCodeKeyForCountryValue(item)
-    return item
+def columnIterator(valuesOfArray):
+    codes = []
+    for item in valuesOfArray:
+        codes.append(getIsoCodeKeyForCountryValue(item))
+    return codes
 
 # function to return key for any value
-def getIsoCodeKeyForCountryValue(val):
+def getIsoCodeKeyForCountryValue(item):
     for key, value in CC.items():
-        if str(val).upper() == value:
+        if str(item).upper() == value:
             return key
-    return "IsoCode for doesn't exist"
+
 
 
 class Csse:
@@ -90,7 +90,7 @@ format_str = '%m/%d/%y' # The original date format
 csse = Csse()
 
 # Keys of the dictionary
-print(csse.data.keys())
+# print(csse.data.keys())
 
 # Pivoting columns to rows
 confirmedDf = csse.data['Confirmed']
@@ -100,10 +100,12 @@ confirmedDfWideToLong = pd.melt(confirmedDf,
                             var_name = 'Updated',
                             value_name = 'Confirmed')
 
-print('Dataframe Column \'Country/Region\'', confirmedDf['Country/Region'])
+# print('3-Dataframe Column \'Country/Region\'', confirmedDf['Country/Region'])
 
 confirmedDfWideToLong['IsoCode'] = confirmedDfWideToLong['Country/Region']
-print('Dataframe confirmedDfWideToLong[\'IsoCode\']\r\n', columnIterator([confirmedDfWideToLong['IsoCode']]) )
+print('Type', type(confirmedDfWideToLong['IsoCode']))
+valuesOfArray = confirmedDfWideToLong['IsoCode'].values
+# print('X-Dataframe confirmedDfWideToLong[\'IsoCode\']\r\n', columnIterator(valuesOfArray) )
 
 print('+++++')
 
@@ -113,7 +115,7 @@ dictConfirmed = {
     'Country_Region': confirmedDfWideToLong['Country/Region'],
     'Latitude': confirmedDfWideToLong['Lat'],
     'Longitude': confirmedDfWideToLong['Long'],
-    # 'ISO': getIsoCodeKeyForCountryValue([confirmedDfWideToLong['IsoCode']]),
+    'ISO': columnIterator(valuesOfArray),
     'Confirmed': confirmedDfWideToLong['Confirmed']
 }
 dfConfirmed = pd.DataFrame(dictConfirmed)
