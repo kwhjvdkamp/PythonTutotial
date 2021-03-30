@@ -37,6 +37,7 @@ def columnIterator(valuesOfArray):
         codes.append(getIsoCodeKeyForCountryValue(item))
     return codes
 
+
 # function to return key for any value
 def getIsoCodeKeyForCountryValue(item):
     for key, value in CC.items():
