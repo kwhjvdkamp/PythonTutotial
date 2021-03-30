@@ -31,6 +31,7 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
     # print(path)
     return path
 
+# 
 def columnIterator(valuesOfArray):
     codes = []
     for item in valuesOfArray:
@@ -43,7 +44,6 @@ def getIsoCodeKeyForCountryValue(item):
     for key, value in CC.items():
         if str(item).upper() == value:
             return key
-
 
 
 class Csse:
