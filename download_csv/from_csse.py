@@ -1,5 +1,12 @@
+# type: ignore
+# ========================================================
+# Above line tells Pylance to ignore particular file?
+# > At the top of the file to ignore the file
+# > At the end of a line to ignore the line
+# ========================================================
+
 # Downloading the csv file from CSSE
-print('__file__={0:<35} | __name__={1:<20} | __package__={2:<20}'.format(__file__,__name__,str(__package__)))
+print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__file__,__name__,str(__package__)))
 
 import os
 import pathlib
@@ -21,6 +28,8 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
     # print(type(path))
     # print(path)
     return path
+
+
 
 
 class Csse:
