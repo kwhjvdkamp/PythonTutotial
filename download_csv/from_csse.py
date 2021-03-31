@@ -15,7 +15,7 @@ import requests
 import io
 
 # local modules
-from isoCountryCodes import CC
+from isoCountryCodes import CC, CCC
 
 
 from datetime import datetime
@@ -31,19 +31,37 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
     # print(path)
     return path
 
-# 
-def columnIterator(valuesOfArray):
+#
+def getIso2CodeKeyForCountryValue(valuesOfArray):
+    # codes-list will going to contain an object of
+    # {'Iso2': 'XX', 'Iso3', 'XXX'}
     codes = []
     for item in valuesOfArray:
-        codes.append(getIsoCodeKeyForCountryValue(item))
+        pair = columnIterator(item)
+        item = pair['Iso2']
+        codes.append(columnIterator(item))
+    return codes
+
+
+def getIso3CodeKeyForCountryValue(valuesOfArray):
+    codes = []
+    for item in valuesOfArray:
+        pair = columnIterator(item)
+        item = pair['Iso2']
+        codes.append(columnIterator(item))
     return codes
 
 
 # function to return key for any value
-def getIsoCodeKeyForCountryValue(item):
-    for key, value in CC.items():
-        if str(item).upper() == value:
-            return key
+def columnIterator(item):
+    for key, value in CCC.items():
+        if (key == item):
+            # print('key', key, ' | value', value)
+            return value
+
+    # for key, value in CCC.items():
+    #     if value == str(item).upper():
+    #         return key
 
 
 class Csse:
@@ -116,7 +134,8 @@ dictConfirmed = {
     'Country_Region': confirmedDfWideToLong['Country/Region'],
     'Latitude': confirmedDfWideToLong['Lat'],
     'Longitude': confirmedDfWideToLong['Long'],
-    'ISO': columnIterator(valuesOfArray),
+    'ISO2': getIso2CodeKeyForCountryValue(valuesOfArray),
+    'ISO3' : getIso3CodeKeyForCountryValue(valuesOfArray),
     'Confirmed': confirmedDfWideToLong['Confirmed']
 }
 dfConfirmed = pd.DataFrame(dictConfirmed)
