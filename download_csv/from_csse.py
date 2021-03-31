@@ -57,19 +57,6 @@ def getIsoCodeKeyForCountryValue(valuesOfArray, iso):
     return codes
 
 
-# def getIso3CodeKeyForCountryValue(valuesOfArray):
-#     codes = []
-#     for item in valuesOfArray:
-#         pair = columnIterator(item)
-#         if pair != None:
-#             item = pair['Iso3']
-#             codes.append(item)
-#         else:
-#             print('No Iso3 for {item}')
-#             codes.append('---')
-#     return codes
-
-
 # function to return key for any value
 def columnIterator(item):
     for key, value in CCC.items():
@@ -136,33 +123,26 @@ confirmedDfWideToLong = pd.melt(confirmedDf,
                             value_vars = confirmedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Confirmed')
-
-# print('3-Dataframe Column \'Country/Region\'', confirmedDf['Country/Region'])
-
 confirmedDfWideToLong['IsoCode'] = confirmedDfWideToLong['Country/Region']
-print('Type', type(confirmedDfWideToLong['IsoCode']))
-valuesOfArray = confirmedDfWideToLong['IsoCode'].values
-# print('X-Dataframe confirmedDfWideToLong[\'IsoCode\']\r\n', columnIterator(valuesOfArray) )
-
-print('+++++')
-
+# print('Type', type(confirmedDfWideToLong['IsoCode']))
+confirmedValuesOfArray = confirmedDfWideToLong['IsoCode'].values
 dictConfirmed = {
     'Date': pd.to_datetime(confirmedDfWideToLong['Updated'], format=format_str),
     'Province_State': confirmedDfWideToLong['Province/State'],
     'Country_Region': confirmedDfWideToLong['Country/Region'],
     'Latitude': confirmedDfWideToLong['Lat'],
     'Longitude': confirmedDfWideToLong['Long'],
-    'ISO2': getIsoCodeKeyForCountryValue(valuesOfArray, 'Iso2'),
-    'ISO3' : getIsoCodeKeyForCountryValue(valuesOfArray, 'Iso3'),
+    'ISO2': getIsoCodeKeyForCountryValue(confirmedValuesOfArray, 'Iso2'),
+    'ISO3' : getIsoCodeKeyForCountryValue(confirmedValuesOfArray, 'Iso3'),
     'Confirmed': confirmedDfWideToLong['Confirmed']
 }
 dfConfirmed = pd.DataFrame(dictConfirmed)
 dfConfirmed = dfConfirmed.sort_values(by=['Country_Region', 'Date'])
-print('AFTER SORTING dfConfirmed', dfConfirmed)
+# print('AFTER SORTING dfConfirmed\r\n', dfConfirmed)
 dfConfirmed.sort_values(by=['Date'])
-print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
+# print('After Melting dfConfirmed\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
 
-# print('==================================================')
+print('==================================================')
 
 deceasedDf = csse.data['Deceased']
 deceasedDfWideToLong = pd.melt(deceasedDf,
@@ -170,21 +150,26 @@ deceasedDfWideToLong = pd.melt(deceasedDf,
                             value_vars = deceasedDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Deceased')
+deceasedDfWideToLong['IsoCode'] = deceasedDfWideToLong['Country/Region']
+# print('Type', type(deceasedDfWideToLong['IsoCode']))
+deceasedValuesOfArray = deceasedDfWideToLong['IsoCode'].values
 dictDeceased = {
     'Date': pd.to_datetime(deceasedDfWideToLong['Updated'], format=format_str),
     'Province_State': deceasedDfWideToLong['Province/State'],
     'Country_Region': deceasedDfWideToLong['Country/Region'],
     'Latitude': deceasedDfWideToLong['Lat'],
     'Longitude': deceasedDfWideToLong['Long'],
+    'ISO2': getIsoCodeKeyForCountryValue(deceasedValuesOfArray, 'Iso2'),
+    'ISO3' : getIsoCodeKeyForCountryValue(deceasedValuesOfArray, 'Iso3'),
     'Deceased': deceasedDfWideToLong['Deceased']
 }
 dfDeceased = pd.DataFrame(dictDeceased)
 dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
-print('AFTER SORTING dfDeceased', dfDeceased)
+# print('AFTER SORTING dfDeceased\r\n', dfDeceased)
 dfDeceased.sort_values(by=['Date'])
-# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
+# print('After Melting dfDeceased\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
 
-# print('==================================================')
+print('==================================================')
 
 recoveredDf = csse.data['Recovered']
 recoveredDfWideToLong = pd.melt(recoveredDf,
@@ -192,21 +177,26 @@ recoveredDfWideToLong = pd.melt(recoveredDf,
                             value_vars = recoveredDf.columns[4:],
                             var_name = 'Updated',
                             value_name = 'Recovered')
+recoveredDfWideToLong['IsoCode'] = recoveredDfWideToLong['Country/Region']
+# print('Type', type(recoveredDfWideToLong['IsoCode']))
+recoveredValuesOfArray = recoveredDfWideToLong['IsoCode'].values
 dictRecovered = {
     'Date': pd.to_datetime(recoveredDfWideToLong['Updated'], format=format_str),
     'Province_State': recoveredDfWideToLong['Province/State'],
     'Country_Region': recoveredDfWideToLong['Country/Region'],
     'Latitude': recoveredDfWideToLong['Lat'],
     'Longitude': recoveredDfWideToLong['Long'],
+    'ISO2': getIsoCodeKeyForCountryValue(recoveredValuesOfArray, 'Iso2'),
+    'ISO3' : getIsoCodeKeyForCountryValue(recoveredValuesOfArray, 'Iso3'),
     'Recovered': recoveredDfWideToLong['Recovered']
 }
 dfRecovered = pd.DataFrame(dictRecovered)
 dfRecovered = dfRecovered.sort_values(by=['Country_Region', 'Date'])
-print('AFTER SORTING dfRecovered', dfRecovered)
+# print('AFTER SORTING dfRecovered\r\n', dfRecovered)
 dfRecovered.sort_values(by=['Date'])
-# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
+# print('After Melting dfRecovered\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
 
-# print('==================================================')
+print('==================================================')
 
 print('C', dfConfirmed.head())
 print('C', dfConfirmed.tail())
