@@ -32,24 +32,42 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
     return path
 
 #
-def getIso2CodeKeyForCountryValue(valuesOfArray):
+def getIsoCodeKeyForCountryValue(valuesOfArray, iso):
     # codes-list will going to contain an object of
     # {'Iso2': 'XX', 'Iso3', 'XXX'}
     codes = []
+    noCodesForCountry = []
     for item in valuesOfArray:
         pair = columnIterator(item)
-        item = pair['Iso2']
-        codes.append(columnIterator(item))
+        # 'None' equivalent to 'null'
+        if pair != None:
+            item = pair[iso]
+            codes.append(item)
+        else:
+            if item not in noCodesForCountry:
+                noCodesForCountry.append(item)
+            if iso == 'Iso2':
+                # print('No ', iso, 'for ', item)
+                codes.append('--')
+            else:
+                # print('No ', iso, 'for ', item)
+                codes.append('---')
+
+    # print(noCodesForCountry)
     return codes
 
 
-def getIso3CodeKeyForCountryValue(valuesOfArray):
-    codes = []
-    for item in valuesOfArray:
-        pair = columnIterator(item)
-        item = pair['Iso2']
-        codes.append(columnIterator(item))
-    return codes
+# def getIso3CodeKeyForCountryValue(valuesOfArray):
+#     codes = []
+#     for item in valuesOfArray:
+#         pair = columnIterator(item)
+#         if pair != None:
+#             item = pair['Iso3']
+#             codes.append(item)
+#         else:
+#             print('No Iso3 for {item}')
+#             codes.append('---')
+#     return codes
 
 
 # function to return key for any value
@@ -134,8 +152,8 @@ dictConfirmed = {
     'Country_Region': confirmedDfWideToLong['Country/Region'],
     'Latitude': confirmedDfWideToLong['Lat'],
     'Longitude': confirmedDfWideToLong['Long'],
-    'ISO2': getIso2CodeKeyForCountryValue(valuesOfArray),
-    'ISO3' : getIso3CodeKeyForCountryValue(valuesOfArray),
+    'ISO2': getIsoCodeKeyForCountryValue(valuesOfArray, 'Iso2'),
+    'ISO3' : getIsoCodeKeyForCountryValue(valuesOfArray, 'Iso3'),
     'Confirmed': confirmedDfWideToLong['Confirmed']
 }
 dfConfirmed = pd.DataFrame(dictConfirmed)
@@ -144,85 +162,85 @@ print('AFTER SORTING dfConfirmed', dfConfirmed)
 dfConfirmed.sort_values(by=['Date'])
 print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
 
-# # print('==================================================')
+# print('==================================================')
 
-# deceasedDf = csse.data['Deceased']
-# deceasedDfWideToLong = pd.melt(deceasedDf,
-#                             id_vars=deceasedDf.columns[:4],
-#                             value_vars = deceasedDf.columns[4:],
-#                             var_name = 'Updated',
-#                             value_name = 'Deceased')
-# dictDeceased = {
-#     'Date': pd.to_datetime(deceasedDfWideToLong['Updated'], format=format_str),
-#     'Province_State': deceasedDfWideToLong['Province/State'],
-#     'Country_Region': deceasedDfWideToLong['Country/Region'],
-#     'Latitude': deceasedDfWideToLong['Lat'],
-#     'Longitude': deceasedDfWideToLong['Long'],
-#     'Deceased': deceasedDfWideToLong['Deceased']
-# }
-# dfDeceased = pd.DataFrame(dictDeceased)
-# dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
-# print('AFTER SORTING dfDeceased', dfDeceased)
-# dfDeceased.sort_values(by=['Date'])
-# # print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
+deceasedDf = csse.data['Deceased']
+deceasedDfWideToLong = pd.melt(deceasedDf,
+                            id_vars=deceasedDf.columns[:4],
+                            value_vars = deceasedDf.columns[4:],
+                            var_name = 'Updated',
+                            value_name = 'Deceased')
+dictDeceased = {
+    'Date': pd.to_datetime(deceasedDfWideToLong['Updated'], format=format_str),
+    'Province_State': deceasedDfWideToLong['Province/State'],
+    'Country_Region': deceasedDfWideToLong['Country/Region'],
+    'Latitude': deceasedDfWideToLong['Lat'],
+    'Longitude': deceasedDfWideToLong['Long'],
+    'Deceased': deceasedDfWideToLong['Deceased']
+}
+dfDeceased = pd.DataFrame(dictDeceased)
+dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
+print('AFTER SORTING dfDeceased', dfDeceased)
+dfDeceased.sort_values(by=['Date'])
+# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
 
-# # print('==================================================')
+# print('==================================================')
 
-# recoveredDf = csse.data['Recovered']
-# recoveredDfWideToLong = pd.melt(recoveredDf,
-#                             id_vars=recoveredDf.columns[:4],
-#                             value_vars = recoveredDf.columns[4:],
-#                             var_name = 'Updated',
-#                             value_name = 'Recovered')
-# dictRecovered = {
-#     'Date': pd.to_datetime(recoveredDfWideToLong['Updated'], format=format_str),
-#     'Province_State': recoveredDfWideToLong['Province/State'],
-#     'Country_Region': recoveredDfWideToLong['Country/Region'],
-#     'Latitude': recoveredDfWideToLong['Lat'],
-#     'Longitude': recoveredDfWideToLong['Long'],
-#     'Recovered': recoveredDfWideToLong['Recovered']
-# }
-# dfRecovered = pd.DataFrame(dictRecovered)
-# dfRecovered = dfRecovered.sort_values(by=['Country_Region', 'Date'])
-# print('AFTER SORTING dfRecovered', dfRecovered)
-# dfRecovered.sort_values(by=['Date'])
-# # print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
+recoveredDf = csse.data['Recovered']
+recoveredDfWideToLong = pd.melt(recoveredDf,
+                            id_vars=recoveredDf.columns[:4],
+                            value_vars = recoveredDf.columns[4:],
+                            var_name = 'Updated',
+                            value_name = 'Recovered')
+dictRecovered = {
+    'Date': pd.to_datetime(recoveredDfWideToLong['Updated'], format=format_str),
+    'Province_State': recoveredDfWideToLong['Province/State'],
+    'Country_Region': recoveredDfWideToLong['Country/Region'],
+    'Latitude': recoveredDfWideToLong['Lat'],
+    'Longitude': recoveredDfWideToLong['Long'],
+    'Recovered': recoveredDfWideToLong['Recovered']
+}
+dfRecovered = pd.DataFrame(dictRecovered)
+dfRecovered = dfRecovered.sort_values(by=['Country_Region', 'Date'])
+print('AFTER SORTING dfRecovered', dfRecovered)
+dfRecovered.sort_values(by=['Date'])
+# print('After Melting\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
 
-# # print('==================================================')
+# print('==================================================')
 
-# print('C', dfConfirmed.head())
-# print('C', dfConfirmed.tail())
+print('C', dfConfirmed.head())
+print('C', dfConfirmed.tail())
 
-# print('D', dfDeceased.head())
-# print('D', dfDeceased.tail())
+print('D', dfDeceased.head())
+print('D', dfDeceased.tail())
 
-# print('R', dfRecovered.head())
-# print('R', dfRecovered.tail())
+print('R', dfRecovered.head())
+print('R', dfRecovered.tail())
 
-# # print('==================================================')
+# print('==================================================')
 
-# doWrite = False
-# if doWrite:
+doWrite = True
+if doWrite:
 
-#     currentContainer = pathlib.Path(__file__).parent.absolute()
-#     path = str(currentContainer)
+    currentContainer = pathlib.Path(__file__).parent.absolute()
+    path = str(currentContainer)
 
-#     pathToWriteTo = ''
-#     # current working folder
-#     if path.__contains__('HomeProjects'):
-#         # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
-#         pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
-#         print('Laptop:', pathToWriteTo)
-#     elif path.__contains__('GitHubRepositories'):
-#         # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
-#         pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
-#         print('Desktop:', pathToWriteTo)
-#     else:
-#         print('Wrong:', path)
+    pathToWriteTo = ''
+    # current working folder
+    if path.__contains__('HomeProjects'):
+        # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
+        pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        print('Laptop:', pathToWriteTo)
+    elif path.__contains__('GitHubRepositories'):
+        # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
+        pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        print('Desktop:', pathToWriteTo)
+    else:
+        print('Wrong:', path)
 
-#     dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
-#     dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
-#     dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
+    dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
+    dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
+    dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 
-# else:
-#     print('\r\n=====================\r\nNo file writing')
+else:
+    print('\r\n=====================\r\nNo file writing')
