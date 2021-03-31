@@ -3,6 +3,5 @@
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": false,
     "python.formatting.provider": "black",
-    "python.pythonPath": "C:\\Users\\info\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
-    "python.analysis.extraPaths": ["PYTHONTUTORIAL/download_csv"]
+    "python.analysis.extraPaths": ["download_csv"]
 }
