@@ -142,7 +142,7 @@ dfConfirmed = dfConfirmed.sort_values(by=['Country_Region', 'Date'])
 dfConfirmed.sort_values(by=['Date'])
 # print('After Melting dfConfirmed\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
 
-print('==================================================')
+# print('==================================================')
 
 deceasedDf = csse.data['Deceased']
 deceasedDfWideToLong = pd.melt(deceasedDf,
@@ -169,7 +169,7 @@ dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
 # print('After Melting dfDeceased\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
 
-print('==================================================')
+# print('==================================================')
 
 recoveredDf = csse.data['Recovered']
 recoveredDfWideToLong = pd.melt(recoveredDf,
@@ -197,17 +197,18 @@ dfRecovered.sort_values(by=['Date'])
 # print('After Melting dfRecovered\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
 
 print('==================================================')
-
-print('C', dfConfirmed.head())
-print('C', dfConfirmed.tail())
-
-print('D', dfDeceased.head())
-print('D', dfDeceased.tail())
-
-print('R', dfRecovered.head())
-print('R', dfRecovered.tail())
-
-# print('==================================================')
+print('\r\nConfirmed')
+print(dfConfirmed.head())
+print(dfConfirmed.tail())
+print('==================================================')
+print('\r\nDeceased')
+print(dfDeceased.head())
+print(dfDeceased.tail())
+print('==================================================')
+print('\r\nRecovered')
+print(dfRecovered.head())
+print(dfRecovered.tail())
+print('==================================================')
 
 doWrite = True
 if doWrite:
