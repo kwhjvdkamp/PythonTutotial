@@ -31,11 +31,11 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
 # Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
 # country-specific objects like {'Country': {'Iso2': 'CC', 'Iso3', 'CCC'}, ...}
 # which resides in a local static json-like structure in 'isoCountryCodes.py'
-def getIsoCodeForCountry(arrayCountryNames, iso):
+def getIsoCodeForCountry(CountryRegionNames:list, provinceStateNames:list, iso):
     codes=[]
     noCodeCountries=[]
-    for countryName in arrayCountryNames:
-        pair=mapIsoCodesOnCountryName(countryName)
+    for countryName in CountryRegionNames:
+        pair=mapIsoCodesOnCountryName(countryName, provinceStateNames)
         # 'None' equivalent to 'null'
         if pair != None:
             # ...either 'Iso2' or 'Iso3'
@@ -65,14 +65,14 @@ def getIsoCodeForCountry(arrayCountryNames, iso):
 # Definition to iterate over the CountryCodes Json-structure
 # {'Country': {'Iso2': 'CC', 'Iso3', 'CCC'}, ...}
 # to return the iso codes object for a certain country name
-def mapIsoCodesOnCountryName(countryName):
+def mapIsoCodesOnCountryName(countryName:str, provinceStateNames:list):
     for key, value in CountryCodes.items():
         if (key == countryName):
             return value
 
 
 # Creating a distinct list
-def distinctList(items: list):
+def distinctList(items:list):
     list=[]
     for item in items:
         if item not in list and not pd.isna(item):
@@ -141,16 +141,16 @@ transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
                             var_name='Updated',
                             value_name=confirmed)
 # Extending and Sorting transposed 'Confirmed'-dataframe
-countryRegionConfirmed: list=transposedDfConfirmed['Country/Region'].values
-provinceStateConfirmed: list=transposedDfConfirmed['Province/State'].values
+countryRegionConfirmed:list=transposedDfConfirmed['Country/Region'].values
+provinceStateConfirmed:list=transposedDfConfirmed['Province/State'].values
 dictConfirmed: dict[str, any]={
     'Date': pd.to_datetime(transposedDfConfirmed['Updated'], format=format_str),
     'Country_Region': transposedDfConfirmed['Country/Region'],
     'Province_State': transposedDfConfirmed['Province/State'],
     'Latitude': transposedDfConfirmed['Lat'],
     'Longitude': transposedDfConfirmed['Long'],
-    'ISO2': getIsoCodeForCountry(countryRegionConfirmed, 'Iso2'),
-    'ISO3' : getIsoCodeForCountry(countryRegionConfirmed, 'Iso3'),
+    'ISO2': getIsoCodeForCountry(countryRegionConfirmed, provinceStateConfirmed, 'Iso2'),
+    'ISO3' : getIsoCodeForCountry(countryRegionConfirmed, provinceStateConfirmed, 'Iso3'),
     confirmed: transposedDfConfirmed[confirmed]
 }
 dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
@@ -179,16 +179,16 @@ transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
                             var_name='Updated',
                             value_name='Deceased')
 # Extending and Sorting transposed deceased-dataframe
-countryRegionDeceased: list=transposedDfDeceased['Country/Region'].values
-provinceStateDeceased: list=transposedDfDeceased['Province/State'].values
+countryRegionDeceased:list=transposedDfDeceased['Country/Region'].values
+provinceStateDeceased:list=transposedDfDeceased['Province/State'].values
 dictDeceased: dict[str, any]={
     'Date': pd.to_datetime(transposedDfDeceased['Updated'], format=format_str),
     'Country_Region': transposedDfDeceased['Country/Region'],
     'Province_State': transposedDfDeceased['Province/State'],
     'Latitude': transposedDfDeceased['Lat'],
     'Longitude': transposedDfDeceased['Long'],
-    'ISO2': getIsoCodeForCountry(countryRegionDeceased, 'Iso2'),
-    'ISO3' : getIsoCodeForCountry(countryRegionDeceased, 'Iso3'),
+    'ISO2': getIsoCodeForCountry(countryRegionDeceased, provinceStateConfirmed, 'Iso2'),
+    'ISO3' : getIsoCodeForCountry(countryRegionDeceased, provinceStateConfirmed, 'Iso3'),
     deceased: transposedDfDeceased[deceased]
 }
 dfDeceased: DataFrame=pd.DataFrame(dictDeceased)
@@ -217,16 +217,16 @@ transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
                             var_name='Updated',
                             value_name=recovered)
 # Extending and Sorting transposed 'Recovered'-dataframe
-countryRegionRecovered: list=transposedDfRecovered['Country/Region'].values
-provinceStateRecovered: list=transposedDfRecovered['Province/State'].values
+countryRegionRecovered:list=transposedDfRecovered['Country/Region'].values
+provinceStateRecovered:list=transposedDfRecovered['Province/State'].values
 dictRecovered: dict[str, any]={
     'Date': pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
     'Country_Region': transposedDfRecovered['Country/Region'],
     'Province_State': transposedDfRecovered['Province/State'],
     'Latitude': transposedDfRecovered['Lat'],
     'Longitude': transposedDfRecovered['Long'],
-    'ISO2': getIsoCodeForCountry(countryRegionRecovered, 'Iso2'),
-    'ISO3': getIsoCodeForCountry(countryRegionRecovered, 'Iso3'),
+    'ISO2': getIsoCodeForCountry(countryRegionRecovered, provinceStateConfirmed, 'Iso2'),
+    'ISO3': getIsoCodeForCountry(countryRegionRecovered, provinceStateConfirmed, 'Iso3'),
     recovered: transposedDfRecovered[recovered]
 }
 dfRecovered: DataFrame=pd.DataFrame(dictRecovered)
