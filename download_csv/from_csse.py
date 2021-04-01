@@ -141,7 +141,7 @@ dictConfirmed = {
     'Confirmed': transposedDfConfirmed['Confirmed']
 }
 dfConfirmed = pd.DataFrame(dictConfirmed)
-dfConfirmed.sort_values(by=['Country_Region', 'Date'])
+dfConfirmed = dfConfirmed.sort_values(by=['Country_Region', 'Date'])
 dfConfirmed.sort_values(by=['Date'])
 
 # print('==Deceased========================================')
@@ -165,7 +165,7 @@ dictDeceased = {
     'Deceased': transposedDfDeceased['Deceased']
 }
 dfDeceased = pd.DataFrame(dictDeceased)
-dfDeceased.sort_values(by=['Country_Region', 'Date'])
+dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
 
 # print('==Recovered=======================================')
@@ -189,7 +189,7 @@ dictRecovered = {
     'Recovered': transposedDfRecovered['Recovered']
 }
 dfRecovered = pd.DataFrame(dictRecovered)
-dfRecovered.sort_values(by=['Country_Region', 'Date'])
+dfRecovered = dfRecovered.sort_values(by=['Country_Region', 'Date'])
 dfRecovered.sort_values(by=['Date'])
 
 print('==================================================')
@@ -230,4 +230,4 @@ if doWrite:
     dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 
 else:
-    print('File writing switched off')
+    print('File writing switched OFF')
