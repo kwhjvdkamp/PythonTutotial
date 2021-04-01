@@ -269,9 +269,9 @@ if doWrite:
     else:
         print('Wrong:', path)
 
-    dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
-    dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
-    dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
+    dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
+    dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
+    dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 
 else:
     print('File writing switched OFF')
