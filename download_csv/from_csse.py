@@ -11,6 +11,7 @@ print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__f
 import os
 import pathlib
 import pandas as pd
+from pandas.core.frame import DataFrame
 import requests
 import io
 
@@ -32,7 +33,7 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
 # which resides in a local static json-like structure in 'isoCountryCodes.py'
 def getIsoCodeForCountry(arrayCountryNames, iso):
     codes=[]
-    # noCodesForCountry=[]
+    noCodeCountries=[]
     for countryName in arrayCountryNames:
         pair=mapIsoCodesOnCountryName(countryName)
         # 'None' equivalent to 'null'
@@ -42,8 +43,8 @@ def getIsoCodeForCountry(arrayCountryNames, iso):
             codes.append(isoCode)
         else:
             # Missing codes
-            # if item not in noCodesForCountry:
-            #     noCodesForCountry.append(item)
+            if countryName not in noCodeCountries:
+                noCodeCountries.append(countryName)
 
             if iso == 'Iso2':
                 codes.append('--')
@@ -70,9 +71,13 @@ def mapIsoCodesOnCountryName(countryName):
             return value
 
 
-#
-def calculateDiffWithPreviousRowValue():
-    return
+# Creating a distinct list
+def distinctList(items: list):
+    list=[]
+    for item in items:
+        if item not in list and not pd.isna(item):
+            list.append(item)
+    return list
 
 
 # Reading the data for the Covid-19 repository which itself has been
@@ -125,34 +130,36 @@ csse=Csse()
 # Keys of the dictionary
 # print(csse.data.keys())
 
+
 # print('==Confirmed=======================================')
 confirmed='Confirmed'
-dfConfirmed=csse.data[confirmed]
+dfConfirmed: DataFrame=csse.data[confirmed]
 # Pivoting 'Confirmed'-dataframe columns to rows
-transposedDfConfirmed=pd.melt(dfConfirmed,
+transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
                             id_vars=dfConfirmed.columns[:4],
                             value_vars=dfConfirmed.columns[4:],
                             var_name='Updated',
                             value_name=confirmed)
 # Extending and Sorting transposed 'Confirmed'-dataframe
-countryNamesConfirmed=transposedDfConfirmed['Country/Region'].values
-dictConfirmed={
+countryRegionConfirmed: list=transposedDfConfirmed['Country/Region'].values
+provinceStateConfirmed: list=transposedDfConfirmed['Province/State'].values
+dictConfirmed: dict[str, any]={
     'Date': pd.to_datetime(transposedDfConfirmed['Updated'], format=format_str),
-    'Province_State': transposedDfConfirmed['Province/State'],
     'Country_Region': transposedDfConfirmed['Country/Region'],
+    'Province_State': transposedDfConfirmed['Province/State'],
     'Latitude': transposedDfConfirmed['Lat'],
     'Longitude': transposedDfConfirmed['Long'],
-    'ISO2': getIsoCodeForCountry(countryNamesConfirmed, 'Iso2'),
-    'ISO3' : getIsoCodeForCountry(countryNamesConfirmed, 'Iso3'),
+    'ISO2': getIsoCodeForCountry(countryRegionConfirmed, 'Iso2'),
+    'ISO3' : getIsoCodeForCountry(countryRegionConfirmed, 'Iso3'),
     confirmed: transposedDfConfirmed[confirmed]
 }
-dfConfirmed=pd.DataFrame(dictConfirmed)
-dfConfirmed=dfConfirmed.sort_values(by=['Country_Region', 'Date'])
+dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
+dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region', 'Date'])
 dfConfirmed.sort_values(by=['Date'])
-dictConfirmedExtended={
+dictConfirmedExtended: dict[str, any]={
     'Date': dfConfirmed['Date'],
-    'Province_State': dfConfirmed['Province_State'],
     'Country_Region': dfConfirmed['Country_Region'],
+    'Province_State': dfConfirmed['Province_State'],
     'Latitude': dfConfirmed['Latitude'],
     'Longitude': dfConfirmed['Longitude'],
     'ISO2': dfConfirmed['ISO2'],
@@ -160,36 +167,37 @@ dictConfirmedExtended={
     confirmed: dfConfirmed[confirmed],
     confirmed+'Change': [num for num in dfConfirmed[confirmed].diff()],
 }
-dfConfirmedExtended=pd.DataFrame(dictConfirmedExtended)
+dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
 
 # print('==Deceased========================================')
 deceased='Deceased'
-dfDeceased=csse.data[deceased]
+dfDeceased: DataFrame=csse.data[deceased]
 # Pivoting 'Deceased'-dataframe columns to rows
-transposedDfDeceased=pd.melt(dfDeceased,
+transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
                             id_vars=dfDeceased.columns[:4],
                             value_vars=dfDeceased.columns[4:],
                             var_name='Updated',
                             value_name='Deceased')
 # Extending and Sorting transposed deceased-dataframe
-countryNamesDeceased=transposedDfDeceased['Country/Region'].values
-dictDeceased={
+countryRegionDeceased: list=transposedDfDeceased['Country/Region'].values
+provinceStateDeceased: list=transposedDfDeceased['Province/State'].values
+dictDeceased: dict[str, any]={
     'Date': pd.to_datetime(transposedDfDeceased['Updated'], format=format_str),
-    'Province_State': transposedDfDeceased['Province/State'],
     'Country_Region': transposedDfDeceased['Country/Region'],
+    'Province_State': transposedDfDeceased['Province/State'],
     'Latitude': transposedDfDeceased['Lat'],
     'Longitude': transposedDfDeceased['Long'],
-    'ISO2': getIsoCodeForCountry(countryNamesDeceased, 'Iso2'),
-    'ISO3' : getIsoCodeForCountry(countryNamesDeceased, 'Iso3'),
+    'ISO2': getIsoCodeForCountry(countryRegionDeceased, 'Iso2'),
+    'ISO3' : getIsoCodeForCountry(countryRegionDeceased, 'Iso3'),
     deceased: transposedDfDeceased[deceased]
 }
-dfDeceased=pd.DataFrame(dictDeceased)
-dfDeceased=dfDeceased.sort_values(by=['Country_Region', 'Date'])
+dfDeceased: DataFrame=pd.DataFrame(dictDeceased)
+dfDeceased: DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
-dictDeceasedExtended={
+dictDeceasedExtended: dict[str, any]={
     'Date': dfDeceased['Date'],
-    'Province_State': dfDeceased['Province_State'],
     'Country_Region': dfDeceased['Country_Region'],
+    'Province_State': dfDeceased['Province_State'],
     'Latitude': dfDeceased['Latitude'],
     'Longitude': dfDeceased['Longitude'],
     'ISO2': dfDeceased['ISO2'],
@@ -197,36 +205,37 @@ dictDeceasedExtended={
     deceased: dfDeceased[deceased],
     deceased+'Change': [num for num in dfDeceased[deceased].diff()],
 }
-dfDeceasedExtended=pd.DataFrame(dictDeceasedExtended)
+dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
 
 # print('==Recovered=======================================')
 recovered='Recovered'
-dfRecovered=csse.data['Recovered']
+dfRecovered: DataFrame=csse.data['Recovered']
 # Pivoting 'Recovered'-dataframe columns to rows
-transposedDfRecovered=pd.melt(dfRecovered,
+transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
                             id_vars=dfRecovered.columns[:4],
                             value_vars=dfRecovered.columns[4:],
                             var_name='Updated',
                             value_name=recovered)
 # Extending and Sorting transposed 'Recovered'-dataframe
-countryNamesRecovered=transposedDfRecovered['Country/Region'].values
-dictRecovered={
+countryRegionRecovered: list=transposedDfRecovered['Country/Region'].values
+provinceStateRecovered: list=transposedDfRecovered['Province/State'].values
+dictRecovered: dict[str, any]={
     'Date': pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
-    'Province_State': transposedDfRecovered['Province/State'],
     'Country_Region': transposedDfRecovered['Country/Region'],
+    'Province_State': transposedDfRecovered['Province/State'],
     'Latitude': transposedDfRecovered['Lat'],
     'Longitude': transposedDfRecovered['Long'],
-    'ISO2': getIsoCodeForCountry(countryNamesRecovered, 'Iso2'),
-    'ISO3': getIsoCodeForCountry(countryNamesRecovered, 'Iso3'),
+    'ISO2': getIsoCodeForCountry(countryRegionRecovered, 'Iso2'),
+    'ISO3': getIsoCodeForCountry(countryRegionRecovered, 'Iso3'),
     recovered: transposedDfRecovered[recovered]
 }
-dfRecovered=pd.DataFrame(dictRecovered)
-dfRecovered=dfRecovered.sort_values(by=['Country_Region', 'Date'])
+dfRecovered: DataFrame=pd.DataFrame(dictRecovered)
+dfRecovered: DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
 dfRecovered.sort_values(by=['Date'])
-dictRecoveredExtended={
+dictRecoveredExtended: dict[str, any]={
     'Date': dfRecovered['Date'],
-    'Province_State': dfRecovered['Province_State'],
     'Country_Region': dfRecovered['Country_Region'],
+    'Province_State': dfRecovered['Province_State'],
     'Latitude': dfRecovered['Latitude'],
     'Longitude': dfRecovered['Longitude'],
     'ISO2': dfRecovered['ISO2'],
@@ -234,7 +243,25 @@ dictRecoveredExtended={
     recovered: dfRecovered[recovered],
     recovered+'Change': [num for num in dfRecovered[recovered].diff()],
 }
-dfRecoveredExtended=pd.DataFrame(dictRecoveredExtended)
+dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
+
+print(len(distinctList(countryRegionConfirmed)), len(distinctList(provinceStateConfirmed)))
+dictCountryRegionProvinceStateConfirmed: dict[str, list]={
+    'Confirmed_C_R': distinctList(countryRegionConfirmed),
+    # 'Confirmed_P_S': distinctList(provinceStateConfirmed),
+}
+print(dictCountryRegionProvinceStateConfirmed)
+dfCountryRegionProvinceStateConfirmed: DataFrame=pd.DataFrame(dictCountryRegionProvinceStateConfirmed)
+# dictCountryRegionProvinceStateDeceased: dict[str, list]={
+#     'Deceased_C_R': distinctList(countryRegionDeceased),
+#     'Deceased_P_S': distinctList(provinceStateDeceased),
+# }
+# dfCountryRegionProvinceStateDeceased: DataFrame=pd.DataFrame(dictCountryRegionProvinceStateDeceased)
+# dictCountryRegionProvinceStateRecovered: dict[str, list]={
+#     'Recovered_C_R': distinctList(countryRegionRecovered),
+#     'Recovered_P_S': distinctList(provinceStateRecovered),
+# }
+# dfCountryRegionProvinceStateRecovered: DataFrame=pd.DataFrame(dictCountryRegionProvinceStateRecovered)
 
 print('==================================================')
 print('\r\nConfirmed')
@@ -250,7 +277,7 @@ print(dfRecoveredExtended.head())
 print(dfRecoveredExtended.tail())
 print('==================================================')
 
-doWrite=False
+doWrite=True
 if doWrite:
 
     currentContainer=pathlib.Path(__file__).parent.absolute()
@@ -269,6 +296,9 @@ if doWrite:
     else:
         print('Wrong:', path)
 
+    dfCountryRegionProvinceStateConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed_country_region_province_state.csv'))
+    # dfCountryRegionProvinceStateDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased_country_region_province_state.csv'))
+    # dfCountryRegionProvinceStateRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered_country_region_province_state.csv'))
     dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
     dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
     dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
