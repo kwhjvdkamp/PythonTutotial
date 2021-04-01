@@ -1,6 +1,6 @@
 # //type: ignore
 # ========================================================
-# Above line tells Pylance to ignore particular file?
+# Above line tells Pylance to ignore this file
 # > At the top of the file to ignore the file
 # > At the end of a line to ignore the line
 # ========================================================
@@ -11,64 +11,77 @@ print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__f
 import os
 import pathlib
 import pandas as pd
+from pandas.core.frame import DataFrame
 import requests
 import io
 
-# local modules
-from isoCountryCodes import CC, CCC
-
-
+# Third party modules
 from datetime import datetime
 from pandas.core import indexing
-from typing import Union
+from typing import Match, Union
 
-# print("1-Count {0}".format(len(CC)))
+# Local module(s)
+from isoCountryCodes import CountryCodes
 
+# Converting a string to a Path-typed structure (if already a Path, nothing changes)
 def convertToWindowsPath(string: Union[str, pathlib.Path]):
-    # This converts a str to a Path (if already a Path, nothing changes)
-    path = pathlib.Path(string)
-    # print(type(path))
-    # print(path)
+    path=pathlib.Path(string)
     return path
 
-#
-def getIsoCodeKeyForCountryValue(valuesOfArray, iso):
-    # codes-list will going to contain an object of
-    # {'Iso2': 'XX', 'Iso3', 'XXX'}
-    codes = []
-    noCodesForCountry = []
-    for item in valuesOfArray:
-        pair = columnIterator(item)
+# Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
+# country-specific objects like {'Country': {'Iso2': 'CC', 'Iso3', 'CCC'}, ...}
+# which resides in a local static json-like structure in 'isoCountryCodes.py'
+def getIsoCodeForCountry(CountryRegionNames:list, provinceStateNames:list, iso):
+    codes=[]
+    noCodeCountries=[]
+    for countryName in CountryRegionNames:
+        pair=mapIsoCodesOnCountryName(countryName, provinceStateNames)
         # 'None' equivalent to 'null'
         if pair != None:
-            item = pair[iso]
-            codes.append(item)
+            # ...either 'Iso2' or 'Iso3'
+            isoCode=pair[iso]
+            codes.append(isoCode)
         else:
-            if item not in noCodesForCountry:
-                noCodesForCountry.append(item)
+            # Missing codes
+            if countryName not in noCodeCountries:
+                noCodeCountries.append(countryName)
+
             if iso == 'Iso2':
-                # print('No ', iso, 'for ', item)
                 codes.append('--')
             else:
-                # print('No ', iso, 'for ', item)
                 codes.append('---')
+
+            # On Python version 3.10 and up it will be possible
+            # match iso
+            #     case 'Iso2':
+            #         codes.append('--')
+            #     case 'Iso3':
+            #         codes.append('---')
 
     # print(noCodesForCountry)
     return codes
 
 
-# function to return key for any value
-def columnIterator(item):
-    for key, value in CCC.items():
-        if (key == item):
-            # print('key', key, ' | value', value)
+# Definition to iterate over the CountryCodes Json-structure
+# {'Country': {'Iso2': 'CC', 'Iso3', 'CCC'}, ...}
+# to return the iso codes object for a certain country name
+def mapIsoCodesOnCountryName(countryName:str, provinceStateNames:list):
+    for key, value in CountryCodes.items():
+        if (key == countryName):
             return value
 
-    # for key, value in CCC.items():
-    #     if value == str(item).upper():
-    #         return key
+
+# Creating a distinct list
+def distinctList(items:list):
+    list=[]
+    for item in items:
+        if item not in list and not pd.isna(item):
+            list.append(item)
+    return list
 
 
+# Reading the data for the Covid-19 repository which itself has been
+# forked from the publicly accessible CSSEGISandDATA repository supplied by JHU US
 class Csse:
 
     def __init__(self):
@@ -84,19 +97,19 @@ class Csse:
         # from 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
         # into 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
 
-        URL_PATH = 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
+        URL_PATH='https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
 
-        # f-strings provide a way to embed expressions inside string literals using a minimal syntax.
+        # 'f-strings' provide a way to embed expressions inside string literals using a minimal syntax.
         # It should be noted that an f-string is really an expression evaluated at run time, not a constant value.
         # In Python source code, an f-string is a literal string, prefixed with 'f',
         # which contains expressions inside braces. The expressions are replaced with their values.
-        self.URLS = {
+        self.URLS={
             'Confirmed': f'{URL_PATH}/time_series_covid19_confirmed_global.csv',
             'Deceased': f'{URL_PATH}/time_series_covid19_deaths_global.csv',
             'Recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
         }
 
-        self.data = {case:pd.read_csv(url, header=0, escapechar='\\') for case, url in self.URLS.items()}
+        self.data={case:pd.read_csv(url, header=0, escapechar='\\') for case, url in self.URLS.items()}
 
     # create other useful functions to work with data
     def current_status(self):
@@ -106,132 +119,189 @@ class Csse:
 
 # =========================================================================================
 
-# print(getIsoCodeKeyForCountryValue("NETHERLANDS"))
 
-# Original data contains dates formatted like m/d/jj (no preceding zero's and two digit year)
-format_str = '%m/%d/%y' # The original date format
+# private variables
+# Original data contains dates formatted like 'm/d/jj' meaning a) no preceding zero's and b) two digit year
+# conversion to Iso date 'YYYY-MM-DD' format is mandatory
+format_str='%m/%d/%y' # The original date format
 
-csse = Csse()
-
+# Calling class
+csse=Csse()
 # Keys of the dictionary
 # print(csse.data.keys())
 
-# Pivoting columns to rows
-confirmedDf = csse.data['Confirmed']
-confirmedDfWideToLong = pd.melt(confirmedDf,
-                            id_vars=confirmedDf.columns[:4],
-                            value_vars = confirmedDf.columns[4:],
-                            var_name = 'Updated',
-                            value_name = 'Confirmed')
-confirmedDfWideToLong['IsoCode'] = confirmedDfWideToLong['Country/Region']
-# print('Type', type(confirmedDfWideToLong['IsoCode']))
-confirmedValuesOfArray = confirmedDfWideToLong['IsoCode'].values
-dictConfirmed = {
-    'Date': pd.to_datetime(confirmedDfWideToLong['Updated'], format=format_str),
-    'Province_State': confirmedDfWideToLong['Province/State'],
-    'Country_Region': confirmedDfWideToLong['Country/Region'],
-    'Latitude': confirmedDfWideToLong['Lat'],
-    'Longitude': confirmedDfWideToLong['Long'],
-    'ISO2': getIsoCodeKeyForCountryValue(confirmedValuesOfArray, 'Iso2'),
-    'ISO3' : getIsoCodeKeyForCountryValue(confirmedValuesOfArray, 'Iso3'),
-    'Confirmed': confirmedDfWideToLong['Confirmed']
+
+# print('==Confirmed=======================================')
+confirmed='Confirmed'
+dfConfirmed: DataFrame=csse.data[confirmed]
+# Pivoting 'Confirmed'-dataframe columns to rows
+transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
+                            id_vars=dfConfirmed.columns[:4],
+                            value_vars=dfConfirmed.columns[4:],
+                            var_name='Updated',
+                            value_name=confirmed)
+# Extending and Sorting transposed 'Confirmed'-dataframe
+countryRegionConfirmed:list=transposedDfConfirmed['Country/Region'].values
+provinceStateConfirmed:list=transposedDfConfirmed['Province/State'].values
+dictConfirmed: dict[str, any]={
+    'Date': pd.to_datetime(transposedDfConfirmed['Updated'], format=format_str),
+    'Country_Region': transposedDfConfirmed['Country/Region'],
+    'Province_State': transposedDfConfirmed['Province/State'],
+    'Latitude': transposedDfConfirmed['Lat'],
+    'Longitude': transposedDfConfirmed['Long'],
+    'ISO2': getIsoCodeForCountry(countryRegionConfirmed, provinceStateConfirmed, 'Iso2'),
+    'ISO3' : getIsoCodeForCountry(countryRegionConfirmed, provinceStateConfirmed, 'Iso3'),
+    confirmed: transposedDfConfirmed[confirmed]
 }
-dfConfirmed = pd.DataFrame(dictConfirmed)
-dfConfirmed = dfConfirmed.sort_values(by=['Country_Region', 'Date'])
-# print('AFTER SORTING dfConfirmed\r\n', dfConfirmed)
+dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
+dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region', 'Date'])
 dfConfirmed.sort_values(by=['Date'])
-# print('After Melting dfConfirmed\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfConfirmed)
-
-# print('==================================================')
-
-deceasedDf = csse.data['Deceased']
-deceasedDfWideToLong = pd.melt(deceasedDf,
-                            id_vars=deceasedDf.columns[:4],
-                            value_vars = deceasedDf.columns[4:],
-                            var_name = 'Updated',
-                            value_name = 'Deceased')
-deceasedDfWideToLong['IsoCode'] = deceasedDfWideToLong['Country/Region']
-# print('Type', type(deceasedDfWideToLong['IsoCode']))
-deceasedValuesOfArray = deceasedDfWideToLong['IsoCode'].values
-dictDeceased = {
-    'Date': pd.to_datetime(deceasedDfWideToLong['Updated'], format=format_str),
-    'Province_State': deceasedDfWideToLong['Province/State'],
-    'Country_Region': deceasedDfWideToLong['Country/Region'],
-    'Latitude': deceasedDfWideToLong['Lat'],
-    'Longitude': deceasedDfWideToLong['Long'],
-    'ISO2': getIsoCodeKeyForCountryValue(deceasedValuesOfArray, 'Iso2'),
-    'ISO3' : getIsoCodeKeyForCountryValue(deceasedValuesOfArray, 'Iso3'),
-    'Deceased': deceasedDfWideToLong['Deceased']
+dictConfirmedExtended: dict[str, any]={
+    'Date': dfConfirmed['Date'],
+    'Country_Region': dfConfirmed['Country_Region'],
+    'Province_State': dfConfirmed['Province_State'],
+    'Latitude': dfConfirmed['Latitude'],
+    'Longitude': dfConfirmed['Longitude'],
+    'ISO2': dfConfirmed['ISO2'],
+    'ISO3': dfConfirmed['ISO3'],
+    confirmed: dfConfirmed[confirmed],
+    confirmed+'Change': [num for num in dfConfirmed[confirmed].diff()],
 }
-dfDeceased = pd.DataFrame(dictDeceased)
-dfDeceased = dfDeceased.sort_values(by=['Country_Region', 'Date'])
-# print('AFTER SORTING dfDeceased\r\n', dfDeceased)
+dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
+
+# print('==Deceased========================================')
+deceased='Deceased'
+dfDeceased: DataFrame=csse.data[deceased]
+# Pivoting 'Deceased'-dataframe columns to rows
+transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
+                            id_vars=dfDeceased.columns[:4],
+                            value_vars=dfDeceased.columns[4:],
+                            var_name='Updated',
+                            value_name='Deceased')
+# Extending and Sorting transposed deceased-dataframe
+countryRegionDeceased:list=transposedDfDeceased['Country/Region'].values
+provinceStateDeceased:list=transposedDfDeceased['Province/State'].values
+dictDeceased: dict[str, any]={
+    'Date': pd.to_datetime(transposedDfDeceased['Updated'], format=format_str),
+    'Country_Region': transposedDfDeceased['Country/Region'],
+    'Province_State': transposedDfDeceased['Province/State'],
+    'Latitude': transposedDfDeceased['Lat'],
+    'Longitude': transposedDfDeceased['Long'],
+    'ISO2': getIsoCodeForCountry(countryRegionDeceased, provinceStateConfirmed, 'Iso2'),
+    'ISO3' : getIsoCodeForCountry(countryRegionDeceased, provinceStateConfirmed, 'Iso3'),
+    deceased: transposedDfDeceased[deceased]
+}
+dfDeceased: DataFrame=pd.DataFrame(dictDeceased)
+dfDeceased: DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
-# print('After Melting dfDeceased\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfDeceased)
-
-# print('==================================================')
-
-recoveredDf = csse.data['Recovered']
-recoveredDfWideToLong = pd.melt(recoveredDf,
-                            id_vars=recoveredDf.columns[:4],
-                            value_vars = recoveredDf.columns[4:],
-                            var_name = 'Updated',
-                            value_name = 'Recovered')
-recoveredDfWideToLong['IsoCode'] = recoveredDfWideToLong['Country/Region']
-# print('Type', type(recoveredDfWideToLong['IsoCode']))
-recoveredValuesOfArray = recoveredDfWideToLong['IsoCode'].values
-dictRecovered = {
-    'Date': pd.to_datetime(recoveredDfWideToLong['Updated'], format=format_str),
-    'Province_State': recoveredDfWideToLong['Province/State'],
-    'Country_Region': recoveredDfWideToLong['Country/Region'],
-    'Latitude': recoveredDfWideToLong['Lat'],
-    'Longitude': recoveredDfWideToLong['Long'],
-    'ISO2': getIsoCodeKeyForCountryValue(recoveredValuesOfArray, 'Iso2'),
-    'ISO3' : getIsoCodeKeyForCountryValue(recoveredValuesOfArray, 'Iso3'),
-    'Recovered': recoveredDfWideToLong['Recovered']
+dictDeceasedExtended: dict[str, any]={
+    'Date': dfDeceased['Date'],
+    'Country_Region': dfDeceased['Country_Region'],
+    'Province_State': dfDeceased['Province_State'],
+    'Latitude': dfDeceased['Latitude'],
+    'Longitude': dfDeceased['Longitude'],
+    'ISO2': dfDeceased['ISO2'],
+    'ISO3': dfDeceased['ISO3'],
+    deceased: dfDeceased[deceased],
+    deceased+'Change': [num for num in dfDeceased[deceased].diff()],
 }
-dfRecovered = pd.DataFrame(dictRecovered)
-dfRecovered = dfRecovered.sort_values(by=['Country_Region', 'Date'])
-# print('AFTER SORTING dfRecovered\r\n', dfRecovered)
+dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
+
+# print('==Recovered=======================================')
+recovered='Recovered'
+dfRecovered: DataFrame=csse.data['Recovered']
+# Pivoting 'Recovered'-dataframe columns to rows
+transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
+                            id_vars=dfRecovered.columns[:4],
+                            value_vars=dfRecovered.columns[4:],
+                            var_name='Updated',
+                            value_name=recovered)
+# Extending and Sorting transposed 'Recovered'-dataframe
+countryRegionRecovered:list=transposedDfRecovered['Country/Region'].values
+provinceStateRecovered:list=transposedDfRecovered['Province/State'].values
+dictRecovered: dict[str, any]={
+    'Date': pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
+    'Country_Region': transposedDfRecovered['Country/Region'],
+    'Province_State': transposedDfRecovered['Province/State'],
+    'Latitude': transposedDfRecovered['Lat'],
+    'Longitude': transposedDfRecovered['Long'],
+    'ISO2': getIsoCodeForCountry(countryRegionRecovered, provinceStateConfirmed, 'Iso2'),
+    'ISO3': getIsoCodeForCountry(countryRegionRecovered, provinceStateConfirmed, 'Iso3'),
+    recovered: transposedDfRecovered[recovered]
+}
+dfRecovered: DataFrame=pd.DataFrame(dictRecovered)
+dfRecovered: DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
 dfRecovered.sort_values(by=['Date'])
-# print('After Melting dfRecovered\r\nDate converted to isoDate as part of new compilated Dataframe\r\n', dfRecovered)
+dictRecoveredExtended: dict[str, any]={
+    'Date': dfRecovered['Date'],
+    'Country_Region': dfRecovered['Country_Region'],
+    'Province_State': dfRecovered['Province_State'],
+    'Latitude': dfRecovered['Latitude'],
+    'Longitude': dfRecovered['Longitude'],
+    'ISO2': dfRecovered['ISO2'],
+    'ISO3': dfRecovered['ISO3'],
+    recovered: dfRecovered[recovered],
+    recovered+'Change': [num for num in dfRecovered[recovered].diff()],
+}
+dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
+
+print(len(distinctList(countryRegionConfirmed)), len(distinctList(provinceStateConfirmed)))
+dictCountryRegionProvinceStateConfirmed: dict[str, list]={
+    'Confirmed_C_R': distinctList(countryRegionConfirmed),
+    # 'Confirmed_P_S': distinctList(provinceStateConfirmed),
+}
+print(dictCountryRegionProvinceStateConfirmed)
+dfCountryRegionProvinceStateConfirmed: DataFrame=pd.DataFrame(dictCountryRegionProvinceStateConfirmed)
+# dictCountryRegionProvinceStateDeceased: dict[str, list]={
+#     'Deceased_C_R': distinctList(countryRegionDeceased),
+#     'Deceased_P_S': distinctList(provinceStateDeceased),
+# }
+# dfCountryRegionProvinceStateDeceased: DataFrame=pd.DataFrame(dictCountryRegionProvinceStateDeceased)
+# dictCountryRegionProvinceStateRecovered: dict[str, list]={
+#     'Recovered_C_R': distinctList(countryRegionRecovered),
+#     'Recovered_P_S': distinctList(provinceStateRecovered),
+# }
+# dfCountryRegionProvinceStateRecovered: DataFrame=pd.DataFrame(dictCountryRegionProvinceStateRecovered)
 
 print('==================================================')
 print('\r\nConfirmed')
-print(dfConfirmed.head())
-print(dfConfirmed.tail())
+print(dfConfirmedExtended.head())
+print(dfConfirmedExtended.tail())
 print('==================================================')
 print('\r\nDeceased')
-print(dfDeceased.head())
-print(dfDeceased.tail())
+print(dfDeceasedExtended.head())
+print(dfDeceasedExtended.tail())
 print('==================================================')
 print('\r\nRecovered')
-print(dfRecovered.head())
-print(dfRecovered.tail())
+print(dfRecoveredExtended.head())
+print(dfRecoveredExtended.tail())
 print('==================================================')
 
-doWrite = True
+doWrite=True
 if doWrite:
 
-    currentContainer = pathlib.Path(__file__).parent.absolute()
-    path = str(currentContainer)
+    currentContainer=pathlib.Path(__file__).parent.absolute()
+    path=str(currentContainer)
 
-    pathToWriteTo = ''
+    pathToWriteTo=''
     # current working folder
     if path.__contains__('HomeProjects'):
         # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
-        pathToWriteTo = convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
         print('Laptop:', pathToWriteTo)
     elif path.__contains__('GitHubRepositories'):
         # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
-        pathToWriteTo = convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        pathToWriteTo=convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
         print('Desktop:', pathToWriteTo)
     else:
         print('Wrong:', path)
 
-    dfConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
-    dfDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
-    dfRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
+    dfCountryRegionProvinceStateConfirmed.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed_country_region_province_state.csv'))
+    # dfCountryRegionProvinceStateDeceased.to_csv(os.path.join(pathToWriteTo, r'csse_deceased_country_region_province_state.csv'))
+    # dfCountryRegionProvinceStateRecovered.to_csv(os.path.join(pathToWriteTo, r'csse_recovered_country_region_province_state.csv'))
+    dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
+    dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
+    dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 
 else:
-    print('\r\n=====================\r\nNo file writing')
+    print('File writing switched OFF')
