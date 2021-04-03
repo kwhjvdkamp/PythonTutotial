@@ -43,6 +43,8 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
     # print('Overseas areas with own Isocode', provinceStateNames)
 
     for stateName in stateNames:
+        if(stateName == 'Aruba'):
+            bla = bla
         pair= mapStateNamewithIsoCodesObject(stateName)
         # 'None' equivalent to 'null'
         if pair!=None:
@@ -79,7 +81,7 @@ def  mapStateNamewithIsoCodesObject(stateName:str):
             return value
 
 
-def combineTextColumns(col1:list, col2:list):
+def combineTextColumns(col1:list,col2:list):
     dfCol1=pd.DataFrame(col1)
     dfCol2=pd.DataFrame(col2)
     dfCol2 = dfCol2.fillna('')
@@ -87,7 +89,11 @@ def combineTextColumns(col1:list, col2:list):
     dfValues = df.values
     finalList=[]
     for item in dfValues:
-        finalList.append(str(item)[2:len(str(item))-3].replace('|', ' '))
+        if str(item)[2:len(str(item))-2][-1] == '|':
+            finalList.append(str(item)[2:len(str(item))-3])
+        else:
+            finalList.append(str(item)[2:len(str(item))-2].replace('|', ' '))
+    # print(distinctList(finalList))
     return finalList
 
 
@@ -185,7 +191,7 @@ dictConfirmedExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(stateNameConfirmed,'Iso2'),
     'ISO3':getIsoCodeForCountry(stateNameConfirmed,'Iso3'),
     confirmed: dfConfirmed[confirmed],
-    confirmed+'Change':[num for num in dfConfirmed[confirmed].diff().where(dfConfirmed[confirmed] < 0 , 0)],
+    confirmed+'Change':[num for num in dfConfirmed[confirmed].diff()],
 }
 dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
 print(dfConfirmedExtended.head(1))
@@ -227,7 +233,7 @@ dictDeceasedExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso2'),
     'ISO3':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso3'),
     deceased: dfDeceased[deceased],
-    deceased+'Change':[num for num in dfDeceased[deceased].diff().where(dfDeceased[deceased] < 0 , 0)],
+    deceased+'Change':[num for num in dfDeceased[deceased].diff()],
 }
 dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
 print(dfDeceasedExtended.head(1))
@@ -269,7 +275,7 @@ dictRecoveredExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso2'),
     'ISO3':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso3'),
     recovered: dfRecovered[recovered],
-    recovered+'Change':[num for num in dfRecovered[recovered].diff().where(dfRecovered[recovered] < 0 , 0)],
+    recovered+'Change':[num for num in dfRecovered[recovered].diff()],
 }
 dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
 print(dfRecoveredExtended.head(1))
