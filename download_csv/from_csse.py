@@ -176,7 +176,9 @@ dictConfirmed:dict[str, any]={
     confirmed: transposedDfConfirmed[confirmed]
 }
 dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
-dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region', 'Date'])
+# Sorting first on 'Country_Region' than 'Province_Region' next 'Date'
+dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region','Province_State','Date'])
+# Again sorting on 'Date'
 dfConfirmed.sort_values(by=['Date'])
 # Extending the sorted 'Confirmed'-dataframe
 countryRegionConfirmed:list=dfConfirmed['Country_Region'].values
@@ -191,7 +193,7 @@ dictConfirmedExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(stateNameConfirmed,'Iso2'),
     'ISO3':getIsoCodeForCountry(stateNameConfirmed,'Iso3'),
     confirmed: dfConfirmed[confirmed],
-    confirmed+'Change':[num for num in dfConfirmed[confirmed].diff()],
+    confirmed+'Change':[num for num in dfConfirmed[confirmed].diff().where(dfConfirmed[confirmed]>0)],
 }
 dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
 print(dfConfirmedExtended.head(1))
@@ -233,7 +235,7 @@ dictDeceasedExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso2'),
     'ISO3':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso3'),
     deceased: dfDeceased[deceased],
-    deceased+'Change':[num for num in dfDeceased[deceased].diff()],
+    deceased+'Change':[num for num in dfDeceased[deceased].diff().where(dfDeceased[deceased]>0)],
 }
 dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
 print(dfDeceasedExtended.head(1))
@@ -275,7 +277,7 @@ dictRecoveredExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso2'),
     'ISO3':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso3'),
     recovered: dfRecovered[recovered],
-    recovered+'Change':[num for num in dfRecovered[recovered].diff()],
+    recovered+'Change':[num for num in dfRecovered[recovered].diff().where(dfRecovered[recovered]>0)],
 }
 dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
 print(dfRecoveredExtended.head(1))
