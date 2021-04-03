@@ -151,7 +151,7 @@ csse=Csse()
 # print(csse.data.keys())
 
 
-print('==Confirmed=========================================================================================')
+print('==Confirmed================================================================================================')
 confirmed='Confirmed'
 dfConfirmed: DataFrame=csse.data[confirmed]
 # Pivoting the 'Confirmed'-dataframe columns to rows
@@ -185,14 +185,14 @@ dictConfirmedExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(stateNameConfirmed,'Iso2'),
     'ISO3':getIsoCodeForCountry(stateNameConfirmed,'Iso3'),
     confirmed: dfConfirmed[confirmed],
-    confirmed+'Change':[num for num in dfConfirmed[confirmed].diff()],
+    confirmed+'Change':[num for num in dfConfirmed[confirmed].diff().where(dfConfirmed[confirmed] < 0 , 0)],
 }
 dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
 print(dfConfirmedExtended.head(1))
 print(dfConfirmedExtended.tail(1))
-print('====================================================================================================')
+print('===========================================================================================================')
 print('\r\n')
-print('==Deceased==========================================================================================')
+print('==Deceased=================================================================================================')
 deceased='Deceased'
 dfDeceased: DataFrame=csse.data[deceased]
 # Pivoting the 'Deceased'-dataframe columns to rows
@@ -227,14 +227,14 @@ dictDeceasedExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso2'),
     'ISO3':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso3'),
     deceased: dfDeceased[deceased],
-    deceased+'Change':[num for num in dfDeceased[deceased].diff()],
+    deceased+'Change':[num for num in dfDeceased[deceased].diff().where(dfDeceased[deceased] < 0 , 0)],
 }
 dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
 print(dfDeceasedExtended.head(1))
 print(dfDeceasedExtended.tail(1))
-print('====================================================================================================')
+print('===========================================================================================================')
 print('\r\n')
-print('==Recovered=========================================================================================')
+print('==Recovered================================================================================================')
 recovered='Recovered'
 dfRecovered: DataFrame=csse.data['Recovered']
 # Pivoting 'Recovered'-dataframe columns to rows
@@ -269,19 +269,17 @@ dictRecoveredExtended:dict[str, any]={
     'ISO2':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso2'),
     'ISO3':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso3'),
     recovered: dfRecovered[recovered],
-    recovered+'Change':[num for num in dfRecovered[recovered].diff()],
+    recovered+'Change':[num for num in dfRecovered[recovered].diff().where(dfRecovered[recovered] < 0 , 0)],
 }
 dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
 print(dfRecoveredExtended.head(1))
 print(dfRecoveredExtended.tail(1))
-print('====================================================================================================')
+print('===========================================================================================================')
 
-doWrite=False
+doWrite=True
 if doWrite:
-
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)
-
     pathToWriteTo=''
     # current working folder
     if path.__contains__('HomeProjects'):
