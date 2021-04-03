@@ -154,18 +154,17 @@ csse=Csse()
 print('==Confirmed=======================================')
 confirmed='Confirmed'
 dfConfirmed: DataFrame=csse.data[confirmed]
-# Pivoting 'Confirmed'-dataframe columns to rows
+# Pivoting the 'Confirmed'-dataframe columns to rows
 transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
                             id_vars=dfConfirmed.columns[:4],
                             value_vars=dfConfirmed.columns[4:],
                             var_name='Updated',
                             value_name=confirmed)
-# Extending and Sorting transposed 'Confirmed'-dataframe
+# Sorting the transposed 'Confirmed'-dataframe
 dictConfirmed:dict[str, any]={
     'Date':pd.to_datetime(transposedDfConfirmed['Updated'], format=format_str),
     'Country_Region':transposedDfConfirmed['Country/Region'],
     'Province_State':transposedDfConfirmed['Province/State'],
-    # 'Country_Region_Province_State':combineTextColumns(transposedDfConfirmed['Country/Region'],transposedDfConfirmed['Province/State']),
     'Latitude':transposedDfConfirmed['Lat'],
     'Longitude':transposedDfConfirmed['Long'],
     confirmed: transposedDfConfirmed[confirmed]
@@ -173,17 +172,14 @@ dictConfirmed:dict[str, any]={
 dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
 dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region', 'Date'])
 dfConfirmed.sort_values(by=['Date'])
+# Extending the sorted 'Confirmed'-dataframe
 countryRegionConfirmed:list=dfConfirmed['Country_Region'].values
 provinceStateConfirmed:list=dfConfirmed['Province_State'].values
-# distinctProvinceStateNamesConfirmed=distinctList(provinceStateConfirmed)
 stateNameConfirmed:list=combineTextColumns(countryRegionConfirmed,provinceStateConfirmed)
-print('XX', stateNameConfirmed[0])
-print('XX', stateNameConfirmed[10])
 dictConfirmedExtended:dict[str, any]={
     'Date':dfConfirmed['Date'],
     'Country_Region':dfConfirmed['Country_Region'],
     'Province_State':dfConfirmed['Province_State'],
-    # 'Country_Region_Province_State':dfConfirmed['Country_Region_Province_State'],
     'Latitude':dfConfirmed['Latitude'],
     'Longitude':dfConfirmed['Longitude'],
     'ISO2':getIsoCodeForCountry(stateNameConfirmed,'Iso2'),
@@ -199,18 +195,17 @@ print('\r\n')
 print('==Deceased========================================')
 deceased='Deceased'
 dfDeceased: DataFrame=csse.data[deceased]
-# Pivoting 'Deceased'-dataframe columns to rows
+# Pivoting the 'Deceased'-dataframe columns to rows
 transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
                             id_vars=dfDeceased.columns[:4],
                             value_vars=dfDeceased.columns[4:],
                             var_name='Updated',
                             value_name='Deceased')
-# Extending and Sorting transposed deceased-dataframe
+# Sorting the transposed 'Deceased'-dataframe
 dictDeceased:dict[str, any]={
     'Date':pd.to_datetime(transposedDfDeceased['Updated'], format=format_str),
     'Country_Region':transposedDfDeceased['Country/Region'],
     'Province_State':transposedDfDeceased['Province/State'],
-    # 'Country_Region_Province_State':combineTextColumns(transposedDfDeceased['Country/Region'],transposedDfDeceased['Province/State']),
     'Latitude':transposedDfDeceased['Lat'],
     'Longitude':transposedDfDeceased['Long'],
     deceased: transposedDfDeceased[deceased]
@@ -218,6 +213,7 @@ dictDeceased:dict[str, any]={
 dfDeceased: DataFrame=pd.DataFrame(dictDeceased)
 dfDeceased: DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
+# Extending the sorted 'Deceased'-dataframe
 countryRegionDeceased:list=dfDeceased['Country_Region'].values
 provinceStateDeceased:list=dfDeceased['Province_State'].values
 combinedDataFramesDeceased:list=combineTextColumns(countryRegionDeceased,provinceStateDeceased)
@@ -247,7 +243,7 @@ transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
                             value_vars=dfRecovered.columns[4:],
                             var_name='Updated',
                             value_name=recovered)
-# Extending and Sorting transposed 'Recovered'-dataframe
+# Sorting the transposed 'Recovered'-dataframe
 dictRecovered:dict[str, any]={
     'Date':pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
     'Country_Region':transposedDfRecovered['Country/Region'],
@@ -260,6 +256,7 @@ dictRecovered:dict[str, any]={
 dfRecovered: DataFrame=pd.DataFrame(dictRecovered)
 dfRecovered: DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
 dfRecovered.sort_values(by=['Date'])
+# Extending the sorted 'Recovered'-dataframe
 countryRegionRecovered:list=dfRecovered['Country_Region'].values
 provinceStateRecovered:list=dfRecovered['Province_State'].values
 combinedDataFramesRecovered:list=combineTextColumns(countryRegionRecovered,provinceStateRecovered)
@@ -267,7 +264,6 @@ dictRecoveredExtended:dict[str, any]={
     'Date':dfRecovered['Date'],
     'Country_Region':dfRecovered['Country_Region'],
     'Province_State':dfRecovered['Province_State'],
-    # 'Country_Region_Province_State':dfRecovered['Country_Region_Province_State'],
     'Latitude':dfRecovered['Latitude'],
     'Longitude':dfRecovered['Longitude'],
     'ISO2':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso2'),
