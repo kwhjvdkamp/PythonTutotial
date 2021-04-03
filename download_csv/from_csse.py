@@ -33,13 +33,12 @@ def convertToWindowsPath(string: Union[str, pathlib.Path]):
 # which resides in a local static json-like structure in 'isoCountryCodes.py'
 def getIsoCodeForCountry(stateNames:list,iso:str):
     codes=[]
-    missingIsoCodesStateNames=[]
+    # missingIsoCodesStateNames=[]
 
     # noneExistingCountryNames = ['Diamond Princess','Grand Princess','Repatriated Travellers']
     # Countries With Overseas Areas = ['Denmark','France','Netherlands','United Kingdom']
     # (US in not taken into account)
     # These 'Overseas areas' listed in Province/State column having their own Iso2 & Iso3 codes
-
 
     # print('Overseas areas with own Isocode', provinceStateNames)
 
@@ -52,8 +51,8 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
             codes.append(isoCode)
         else:
             # Missing codes
-            if stateName not in missingIsoCodesStateNames:
-                missingIsoCodesStateNames.append(stateName)
+            # if stateName not in missingIsoCodesStateNames:
+            #     missingIsoCodesStateNames.append(stateName)
 
             if iso=='Iso2':
                 codes.append('--')
@@ -67,7 +66,7 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
             #     case 'Iso3':
             #         codes.append('---')
 
-    print('X',missingIsoCodesStateNames)
+    # print('X',missingIsoCodesStateNames)
     return codes
 
 
@@ -80,26 +79,16 @@ def  mapStateNamewithIsoCodesObject(stateName:str):
             return value
 
 
-def combineTextColumns(col1:DataFrame, col2:DataFrame):
-    col2 = col2.fillna('')
-    df = col1.astype(str)+"|"+col2
+def combineTextColumns(col1:list, col2:list):
+    dfCol1=pd.DataFrame(col1)
+    dfCol2=pd.DataFrame(col2)
+    dfCol2 = dfCol2.fillna('')
+    df = dfCol1.astype(str)+"|"+dfCol2
     dfValues = df.values
-    newList=[]
     finalList=[]
     for item in dfValues:
-        if item[-1]=='|':
-            newList.append(item[:-1])
-        else:
-            newList.append(item)
-
-    for item in newList:
-        item=item.replace('|', ' ')
-        finalList.append(item)
-
-    print(finalList[10])
-    bla = pd.DataFrame(finalList)
-    return bla
-    # return dfValues
+        finalList.append(str(item)[2:len(str(item))-3].replace('|', ' '))
+    return finalList
 
 
 # Creating a distinct list
@@ -162,7 +151,7 @@ csse=Csse()
 # print(csse.data.keys())
 
 
-# print('==Confirmed=======================================')
+print('==Confirmed=======================================')
 confirmed='Confirmed'
 dfConfirmed: DataFrame=csse.data[confirmed]
 # Pivoting 'Confirmed'-dataframe columns to rows
@@ -172,12 +161,6 @@ transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
                             var_name='Updated',
                             value_name=confirmed)
 # Extending and Sorting transposed 'Confirmed'-dataframe
-# countryRegionConfirmed:list=transposedDfConfirmed['Country/Region'].values
-# provinceStateConfirmed:list=transposedDfConfirmed['Province/State'].values
-# distinctProvinceStateNamesConfirmed=distinctList(provinceStateConfirmed)
-combinedDataFramesConfirmed:DataFrame=combineTextColumns(transposedDfConfirmed['Country/Region'],transposedDfConfirmed['Province/State'])
-stateNamesConfirmed=pd.DataFrame(combinedDataFramesConfirmed).values
-print('XX', stateNamesConfirmed[10])
 dictConfirmed:dict[str, any]={
     'Date':pd.to_datetime(transposedDfConfirmed['Updated'], format=format_str),
     'Country_Region':transposedDfConfirmed['Country/Region'],
@@ -185,13 +168,17 @@ dictConfirmed:dict[str, any]={
     # 'Country_Region_Province_State':combineTextColumns(transposedDfConfirmed['Country/Region'],transposedDfConfirmed['Province/State']),
     'Latitude':transposedDfConfirmed['Lat'],
     'Longitude':transposedDfConfirmed['Long'],
-    'ISO2':getIsoCodeForCountry(stateNamesConfirmed,'Iso2'),
-    'ISO3':getIsoCodeForCountry(stateNamesConfirmed,'Iso3'),
     confirmed: transposedDfConfirmed[confirmed]
 }
 dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
 dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region', 'Date'])
 dfConfirmed.sort_values(by=['Date'])
+countryRegionConfirmed:list=dfConfirmed['Country_Region'].values
+provinceStateConfirmed:list=dfConfirmed['Province_State'].values
+# distinctProvinceStateNamesConfirmed=distinctList(provinceStateConfirmed)
+stateNameConfirmed:list=combineTextColumns(countryRegionConfirmed,provinceStateConfirmed)
+print('XX', stateNameConfirmed[0])
+print('XX', stateNameConfirmed[10])
 dictConfirmedExtended:dict[str, any]={
     'Date':dfConfirmed['Date'],
     'Country_Region':dfConfirmed['Country_Region'],
@@ -199,14 +186,17 @@ dictConfirmedExtended:dict[str, any]={
     # 'Country_Region_Province_State':dfConfirmed['Country_Region_Province_State'],
     'Latitude':dfConfirmed['Latitude'],
     'Longitude':dfConfirmed['Longitude'],
-    'ISO2':dfConfirmed['ISO2'],
-    'ISO3':dfConfirmed['ISO3'],
+    'ISO2':getIsoCodeForCountry(stateNameConfirmed,'Iso2'),
+    'ISO3':getIsoCodeForCountry(stateNameConfirmed,'Iso3'),
     confirmed: dfConfirmed[confirmed],
     confirmed+'Change':[num for num in dfConfirmed[confirmed].diff()],
 }
 dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
-
-# print('==Deceased========================================')
+print(dfConfirmedExtended.head(1))
+print(dfConfirmedExtended.tail(1))
+print('==================================================')
+print('\r\n')
+print('==Deceased========================================')
 deceased='Deceased'
 dfDeceased: DataFrame=csse.data[deceased]
 # Pivoting 'Deceased'-dataframe columns to rows
@@ -216,11 +206,6 @@ transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
                             var_name='Updated',
                             value_name='Deceased')
 # Extending and Sorting transposed deceased-dataframe
-# countryRegionDeceased:list=transposedDfDeceased['Country/Region'].values
-# provinceStateDeceased:list=transposedDfDeceased['Province/State'].values
-# distinctProvinceStateNamesDeceased=distinctList(provinceStateDeceased)
-combinedDataFramesDeceased:DataFrame=combineTextColumns(transposedDfDeceased['Country/Region'],transposedDfDeceased['Province/State'])
-stateNamesDeceased=pd.DataFrame(combinedDataFramesDeceased).values
 dictDeceased:dict[str, any]={
     'Date':pd.to_datetime(transposedDfDeceased['Updated'], format=format_str),
     'Country_Region':transposedDfDeceased['Country/Region'],
@@ -228,13 +213,14 @@ dictDeceased:dict[str, any]={
     # 'Country_Region_Province_State':combineTextColumns(transposedDfDeceased['Country/Region'],transposedDfDeceased['Province/State']),
     'Latitude':transposedDfDeceased['Lat'],
     'Longitude':transposedDfDeceased['Long'],
-    'ISO2':getIsoCodeForCountry(stateNamesDeceased,'Iso2'),
-    'ISO3':getIsoCodeForCountry(stateNamesDeceased,'Iso3'),
     deceased: transposedDfDeceased[deceased]
 }
 dfDeceased: DataFrame=pd.DataFrame(dictDeceased)
 dfDeceased: DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
+countryRegionDeceased:list=dfDeceased['Country_Region'].values
+provinceStateDeceased:list=dfDeceased['Province_State'].values
+combinedDataFramesDeceased:list=combineTextColumns(countryRegionDeceased,provinceStateDeceased)
 dictDeceasedExtended:dict[str, any]={
     'Date':dfDeceased['Date'],
     'Country_Region':dfDeceased['Country_Region'],
@@ -242,14 +228,17 @@ dictDeceasedExtended:dict[str, any]={
     # 'Country_Region_Province_State':dfDeceased['Country_Region_Province_State'],
     'Latitude':dfDeceased['Latitude'],
     'Longitude':dfDeceased['Longitude'],
-    'ISO2':dfDeceased['ISO2'],
-    'ISO3':dfDeceased['ISO3'],
+    'ISO2':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso2'),
+    'ISO3':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso3'),
     deceased: dfDeceased[deceased],
     deceased+'Change':[num for num in dfDeceased[deceased].diff()],
 }
 dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
-
-# print('==Recovered=======================================')
+print(dfDeceasedExtended.head(1))
+print(dfDeceasedExtended.tail(1))
+print('==================================================')
+print('\r\n')
+print('==Recovered=======================================')
 recovered='Recovered'
 dfRecovered: DataFrame=csse.data['Recovered']
 # Pivoting 'Recovered'-dataframe columns to rows
@@ -259,11 +248,6 @@ transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
                             var_name='Updated',
                             value_name=recovered)
 # Extending and Sorting transposed 'Recovered'-dataframe
-# countryRegionRecovered:list=transposedDfRecovered['Country/Region'].values
-# provinceStateRecovered:list=transposedDfRecovered['Province/State'].values
-# distinctProvinceStateNamesRecovered=distinctList(provinceStateRecovered)
-combinedDataFramesRecovered:DataFrame=combineTextColumns(transposedDfRecovered['Country/Region'],transposedDfRecovered['Province/State'])
-stateNamesRecovered=pd.DataFrame(combinedDataFramesRecovered).values
 dictRecovered:dict[str, any]={
     'Date':pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
     'Country_Region':transposedDfRecovered['Country/Region'],
@@ -271,13 +255,14 @@ dictRecovered:dict[str, any]={
     # 'Country_Region_Province_State':combineTextColumns(transposedDfRecovered['Country/Region'],transposedDfRecovered['Province/State']),
     'Latitude':transposedDfRecovered['Lat'],
     'Longitude':transposedDfRecovered['Long'],
-    'ISO2':getIsoCodeForCountry(stateNamesRecovered,'Iso2'),
-    'ISO3':getIsoCodeForCountry(stateNamesRecovered,'Iso3'),
     recovered: transposedDfRecovered[recovered]
 }
 dfRecovered: DataFrame=pd.DataFrame(dictRecovered)
 dfRecovered: DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
 dfRecovered.sort_values(by=['Date'])
+countryRegionRecovered:list=dfRecovered['Country_Region'].values
+provinceStateRecovered:list=dfRecovered['Province_State'].values
+combinedDataFramesRecovered:list=combineTextColumns(countryRegionRecovered,provinceStateRecovered)
 dictRecoveredExtended:dict[str, any]={
     'Date':dfRecovered['Date'],
     'Country_Region':dfRecovered['Country_Region'],
@@ -285,30 +270,17 @@ dictRecoveredExtended:dict[str, any]={
     # 'Country_Region_Province_State':dfRecovered['Country_Region_Province_State'],
     'Latitude':dfRecovered['Latitude'],
     'Longitude':dfRecovered['Longitude'],
-    'ISO2':dfRecovered['ISO2'],
-    'ISO3':dfRecovered['ISO3'],
+    'ISO2':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso2'),
+    'ISO3':getIsoCodeForCountry(combinedDataFramesRecovered,'Iso3'),
     recovered: dfRecovered[recovered],
     recovered+'Change':[num for num in dfRecovered[recovered].diff()],
 }
 dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
+print(dfRecoveredExtended.head(1))
+print(dfRecoveredExtended.tail(1))
+print('==================================================')
 
-# print('==================================================')
-# print('\r\nConfirmed')
-# print(dfConfirmedExtended.head())
-# print(dfConfirmedExtended.tail())
-# print('==================================================')
-# print('\r\nDeceased')
-# print(dfDeceasedExtended.head())
-# print(dfDeceasedExtended.tail())
-# print('==================================================')
-# print('\r\nRecovered')
-# print(dfRecoveredExtended.head())
-# print(dfRecoveredExtended.tail())
-# print('==================================================')
-
-# ======================================================================================
-
-doWrite=True
+doWrite=False
 if doWrite:
 
     currentContainer=pathlib.Path(__file__).parent.absolute()
