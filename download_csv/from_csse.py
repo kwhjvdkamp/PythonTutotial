@@ -151,7 +151,7 @@ csse=Csse()
 # print(csse.data.keys())
 
 
-print('==Confirmed=======================================')
+print('==Confirmed=========================================================================================')
 confirmed='Confirmed'
 dfConfirmed: DataFrame=csse.data[confirmed]
 # Pivoting the 'Confirmed'-dataframe columns to rows
@@ -190,9 +190,9 @@ dictConfirmedExtended:dict[str, any]={
 dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
 print(dfConfirmedExtended.head(1))
 print(dfConfirmedExtended.tail(1))
-print('==================================================')
+print('====================================================================================================')
 print('\r\n')
-print('==Deceased========================================')
+print('==Deceased==========================================================================================')
 deceased='Deceased'
 dfDeceased: DataFrame=csse.data[deceased]
 # Pivoting the 'Deceased'-dataframe columns to rows
@@ -232,9 +232,9 @@ dictDeceasedExtended:dict[str, any]={
 dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
 print(dfDeceasedExtended.head(1))
 print(dfDeceasedExtended.tail(1))
-print('==================================================')
+print('====================================================================================================')
 print('\r\n')
-print('==Recovered=======================================')
+print('==Recovered=========================================================================================')
 recovered='Recovered'
 dfRecovered: DataFrame=csse.data['Recovered']
 # Pivoting 'Recovered'-dataframe columns to rows
@@ -274,7 +274,7 @@ dictRecoveredExtended:dict[str, any]={
 dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
 print(dfRecoveredExtended.head(1))
 print(dfRecoveredExtended.tail(1))
-print('==================================================')
+print('====================================================================================================')
 
 doWrite=False
 if doWrite:
