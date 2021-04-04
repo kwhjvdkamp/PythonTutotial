@@ -8,16 +8,20 @@
 # Downloading the csv file from CSSE
 print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__file__,__name__,str(__package__)))
 
+import numpy as np
 import os
 import pathlib
 import pandas as pd
 import requests
 import io
+import time
 
 from datetime import datetime
 from pandas.core import indexing
 from pandas.core.frame import DataFrame
 from typing import Match, Union
+from awesome_progress_bar import ProgressBar
+
 
 # Local module(s)
 from isoCountryCodes import CountryCodes
@@ -150,17 +154,20 @@ class Csse:
 # conversion to Iso date 'YYYY-MM-DD' format is mandatory
 format_str='%m/%d/%y' # The original date format
 
+total = 10
+bar = ProgressBar(total, bar_length=39)
+
 # Calling class
+print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
 csse=Csse()
 # Keys of the dictionary
-# print(csse.data.keys())
+print('\r\n\r\n', csse.data.keys())
 
-
-print('==Confirmed================================================================================================')
 confirmed='Confirmed'
-dfConfirmed: DataFrame=csse.data[confirmed]
+print('\r\n\r\n= Reconstruction of '+confirmed+' Dataset =')
+dfConfirmed:DataFrame=csse.data[confirmed]
 # Pivoting the 'Confirmed'-dataframe columns to rows
-transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
+transposedDfConfirmed:DataFrame=pd.melt(dfConfirmed,
                             id_vars=dfConfirmed.columns[:4],
                             value_vars=dfConfirmed.columns[4:],
                             var_name='Updated',
@@ -174,36 +181,38 @@ dictConfirmed:dict[str,any]={
     'Longitude':transposedDfConfirmed['Long'],
     confirmed: transposedDfConfirmed[confirmed]
 }
-dfConfirmed: DataFrame=pd.DataFrame(dictConfirmed)
+dfConfirmed:DataFrame=pd.DataFrame(dictConfirmed)
 # Sorting first on 'Country_Region' than 'Province_Region' next 'Date'
-dfConfirmed: DataFrame=dfConfirmed.sort_values(by=['Country_Region','Province_State','Date'])
+dfConfirmed:DataFrame=dfConfirmed.sort_values(by=['Country_Region','Province_State','Date'])
 # Again sorting on 'Date'
 dfConfirmed.sort_values(by=['Date'])
 # Extending the sorted 'Confirmed'-dataframe
 countryRegionConfirmed:list=dfConfirmed['Country_Region'].values
 provinceStateConfirmed:list=dfConfirmed['Province_State'].values
 stateNameConfirmed:list=combineTextColumns(countryRegionConfirmed,provinceStateConfirmed)
+iso2Codes:list=getIsoCodeForCountry(stateNameConfirmed,'Iso2')
+iso3Codes:list=getIsoCodeForCountry(stateNameConfirmed,'Iso3')
 dictConfirmedExtended:dict[str,any]={
     'Date':dfConfirmed['Date'],
     'Country_Region':dfConfirmed['Country_Region'],
     'Province_State':dfConfirmed['Province_State'],
     'Latitude':dfConfirmed['Latitude'],
     'Longitude':dfConfirmed['Longitude'],
-    'ISO2':getIsoCodeForCountry(stateNameConfirmed,'Iso2'),
-    'ISO3':getIsoCodeForCountry(stateNameConfirmed,'Iso3'),
+    'ISO2':iso2Codes,
+    'ISO3':iso3Codes,
     confirmed: dfConfirmed[confirmed],
     confirmed+'Change':[num for num in dfConfirmed[confirmed].diff().where(dfConfirmed[confirmed]>0)],
 }
-dfConfirmedExtended: DataFrame=pd.DataFrame(dictConfirmedExtended)
-print(dfConfirmedExtended.head(1))
-print(dfConfirmedExtended.tail(1))
-print('===========================================================================================================')
-print('\r\n')
-print('==Deceased=================================================================================================')
+dfConfirmedExtended:DataFrame=pd.DataFrame(dictConfirmedExtended)
+# print('\r\n',dfConfirmedExtended.head(1))
+# print('\r\n',dfConfirmedExtended.tail(1))
+# print('===========================================================================================================')
+# print('\r\n')
 deceased='Deceased'
-dfDeceased: DataFrame=csse.data[deceased]
+print('\r\n\r\n= Reconstruction of '+deceased+' Dataset =')
+dfDeceased:DataFrame=csse.data[deceased]
 # Pivoting the 'Deceased'-dataframe columns to rows
-transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
+transposedDfDeceased:DataFrame=pd.melt(dfDeceased,
                             id_vars=dfDeceased.columns[:4],
                             value_vars=dfDeceased.columns[4:],
                             var_name='Updated',
@@ -217,8 +226,8 @@ dictDeceased:dict[str,any]={
     'Longitude':transposedDfDeceased['Long'],
     deceased: transposedDfDeceased[deceased]
 }
-dfDeceased: DataFrame=pd.DataFrame(dictDeceased)
-dfDeceased: DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
+dfDeceased:DataFrame=pd.DataFrame(dictDeceased)
+dfDeceased:DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
 dfDeceased.sort_values(by=['Date'])
 # Extending the sorted 'Deceased'-dataframe
 countryRegionDeceased:list=dfDeceased['Country_Region'].values
@@ -236,16 +245,16 @@ dictDeceasedExtended:dict[str,any]={
     deceased: dfDeceased[deceased],
     deceased+'Change':[num for num in dfDeceased[deceased].diff().where(dfDeceased[deceased]>0)],
 }
-dfDeceasedExtended: DataFrame=pd.DataFrame(dictDeceasedExtended)
-print(dfDeceasedExtended.head(1))
-print(dfDeceasedExtended.tail(1))
-print('===========================================================================================================')
-print('\r\n')
-print('==Recovered================================================================================================')
+dfDeceasedExtended:DataFrame=pd.DataFrame(dictDeceasedExtended)
+# print('\r\n',dfDeceasedExtended.head(1))
+# print('\r\n',dfDeceasedExtended.tail(1))
+# print('===========================================================================================================')
+# print('\r\n')
 recovered='Recovered'
-dfRecovered: DataFrame=csse.data['Recovered']
+print('\r\n\r\n= Reconstruction of '+recovered+' Dataset =')
+dfRecovered:DataFrame=csse.data['Recovered']
 # Pivoting 'Recovered'-dataframe columns to rows
-transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
+transposedDfRecovered:DataFrame=pd.melt(dfRecovered,
                             id_vars=dfRecovered.columns[:4],
                             value_vars=dfRecovered.columns[4:],
                             var_name='Updated',
@@ -260,8 +269,8 @@ dictRecovered:dict[str,any]={
     'Longitude':transposedDfRecovered['Long'],
     recovered: transposedDfRecovered[recovered]
 }
-dfRecovered: DataFrame=pd.DataFrame(dictRecovered)
-dfRecovered: DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
+dfRecovered:DataFrame=pd.DataFrame(dictRecovered)
+dfRecovered:DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
 dfRecovered.sort_values(by=['Date'])
 # Extending the sorted 'Recovered'-dataframe
 countryRegionRecovered:list=dfRecovered['Country_Region'].values
@@ -278,10 +287,10 @@ dictRecoveredExtended:dict[str,any]={
     recovered: dfRecovered[recovered],
     recovered+'Change':[num for num in dfRecovered[recovered].diff().where(dfRecovered[recovered]>0)],
 }
-dfRecoveredExtended: DataFrame=pd.DataFrame(dictRecoveredExtended)
-print(dfRecoveredExtended.head(1))
-print(dfRecoveredExtended.tail(1))
-print('===========================================================================================================')
+dfRecoveredExtended:DataFrame=pd.DataFrame(dictRecoveredExtended)
+# print('\r\n',dfRecoveredExtended.head(1))
+# print('\r\n',dfRecoveredExtended.tail(1))
+# print('===========================================================================================================')
 
 doWrite=False
 if doWrite:
@@ -305,4 +314,14 @@ if doWrite:
     dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 
 else:
-    print('File writing switched OFF')
+    print('\r\n\r\n= File writing switched OFF =')
+
+try:
+    for x in range(total):
+        time.sleep(0.1)
+        bar.iter('')
+
+except:
+    bar.stop()
+bar.wait()
+# print('Bar is done')
