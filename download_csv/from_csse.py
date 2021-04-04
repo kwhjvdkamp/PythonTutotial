@@ -205,7 +205,7 @@ dictConfirmedExtended:dict[str,any]={
 }
 dfConfirmedExtended:DataFrame=pd.DataFrame(dictConfirmedExtended)
 # print('\r\n',dfConfirmedExtended.head(1))
-# print('\r\n',dfConfirmedExtended.tail(1))
+print('\r\n',dfConfirmedExtended.tail(1))
 # print('===========================================================================================================')
 # print('\r\n')
 deceased='Deceased'
@@ -237,7 +237,6 @@ dictDeceasedExtended:dict[str,any]={
     'Date':dfDeceased['Date'],
     'Country_Region':dfDeceased['Country_Region'],
     'Province_State':dfDeceased['Province_State'],
-    # 'Country_Region_Province_State':dfDeceased['Country_Region_Province_State'],
     'Latitude':dfDeceased['Latitude'],
     'Longitude':dfDeceased['Longitude'],
     'ISO2':getIsoCodeForCountry(combinedDataFramesDeceased,'Iso2'),
@@ -247,7 +246,7 @@ dictDeceasedExtended:dict[str,any]={
 }
 dfDeceasedExtended:DataFrame=pd.DataFrame(dictDeceasedExtended)
 # print('\r\n',dfDeceasedExtended.head(1))
-# print('\r\n',dfDeceasedExtended.tail(1))
+print('\r\n',dfDeceasedExtended.tail(1))
 # print('===========================================================================================================')
 # print('\r\n')
 recovered='Recovered'
@@ -264,7 +263,6 @@ dictRecovered:dict[str,any]={
     'Date':pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
     'Country_Region':transposedDfRecovered['Country/Region'],
     'Province_State':transposedDfRecovered['Province/State'],
-    # 'Country_Region_Province_State':combineTextColumns(transposedDfRecovered['Country/Region'],transposedDfRecovered['Province/State']),
     'Latitude':transposedDfRecovered['Lat'],
     'Longitude':transposedDfRecovered['Long'],
     recovered: transposedDfRecovered[recovered]
@@ -289,10 +287,10 @@ dictRecoveredExtended:dict[str,any]={
 }
 dfRecoveredExtended:DataFrame=pd.DataFrame(dictRecoveredExtended)
 # print('\r\n',dfRecoveredExtended.head(1))
-# print('\r\n',dfRecoveredExtended.tail(1))
+print('\r\n',dfRecoveredExtended.tail(1))
 # print('===========================================================================================================')
 
-doWrite=False
+doWrite=True
 if doWrite:
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)
@@ -301,6 +299,7 @@ if doWrite:
     if path.__contains__('HomeProjects'):
         # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
         pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
+        print('\r\n=========== File writing to ===========')
         print('Laptop:', pathToWriteTo)
     elif path.__contains__('GitHubRepositories'):
         # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
