@@ -11,22 +11,22 @@ print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__f
 import os
 import pathlib
 import pandas as pd
-from pandas.core.frame import DataFrame
 import requests
 import io
 
-# Third party modules
 from datetime import datetime
 from pandas.core import indexing
+from pandas.core.frame import DataFrame
 from typing import Match, Union
 
 # Local module(s)
 from isoCountryCodes import CountryCodes
 
-# Converting a string to a Path-typed structure (if already a Path, nothing changes)
+# Definition to convert a string to a Path-typed structure (if already a Path, nothing changes)
 def convertToWindowsPath(string: Union[str, pathlib.Path]):
     path=pathlib.Path(string)
     return path
+
 
 # Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
 # country-specific objects like {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
@@ -43,8 +43,6 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
     # print('Overseas areas with own Isocode', provinceStateNames)
 
     for stateName in stateNames:
-        if(stateName == 'Aruba'):
-            bla = bla
         pair= mapStateNamewithIsoCodesObject(stateName)
         # 'None' equivalent to 'null'
         if pair!=None:
@@ -81,6 +79,7 @@ def  mapStateNamewithIsoCodesObject(stateName:str):
             return value
 
 
+# Definition to concatenate two dataframe columns containing string values
 def combineTextColumns(col1:list,col2:list):
     dfCol1=pd.DataFrame(col1)
     dfCol2=pd.DataFrame(col2)
@@ -167,7 +166,7 @@ transposedDfConfirmed: DataFrame=pd.melt(dfConfirmed,
                             var_name='Updated',
                             value_name=confirmed)
 # Sorting the transposed 'Confirmed'-dataframe
-dictConfirmed:dict[str, any]={
+dictConfirmed:dict[str,any]={
     'Date':pd.to_datetime(transposedDfConfirmed['Updated'], format=format_str),
     'Country_Region':transposedDfConfirmed['Country/Region'],
     'Province_State':transposedDfConfirmed['Province/State'],
@@ -184,7 +183,7 @@ dfConfirmed.sort_values(by=['Date'])
 countryRegionConfirmed:list=dfConfirmed['Country_Region'].values
 provinceStateConfirmed:list=dfConfirmed['Province_State'].values
 stateNameConfirmed:list=combineTextColumns(countryRegionConfirmed,provinceStateConfirmed)
-dictConfirmedExtended:dict[str, any]={
+dictConfirmedExtended:dict[str,any]={
     'Date':dfConfirmed['Date'],
     'Country_Region':dfConfirmed['Country_Region'],
     'Province_State':dfConfirmed['Province_State'],
@@ -210,7 +209,7 @@ transposedDfDeceased: DataFrame=pd.melt(dfDeceased,
                             var_name='Updated',
                             value_name='Deceased')
 # Sorting the transposed 'Deceased'-dataframe
-dictDeceased:dict[str, any]={
+dictDeceased:dict[str,any]={
     'Date':pd.to_datetime(transposedDfDeceased['Updated'], format=format_str),
     'Country_Region':transposedDfDeceased['Country/Region'],
     'Province_State':transposedDfDeceased['Province/State'],
@@ -225,7 +224,7 @@ dfDeceased.sort_values(by=['Date'])
 countryRegionDeceased:list=dfDeceased['Country_Region'].values
 provinceStateDeceased:list=dfDeceased['Province_State'].values
 combinedDataFramesDeceased:list=combineTextColumns(countryRegionDeceased,provinceStateDeceased)
-dictDeceasedExtended:dict[str, any]={
+dictDeceasedExtended:dict[str,any]={
     'Date':dfDeceased['Date'],
     'Country_Region':dfDeceased['Country_Region'],
     'Province_State':dfDeceased['Province_State'],
@@ -252,7 +251,7 @@ transposedDfRecovered: DataFrame=pd.melt(dfRecovered,
                             var_name='Updated',
                             value_name=recovered)
 # Sorting the transposed 'Recovered'-dataframe
-dictRecovered:dict[str, any]={
+dictRecovered:dict[str,any]={
     'Date':pd.to_datetime(transposedDfRecovered['Updated'], format=format_str),
     'Country_Region':transposedDfRecovered['Country/Region'],
     'Province_State':transposedDfRecovered['Province/State'],
@@ -268,7 +267,7 @@ dfRecovered.sort_values(by=['Date'])
 countryRegionRecovered:list=dfRecovered['Country_Region'].values
 provinceStateRecovered:list=dfRecovered['Province_State'].values
 combinedDataFramesRecovered:list=combineTextColumns(countryRegionRecovered,provinceStateRecovered)
-dictRecoveredExtended:dict[str, any]={
+dictRecoveredExtended:dict[str,any]={
     'Date':dfRecovered['Date'],
     'Country_Region':dfRecovered['Country_Region'],
     'Province_State':dfRecovered['Province_State'],
@@ -284,7 +283,7 @@ print(dfRecoveredExtended.head(1))
 print(dfRecoveredExtended.tail(1))
 print('===========================================================================================================')
 
-doWrite=True
+doWrite=False
 if doWrite:
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)
