@@ -1,29 +1,30 @@
-# import numpy as np
-# import pandas as pd
+from awesome_progress_bar import ProgressBar
+import time
 
-# from tqdm.auto import tqdm
+total = 1
+# bar = ProgressBar(total, bar_length=50)
+# Progress: |=========== 00:15 ============| 100.00% Appended
 
-# df = pd.DataFrame(np.random.randint(0, 100, (100000, 6)))
+# bar = ProgressBar(total, prefix='Prefix', suffix='Suffix', use_eta=True, bar_length=70)
+# # Prefix: в ‡ |==>             00:00/00:14                |   5.26% Suffix
 
-# # Register `pandas.progress_apply` and `pandas.Series.map_apply` with `tqdm`
-# # (can use `tqdm.gui.tqdm`, `tqdm.notebook.tqdm`, optional kwargs, etc.)
-# tqdm.pandas(desc="my bar!")
+# bar = ProgressBar(total, fill='#', use_time=False, bar_length=50, use_spinner=False)
+# # Progress: |##########>                   |  33.83%
 
-# # Now you can use `progress_apply` instead of `apply`
-# # and `progress_map` instead of `map`
-# df.progress_apply(lambda x: x**2)
-# # can also groupby:
-# # df.groupby(0).progress_apply(lambda x: x**2)
+# bar = ProgressBar(total, time_format='hhh mmmin sss', bar_length=70, spinner_type='s')
+# # Progress: - |=======>         00h 00min 02s                  |  16.54%
 
-# # -- Source code for `tqdm_pandas` (really simple!)
-# # def tqdm_pandas(t):
-# #   from pandas.core.frame import DataFrame
-# #   def inner(df, func, *args, **kwargs):
-# #       t.total = groups.size // len(groups)
-# #       def wrapper(*args, **kwargs):
-# #           t.update(1)
-# #           return func(*args, **kwargs)
-# #       result = df.apply(wrapper, *args, **kwargs)
-# #       t.close()
-# #       return result
-# #   DataFrame.progress_apply = inner
+bar = ProgressBar(total, bar_length=70, spinner_type='db')
+# Progress: вў€вЎ± |===========>         00:04                     |  24.81
+
+# Bar is done
+try:
+    for x in range(total):
+        time.sleep(0.1)
+        bar.iter(' Appended')
+except:
+    bar.stop()
+
+bar.wait()
+
+print('Bar is done')
