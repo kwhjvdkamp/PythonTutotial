@@ -314,7 +314,7 @@ if doWrite:
     dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
 
 else:
-    print('\r\n\r\n= File writing switched OFF =')
+    print('\r\n\r\n====== File writing switched OFF ======')
 
 try:
     for x in range(total):
