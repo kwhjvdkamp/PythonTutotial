@@ -3,31 +3,38 @@
 # https://web.archive.org/web/20150721184347/http://www.iso.org/iso/home/standards/country_codes/country_names_and_code_elements_txt-temp.htm
 
 CountryCodes = {
-    "Afghanistan":      {"Iso2": "AF", "Iso3": "AFG"},
-    "Åland Islands":    {"Iso2": "AX", "Iso3": "ALA"},
-    "Albania":          {"Iso2": "AL", "Iso3": "ALB"},
-    "Algeria":          {"Iso2": "DZ", "Iso3": "DZA"},
-    "American Samoa":   {"Iso2": "AS", "Iso3": "ASM"},
-    "Andorra":          {"Iso2": "AD", "Iso3": "AND"},
-    "Angola":           {"Iso2": "AO", "Iso3": "AGO"},
-    "Anguilla":         {"Iso2": "AI", "Iso3": "AIA"},
-    "Antarctica":       {"Iso2": "AQ", "Iso3": "ATA"},
+    "Afghanistan": {"Iso2": "AF", "Iso3": "AFG"},
+    "Åland Islands": {"Iso2": "AX", "Iso3": "ALA"},
+    "Albania": {"Iso2": "AL", "Iso3": "ALB"},
+    "Algeria": {"Iso2": "DZ", "Iso3": "DZA"},
+    "American Samoa": {"Iso2": "AS", "Iso3": "ASM"},
+    "Andorra": {"Iso2": "AD", "Iso3": "AND"},
+    "Angola": {"Iso2": "AO", "Iso3": "AGO"},
+    "Anguilla": {"Iso2": "AI", "Iso3": "AIA"},
+    "Antarctica": {"Iso2": "AQ", "Iso3": "ATA"},
     "Antigua and Barbuda": {"Iso2": "AG", "Iso3": "ATG"},
-    "Argentina":        {"Iso2": "AR", "Iso3": "ARG"},
-    "Armenia":          {"Iso2": "AM", "Iso3": "ARM"},
-    "Aruba":            {"Iso2": "AW", "Iso3": "ABW"},
-    "Australia":        {"Iso2": "AU", "Iso3": "AUS"},
-    "Austria":          {"Iso2": "AT", "Iso3": "AUT"},
-    "Azerbaijan":       {"Iso2": "AZ", "Iso3": "AZE"},
-    "Bahamas":          {"Iso2": "BS", "Iso3": "BHS"},
-    "Bahrain":          {"Iso2": "BH", "Iso3": "BHR"},
-    "Bangladesh":       {"Iso2": "BD", "Iso3": "BGD"},
-    "Barbados":         {"Iso2": "BB", "Iso3": "BRB"},
-    "Belarus":          {"Iso2": "BY", "Iso3": "BLR"},
-    "Belgium":          {"Iso2": "BE", "Iso3": "BEL"},
-    "Belize":           {"Iso2": "BZ", "Iso3": "BLZ"},
-    "Benin":            {"Iso2": "BJ", "Iso3": "BEN"},
-    "Bermuda":          {"Iso2": "BM", "Iso3": "BMU"},
+    "Argentina": {"Iso2": "AR", "Iso3": "ARG"},
+    "Armenia": {"Iso2": "AM", "Iso3": "ARM"},
+    "Australia Australian Capital Territory": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia New South Wales": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia Northern Territory": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia Queensland": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia South Australia": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia Tasmania": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia Victoria": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia Western Australia": {"Iso2": "AU", "Iso3": "AUS"},
+    "Australia": {"Iso2": "AU", "Iso3": "AUS"},
+    "Austria": {"Iso2": "AT", "Iso3": "AUT"},
+    "Azerbaijan": {"Iso2": "AZ", "Iso3": "AZE"},
+    "Bahamas": {"Iso2": "BS", "Iso3": "BHS"},
+    "Bahrain": {"Iso2": "BH", "Iso3": "BHR"},
+    "Bangladesh": {"Iso2": "BD", "Iso3": "BGD"},
+    "Barbados": {"Iso2": "BB", "Iso3": "BRB"},
+    "Belarus": {"Iso2": "BY", "Iso3": "BLR"},
+    "Belgium": {"Iso2": "BE", "Iso3": "BEL"},
+    "Belize": {"Iso2": "BZ", "Iso3": "BLZ"},
+    "Benin": {"Iso2": "BJ", "Iso3": "BEN"},
+    "Bermuda": {"Iso2": "BM", "Iso3": "BMU"},
     "Bhutan": {"Iso2": "BT", "Iso3": "BTN"},
     "Bolivia": {"Iso2": "BO", "Iso3": "BOL"},
     "Burma": {"Iso2": "BU", "Iso3": "BUR"},
@@ -45,11 +52,60 @@ CountryCodes = {
     "Cabo Verde": {"Iso2": "CV", "Iso3": "CPV"},
     "Cambodia": {"Iso2": "KH", "Iso3": "KHM"},
     "Cameroon": {"Iso2": "CM", "Iso3": "CMR"},
+    "Canada Alberta": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada British Columbia": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Diamond Princess": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Grand Princess": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Manitoba": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada New Brunswick": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Newfoundland and Labrador": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Northwest Territories": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Nova Scotia": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Nunavut": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Ontario": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Prince Edward Island": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Quebec": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Repatriated Travellers": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Saskatchewan": {"Iso2": "CA", "Iso3": "CAN"},
+    "Canada Yukon": {"Iso2": "CA", "Iso3": "CAN"},
     "Canada": {"Iso2": "CA", "Iso3": "CAN"},
     "Cayman Islands": {"Iso2": "KY", "Iso3": "CYM"},
     "Central African Republic": {"Iso2": "CF", "Iso3": "CAF"},
     "Chad": {"Iso2": "TD", "Iso3": "TCD"},
     "Chile": {"Iso2": "CL", "Iso3": "CHL"},
+    "China Anhui": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Beijing": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Chongqing": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Fujian": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Gansu": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Guangdong": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Guangxi": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Guizhou": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Hainan": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Hebei": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Heilongjiang": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Henan": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Hong Kong": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Hubei": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Hunan": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Inner Mongolia": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Jiangsu": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Jiangxi": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Jilin": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Liaoning": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Macau": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Ningxia": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Qinghai": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Shaanxi": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Shandong": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Shanghai": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Shanxi": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Sichuan": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Tianjin": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Tibet": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Xinjiang": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Yunnan": {"Iso2": "CN", "Iso3": "CHN"},
+    "China Zhejiang": {"Iso2": "CN", "Iso3": "CHN"},
     "China": {"Iso2": "CN", "Iso3": "CHN"},
     "Christmas Island": {"Iso2": "CX", "Iso3": "CXR"},
     "Cocos Islands": {"Iso2": "CC", "Iso3": "CCK"},
@@ -68,6 +124,8 @@ CountryCodes = {
     "Curaçao": {"Iso2": "CW", "Iso3": "CUW"},
     "Cyprus": {"Iso2": "CY", "Iso3": "CYP"},
     "Czechia": {"Iso2": "CZ", "Iso3": "CZE"},
+    "Denmark Faroe Islands": {"Iso2": "DK", "Iso3": "DNK"},
+    "Denmark Greenland": {"Iso2": "DK", "Iso3": "DNK"},
     "Denmark": {"Iso2": "DK", "Iso3": "DNK"},
     "Djibouti": {"Iso2": "DJ", "Iso3": "DJI"},
     "Dominica": {"Iso2": "DM", "Iso3": "DMA"},
@@ -85,9 +143,18 @@ CountryCodes = {
     "Fiji": {"Iso2": "FJ", "Iso3": "FJI"},
     "Finland": {"Iso2": "FI", "Iso3": "FIN"},
     "France": {"Iso2": "FR", "Iso3": "FRA"},
-    "French Guiana": {"Iso2": "GF", "Iso3": "GUF"},
-    "French Polynesia": {"Iso2": "PF", "Iso3": "PYF"},
-    "French Southern Territories": {"Iso2": "TF", "Iso3": "ATF"},
+    "France French Guiana": {"Iso2": "GF", "Iso3": "GUF"},
+    "France French Polynesia": {"Iso2": "PF", "Iso3": "PYF"},
+    "France French Southern Territories": {"Iso2": "TF", "Iso3": "ATF"},
+    "France Guadeloupe": {"Iso2": "FR", "Iso3": "FRA"},
+    "France Martinique": {"Iso2": "FR", "Iso3": "FRA"},
+    "France Mayotte": {"Iso2": "FR", "Iso3": "FRA"},
+    "France New Caledonia": {"Iso2": "FR", "Iso3": "FRA"},
+    "France Reunion": {"Iso2": "FR", "Iso3": "FRA"},
+    "France Saint Barthelemy": {"Iso2": "FR", "Iso3": "FRA"},
+    "France Saint Pierre and Miquelon": {"Iso2": "FR", "Iso3": "FRA"},
+    "France St Martin": {"Iso2": "FR", "Iso3": "FRA"},
+    "France Wallis and Futuna": {"Iso2": "FR", "Iso3": "FRA"},
     "Gabon": {"Iso2": "GA", "Iso3": "GAB"},
     "Gambia": {"Iso2": "GM", "Iso3": "GMB"},
     "Georgia": {"Iso2": "GE", "Iso3": "GEO"},
@@ -165,6 +232,10 @@ CountryCodes = {
     "Namibia": {"Iso2": "NA", "Iso3": "NAM"},
     "Nauru": {"Iso2": "NR", "Iso3": "NRU"},
     "Nepal": {"Iso2": "NP", "Iso3": "NPL"},
+    "Netherlands Aruba": {"Iso2": "AW", "Iso3": "ABW"},
+    "Netherlands Bonaire, Sint Eustatius and Saba": {"Iso2": "BQ", "Iso3": "BES"},
+    "Netherlands Curacao": {"Iso2": "CU", "Iso3": "CUW"},
+    "Netherlands Sint Maarten": {"Iso2": "SX", "Iso3": "SXM"},
     "Netherlands": {"Iso2": "NL", "Iso3": "NLD"},
     "New Caledonia": {"Iso2": "NC", "Iso3": "NCL"},
     "New Zealand": {"Iso2": "NZ", "Iso3": "NZL"},
@@ -244,6 +315,17 @@ CountryCodes = {
     "Uganda": {"Iso2": "UG", "Iso3": "UGA"},
     "Ukraine": {"Iso2": "UA", "Iso3": "UKR"},
     "United Arab Emirates": {"Iso2": "AE", "Iso3": "ARE"},
+    "United Kingdom Anguilla": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Bermuda": {"Iso2": "", "Iso3": ""},
+    "United Kingdom British Virgin Islands": {"Iso2": "VG", "Iso3": "VGB"},
+    "United Kingdom Cayman Islands": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Channel Islands": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Falkland Islands (Malvinas)": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Gibraltar": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Isle of Man": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Montserrat": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Saint Helena, Ascension and Tristan da Cunha": {"Iso2": "", "Iso3": ""},
+    "United Kingdom Turks and Caicos Islands": {"Iso2": "", "Iso3": ""},
     "United Kingdom": {"Iso2": "GB", "Iso3": "GBR"},
     "United States Minor Outlying Islands": {"Iso2": "UM", "Iso3": "UMI"},
     "US": {"Iso2": "US", "Iso3": "USA"},
@@ -252,7 +334,6 @@ CountryCodes = {
     "Vanuatu": {"Iso2": "VU", "Iso3": "VUT"},
     "Venezuela": {"Iso2": "VE", "Iso3": "VEN"},
     "Vietnam": {"Iso2": "VN", "Iso3": "VNM"},
-    "British Virgin Islands": {"Iso2": "VG", "Iso3": "VGB"},
     "United States": {"Iso2": "VI", "Iso3": "VIR"},
     "Wallis and Futuna": {"Iso2": "WF", "Iso3": "WLF"},
     "Western Sahara": {"Iso2": "EH", "Iso3": "ESH"},
@@ -261,3 +342,90 @@ CountryCodes = {
     "Zambia": {"Iso2": "ZM", "Iso3": "ZMB"},
     "Zimbabwe": {"Iso2": "ZW", "Iso3": "ZWE"}
 }
+
+
+# Australia Australian Capital Territory
+# Australia New South Wales
+# Australia Northern Territory
+# Australia Queensland
+# Australia South Australia
+# Australia Tasmania
+# Australia Victoria
+# Australia Western Australia
+# Canada Alberta
+# Canada British Columbia
+# Canada Diamond Princess
+# Canada Grand Princess
+# Canada Manitoba
+# Canada New Brunswick
+# Canada Newfoundland and Labrador
+# Canada Northwest Territories
+# Canada Nova Scotia
+# Canada Nunavut
+# Canada Ontario
+# Canada Prince Edward Island
+# Canada Quebec
+# Canada Repatriated Travellers
+# Canada Saskatchewan
+# Canada Yukon
+# China Anhui
+# China Beijing
+# China Chongqing
+# China Fujian
+# China Gansu
+# China Guangdong
+# China Guangxi
+# China Guizhou
+# China Hainan
+# China Hebei
+# China Heilongjiang
+# China Henan
+# China Hong Kong
+# China Hubei
+# China Hunan
+# China Inner Mongolia
+# China Jiangsu
+# China Jiangxi
+# China Jilin
+# China Liaoning
+# China Macau
+# China Ningxia
+# China Qinghai
+# China Shaanxi
+# China Shandong
+# China Shanghai
+# China Shanxi
+# China Sichuan
+# China Tianjin
+# China Tibet
+# China Xinjiang
+# China Yunnan
+# China Zhejiang
+# Denmark Faroe Islands
+# Denmark Greenland
+# France French Guiana
+# France French Polynesia
+# France Guadeloupe
+# France Martinique
+# France Mayotte
+# France New Caledonia
+# France Reunion
+# France Saint Barthelemy
+# France Saint Pierre and Miquelon
+# France St Martin
+# France Wallis and Futuna
+# Netherlands Aruba
+# Netherlands Bonaire, Sint Eustatius and Saba
+# Netherlands Curacao
+# Netherlands Sint Maarten
+# United Kingdom Anguilla
+# United Kingdom Bermuda
+# United Kingdom British Virgin Islands
+# United Kingdom Cayman Islands
+# United Kingdom Channel Islands
+# United Kingdom Falkland Islands (Malvinas)
+# United Kingdom Gibraltar
+# United Kingdom Isle of Man
+# United Kingdom Montserrat
+# United Kingdom Saint Helena, Ascension and Tristan da Cunha
+# United Kingdom Turks and Caicos Islands
