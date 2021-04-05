@@ -153,6 +153,7 @@ class Csse:
 # Original data contains dates formatted like 'm/d/jj' meaning a) no preceding zero's and b) two digit year
 # conversion to Iso date 'YYYY-MM-DD' format is mandatory
 format_str='%m/%d/%y' # The original date format
+sortOrder = ['Country_Region','Province_State','Date']
 
 total = 10
 bar = ProgressBar(total, bar_length=39)
@@ -183,7 +184,7 @@ dictConfirmed:dict[str,any]={
 }
 dfConfirmed:DataFrame=pd.DataFrame(dictConfirmed)
 # Sorting first on 'Country_Region' than 'Province_Region' next 'Date'
-dfConfirmed:DataFrame=dfConfirmed.sort_values(by=['Country_Region','Province_State','Date'])
+dfConfirmed:DataFrame=dfConfirmed.sort_values(by=sortOrder)
 # Again sorting on 'Date'
 dfConfirmed.sort_values(by=['Date'])
 # Extending the sorted 'Confirmed'-dataframe
@@ -227,7 +228,7 @@ dictDeceased:dict[str,any]={
     deceased: transposedDfDeceased[deceased]
 }
 dfDeceased:DataFrame=pd.DataFrame(dictDeceased)
-dfDeceased:DataFrame=dfDeceased.sort_values(by=['Country_Region', 'Date'])
+dfDeceased:DataFrame=dfDeceased.sort_values(by=sortOrder)
 dfDeceased.sort_values(by=['Date'])
 # Extending the sorted 'Deceased'-dataframe
 countryRegionDeceased:list=dfDeceased['Country_Region'].values
@@ -268,7 +269,7 @@ dictRecovered:dict[str,any]={
     recovered: transposedDfRecovered[recovered]
 }
 dfRecovered:DataFrame=pd.DataFrame(dictRecovered)
-dfRecovered:DataFrame=dfRecovered.sort_values(by=['Country_Region', 'Date'])
+dfRecovered:DataFrame=dfRecovered.sort_values(by=sortOrder)
 dfRecovered.sort_values(by=['Date'])
 # Extending the sorted 'Recovered'-dataframe
 countryRegionRecovered:list=dfRecovered['Country_Region'].values
