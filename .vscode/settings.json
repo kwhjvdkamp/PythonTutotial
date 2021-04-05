@@ -3,5 +3,5 @@
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": false,
     "python.formatting.provider": "black",
-    "python.analysis.extraPaths": ["download_csv","download_csv/web"]
+    "python.analysis.extraPaths": ["download_csv/", "download_csv/web"]
 }
