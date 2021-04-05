@@ -1,11 +1,3 @@
-# //type: ignore
-# ========================================================
-# Above line tells Pylance to ignore this file
-# > At the top of the file to ignore the file
-# > At the end of a line to ignore the line
-# ========================================================
-
-# Downloading the csv file from CSSE
 print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__file__,__name__,str(__package__)))
 
 import numpy as np
