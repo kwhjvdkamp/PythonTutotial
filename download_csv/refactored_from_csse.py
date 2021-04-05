@@ -166,34 +166,32 @@ class DataframeReconstruction:
             'Longitude':transposedDf['Long'],
             set: transposedDf[set]
         }
-        reconstructedDf:DataFrame=pd.DataFrame(dict)
+        df:DataFrame=pd.DataFrame(dict)
         # Sorting first on 'Country_Region' thereafter 'Province_Region' as third 'Date'
-        sortedReconstructedDf:DataFrame=reconstructedDf.sort_values(by=sortOrder)
+        df:DataFrame=df.sort_values(by=sortOrder)
         # Again sorting on 'Date'
-        sortedReconstructedDf.sort_values(by=['Date'])
-        # Extending the sorted 'passed in'-dataframe
-        countryRegionValues:list=sortedReconstructedDf['Country_Region'].values
-        provinceStateValues:list=sortedReconstructedDf['Province_State'].values
+        df.sort_values(by=['Date'])
 
         # Start Time consuming functions
-        stateNameConfirmed:list=DataframeReconstruction.combineTextColumns(countryRegionValues,provinceStateValues)
-        iso2Codes:list=DataframeReconstruction.getIsoCodeForCountry(stateNameConfirmed,'Iso2')
-        iso3Codes:list=DataframeReconstruction.getIsoCodeForCountry(stateNameConfirmed,'Iso3')
+        stateNames:list=DataframeReconstruction.combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
+        iso2Codes:list=DataframeReconstruction.getIsoCodeForCountry(stateNames,'Iso2')
+        iso3Codes:list=DataframeReconstruction.getIsoCodeForCountry(stateNames,'Iso3')
         # Stop Time consuming functions
 
-        extendedSortedReconstructedDict:dict[str,any]={
-            'Date':sortedReconstructedDf['Date'],
-            'Country_Region':sortedReconstructedDf['Country_Region'],
-            'Province_State':sortedReconstructedDf['Province_State'],
-            'Latitude':sortedReconstructedDf['Latitude'],
-            'Longitude':sortedReconstructedDf['Longitude'],
+        # Extending the sorted 'passed in'-dataframe
+        reconstructedDict:dict[str,any]={
+            'Date':df['Date'],
+            'Country_Region':df['Country_Region'],
+            'Province_State':df['Province_State'],
+            'Latitude':df['Latitude'],
+            'Longitude':df['Longitude'],
             'ISO2':iso2Codes,
             'ISO3':iso3Codes,
-            set: sortedReconstructedDf[set],
-            set+'Change':[num for num in sortedReconstructedDf[set].diff().where(sortedReconstructedDf[set]>0)],
+            set:df[set],
+            set+'Change':[num for num in df[set].diff().where(df[set]>0)],
         }
 
-        return pd.DataFrame(extendedSortedReconstructedDict)
+        return pd.DataFrame(reconstructedDict)
 
     # create other useful functions to work with data
     def current_status(self):

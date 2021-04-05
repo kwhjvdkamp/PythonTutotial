@@ -201,7 +201,7 @@ dictConfirmedExtended:dict[str,any]={
     'Longitude':dfConfirmed['Longitude'],
     'ISO2':iso2CodesConfirmed,
     'ISO3':iso3CodesConfirmed,
-    confirmed: dfConfirmed[confirmed],
+    confirmed:dfConfirmed[confirmed],
     confirmed+'Change':[num for num in dfConfirmed[confirmed].diff().where(dfConfirmed[confirmed]>0)],
 }
 dfConfirmedExtended:DataFrame=pd.DataFrame(dictConfirmedExtended)
