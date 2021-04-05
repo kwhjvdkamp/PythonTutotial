@@ -73,8 +73,8 @@ class DataframeReconstruction:
     format_str='%m/%d/%y' # The original date format
     sortOrder = ['Country_Region','Province_State','Date']
 
-    def __init__(self):
-        print(self.goal)
+    # def __init__(self):
+        # print(self.goal)
 
     # Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
     # country-specific objects like {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
@@ -159,7 +159,7 @@ class DataframeReconstruction:
                                     value_name=set)
         # Sorting the transposed 'Confirmed'-dataframe
         dict:dict[str,any]={
-            'Date':pd.to_datetime(transposedDf['Updated'], format=format_str),
+            'Date':pd.to_datetime(transposedDf['Updated'], format=self.format_str),
             'Country_Region':transposedDf['Country/Region'],
             'Province_State':transposedDf['Province/State'],
             'Latitude':transposedDf['Lat'],
@@ -168,7 +168,7 @@ class DataframeReconstruction:
         }
         df:DataFrame=pd.DataFrame(dict)
         # Sorting first on 'Country_Region' thereafter 'Province_Region' as third 'Date'
-        df:DataFrame=df.sort_values(by=sortOrder)
+        df:DataFrame=df.sort_values(by=self.sortOrder)
         # Again sorting on 'Date'
         df.sort_values(by=['Date'])
 
@@ -200,15 +200,8 @@ class DataframeReconstruction:
 
 # =========================================================================================
 
-
-# private variables
-# Original data contains dates formatted like 'm/d/jj' meaning a) no preceding zero's and b) two digit year
-# conversion to Iso date 'YYYY-MM-DD' format is mandatory
-format_str='%m/%d/%y' # The original date format
-sortOrder = ['Country_Region','Province_State','Date']
-
 total = 10
-bar = ProgressBar(total, bar_length=39)
+bar = ProgressBar(total,bar_length=39)
 
 # Calling class
 print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
@@ -233,6 +226,8 @@ dfReconstruction = DataframeReconstruction()
 dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered, csse.data[recovered])
 # print('\r\n',dfRecoveredExtended.head(1))
 print('\r\n',dfRecoveredExtended.tail(1))
+
+# =========================================================================================
 
 doWrite=True
 if doWrite:
