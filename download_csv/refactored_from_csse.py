@@ -164,7 +164,26 @@ class DataframeReconstruction:
             set: transposedDf[set]
         }
         df:DataFrame=pd.DataFrame(dict)
-        # Sorting first on 'Country_Region' thereafter 'Province_Region' as third 'Date'
+        dfWorldwide= df.groupby(['Date']).sum()
+        print(f'\r\nColumns {dfWorldwide.columns}')
+        del dfWorldwide['Latitude']
+        del dfWorldwide['Longitude']
+        dfWorldwide.info()
+        dictWorldwide:dict[str,any]={
+            # 'Date':df.index,
+            'Country/Region':'Worldwide',
+            'Province/State':'',
+            'Latitude':None,
+            'Longitude':None,
+            set:dfWorldwide[set]
+        }
+        worldWideDf=pd.DataFrame(dictWorldwide)
+        print(f'\r\nworldWideDf(rows):{len(worldWideDf)}')
+        # print(f'\r\nworldWideDf\r\n{worldWideDf.head(2)}')
+        # print(f'\r\nworldWideDf\r\n{worldWideDf.tail(2)}')
+
+        df = df.append(worldWideDf)
+
         df:DataFrame=df.sort_values(by=self.sortOrder)
         # Again sorting on 'Date'
         df.sort_values(by=['Date'])
