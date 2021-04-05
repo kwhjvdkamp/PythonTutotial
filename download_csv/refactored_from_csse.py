@@ -141,7 +141,7 @@ class Csse:
 class DataframeReconstruction:
     goal = 'Dataframe construction'
     format_str='%m/%d/%y' # The original date format
-    sortOrder = ['Country_Region','Province_State','Date']
+    sortOrder = ['Country_Region','Province_State']
 
     # def __init__(self):
         # print(self.goal)
