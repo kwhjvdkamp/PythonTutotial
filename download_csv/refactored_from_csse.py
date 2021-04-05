@@ -164,25 +164,37 @@ class DataframeReconstruction:
             set: transposedDf[set]
         }
         df:DataFrame=pd.DataFrame(dict)
-        dfWorldwide= df.groupby(['Date']).sum()
-        print(f'\r\nColumns {dfWorldwide.columns}')
-        del dfWorldwide['Latitude']
-        del dfWorldwide['Longitude']
-        dfWorldwide.info()
-        dictWorldwide:dict[str,any]={
-            # 'Date':df.index,
-            'Country/Region':'Worldwide',
-            'Province/State':'',
-            'Latitude':None,
-            'Longitude':None,
-            set:dfWorldwide[set]
-        }
-        worldWideDf=pd.DataFrame(dictWorldwide)
-        print(f'\r\nworldWideDf(rows):{len(worldWideDf)}')
+
+        # =================================================
+
+        # dfWorldwide= df.groupby(['Date']).sum()
+        # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
+        # del dfWorldwide['Latitude']
+        # del dfWorldwide['Longitude']
+        # # dfWorldwide.info()
+        # dfWorldwide.transpose()
+        # print(dfWorldwide.head(4))
+        # dfWorldwide.reset_index(drop=True, inplace=True)
+        # print(dfWorldwide.head(4))
+        # dictWorldwide:dict[str,any]={
+        #     'Latitude':None,
+        #     'Longitude':None,
+        #     set:dfWorldwide[set]
+        # }
+        # worldWideDf=pd.DataFrame(dictWorldwide)
+        # worldWideDf['Country_Region']='Worldwide'
+        # worldWideDf['Province_State']='Worldwide'
+        # print(f'\r\nColumns {worldWideDf.columns}')
+        # worldWideDf=worldWideDf.reindex(columns=['Date','Country_Region','Province_State','Latitude','Longitude','Confirmed'])
+        # print(f'\r\nColumns {worldWideDf.columns}')
+        # print(f'\r\nworldWideDf(rows):{len(worldWideDf)}')
+        # worldWideDf.set_index('Date')
         # print(f'\r\nworldWideDf\r\n{worldWideDf.head(2)}')
         # print(f'\r\nworldWideDf\r\n{worldWideDf.tail(2)}')
 
-        df = df.append(worldWideDf)
+        # df = df.append(worldWideDf)
+
+        # =================================================
 
         df:DataFrame=df.sort_values(by=self.sortOrder)
         # Again sorting on 'Date'
@@ -216,8 +228,8 @@ class DataframeReconstruction:
 
 # =========================================================================================
 
-total = 10
-bar = ProgressBar(total,bar_length=39)
+# total = 10
+# bar = ProgressBar(total,bar_length=39)
 
 # Calling class
 print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
@@ -269,12 +281,12 @@ if doWrite:
 else:
     print('\r\n\r\n====== File writing switched OFF ======')
 
-try:
-    for x in range(total):
-        time.sleep(0.1)
-        bar.iter('')
+# try:
+#     for x in range(total):
+#         time.sleep(0.1)
+#         bar.iter('')
 
-except:
-    bar.stop()
-bar.wait()
+# except:
+#     bar.stop()
+# bar.wait()
 # print('Bar is done')
