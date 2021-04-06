@@ -167,38 +167,29 @@ class DataframeReconstruction:
 
         # =================================================
 
-        # dfWorldwide= df.groupby(['Date']).sum()
-        # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
-        # del dfWorldwide['Latitude']
-        # del dfWorldwide['Longitude']
-        # # dfWorldwide.info()
-        # dfWorldwide.transpose()
-        # print(dfWorldwide.head(4))
-        # dfWorldwide.reset_index(drop=True, inplace=True)
-        # print(dfWorldwide.head(4))
-        # dictWorldwide:dict[str,any]={
-        #     'Latitude':None,
-        #     'Longitude':None,
-        #     set:dfWorldwide[set]
-        # }
-        # worldWideDf=pd.DataFrame(dictWorldwide)
-        # worldWideDf['Country_Region']='Worldwide'
-        # worldWideDf['Province_State']='Worldwide'
-        # print(f'\r\nColumns {worldWideDf.columns}')
-        # worldWideDf=worldWideDf.reindex(columns=['Date','Country_Region','Province_State','Latitude','Longitude','Confirmed'])
-        # print(f'\r\nColumns {worldWideDf.columns}')
-        # print(f'\r\nworldWideDf(rows):{len(worldWideDf)}')
-        # worldWideDf.set_index('Date')
-        # print(f'\r\nworldWideDf\r\n{worldWideDf.head(2)}')
-        # print(f'\r\nworldWideDf\r\n{worldWideDf.tail(2)}')
+        dfWorldwide= df.groupby(['Date']).sum()
+        print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
+        del dfWorldwide['Latitude']
+        del dfWorldwide['Longitude']
+        # dfWorldwide.info()
+        dfWorldwide.transpose()
+        dfWorldwide['Date'] = dfWorldwide.index
+        print(dfWorldwide.head(4))
+        dfWorldwide.reset_index(drop=True, inplace=True)
+        print(dfWorldwide.head(4))
+        dfWorldwide['Country_Region']='Worldwide'
+        dfWorldwide['Province_State']='Worldwide'
+        dfWorldwide['Latitude']=None
+        dfWorldwide['Longitude']=None
+        dfWorldwide=dfWorldwide.reindex(columns=['Date','Country_Region','Province_State','Latitude','Longitude',set])
+        print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
 
-        # df = df.append(worldWideDf)
-
-        # =================================================
-
-        df:DataFrame=df.sort_values(by=self.sortOrder)
+        df_row_reindex = pd.concat([dfWorldwide, df], ignore_index=True)
+        df:DataFrame=df_row_reindex.sort_values(by=self.sortOrder)
         # Again sorting on 'Date'
         df.sort_values(by=['Date'])
+
+        # print(f'\r\ndf\r\n{df}')
 
         # Start Time consuming functions
         stateNames:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
