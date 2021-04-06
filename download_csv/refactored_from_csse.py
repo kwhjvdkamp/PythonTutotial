@@ -238,6 +238,11 @@ class DataframeReconstruction:
             'ISO2':iso2Codes,
             'ISO3':iso3Codes,
             set:df[set],
+            # TODO
+            # Figure out how to calculate the difference between the row value for df[set]
+            # with the previous row value of df[set] within the list of same df['Country_Region'] values
+            # starting from the first df['Date'] to the last df['Date']
+            # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
             set+'Change':[num for num in df[set].diff().where(df[set]>0)],
         }
 
