@@ -148,13 +148,15 @@ class DataframeReconstruction:
 
     def reconstruct (self, set:str, df:DataFrame):
         print(f'\r\n\r\n= Reconstruction of {set} Dataset =')
-        # Pivoting the 'Confirmed'-dataframe columns to rows
+        # Pivoting the 'passed-in'-dataframe (columns to rows)
         transposedDf:DataFrame=pd.melt(df,
                                     id_vars=df.columns[:4],
                                     value_vars=df.columns[4:],
                                     var_name='Updated',
                                     value_name=set)
-        # Sorting the transposed 'Confirmed'-dataframe
+        # Sorting the transposed 'passed-in'-dataframe
+        # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
+        # thru creating a new dictionary
         dict:dict[str,any]={
             'Date':pd.to_datetime(transposedDf['Updated'], format=self.format_str),
             'Country_Region':transposedDf['Country/Region'],
@@ -163,39 +165,68 @@ class DataframeReconstruction:
             'Longitude':transposedDf['Long'],
             set: transposedDf[set]
         }
+        # Reset the 'passed-in'-dataframe with the just created dictionary
         df:DataFrame=pd.DataFrame(dict)
 
-        # =================================================
-
-        dfWorldwide= df.groupby(['Date']).sum()
-        print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
+        # Create a new dataframe from the current 'df'-dataframe by grouping on the
+        # 'Date'-column which causes that in the new dfWorldwide-dataframe the entity (in this case 'Date')
+        # on which is aggregated is set as the index of on new created dfWorldwide-dataframe
+        dfWorldwide:DataFrame= df.groupby(['Date']).sum()
+        # dfWorldwide.info()
+        # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
+        # For each row where the sum is shown for a particular 'Date'-set of rows aggregation on
+        # the entities 'Latitude' and 'Longitude' is meaningless and therefore needs to be deleted
+        # on the dfWorldwide-dataframe
         del dfWorldwide['Latitude']
         del dfWorldwide['Longitude']
         # dfWorldwide.info()
+        # The current dfWorldwide-dataframe contains at this stage only the 'Date' and the 'sum' of 'set'
+        # for all listed countries for that specific date meaning that 'set' is the total of all 'set' of all countries
+        # Call transpose()-method
         dfWorldwide.transpose()
-        dfWorldwide['Date'] = dfWorldwide.index
-        print(dfWorldwide.head(4))
+        # Output:
+        #       (index)         'set' is 'Confirmed', 'Deceased' or 'Recovered'
+        #   0   jjjj-mm-dd      0
+        #   1   jjjj-mm-dd+1    1
+        # Create a new column and copy the existing 'index'-labels into it
+        dfWorldwide['Date']= dfWorldwide.index
+        # Reset the index of the current dfWorldwide-dataframe
         dfWorldwide.reset_index(drop=True, inplace=True)
-        print(dfWorldwide.head(4))
+        # The aggregation of 'set' for a particular date means 'set' for all countries actually 'Worldwide'
         dfWorldwide['Country_Region']='Worldwide'
-        dfWorldwide['Province_State']='Worldwide'
+        dfWorldwide['Province_State']=None
+        # Worldwide does not have a 'Latitude' or 'Longitude'
         dfWorldwide['Latitude']=None
         dfWorldwide['Longitude']=None
+        # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
         dfWorldwide=dfWorldwide.reindex(columns=['Date','Country_Region','Province_State','Latitude','Longitude',set])
-        print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
-
-        df_row_reindex = pd.concat([dfWorldwide, df], ignore_index=True)
-        df:DataFrame=df_row_reindex.sort_values(by=self.sortOrder)
-        # Again sorting on 'Date'
+        # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
+        # Concatenate the created dfWorldwide-dataframe with the 'passed-in'-dataframe
+        # (relying on the fact, columns of both dataframe have the same order on the moment of concatenation)
+        # ignoring the index on both dataframe
+        dfWorldwideExtendedWithDf = pd.concat([dfWorldwide, df], ignore_index=True)
+        # Reset the 'passed-in'-dataframe with concatenated dataframes and
+        # re-order the resetted dataframe (df) first on 'Country/Region', thereafter on 'Province/State'
+        df:DataFrame=dfWorldwideExtendedWithDf.sort_values(by=self.sortOrder)
+        # At last separately sorting on 'Date' (why separately sorting is needed is not understood)
         df.sort_values(by=['Date'])
 
-        # print(f'\r\ndf\r\n{df}')
+        total = 10
+        bar = ProgressBar(total,bar_length=39)
 
         # Start Time consuming functions
         stateNames:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
         iso2Codes:list=getIsoCodeForCountry(stateNames,'Iso2')
         iso3Codes:list=getIsoCodeForCountry(stateNames,'Iso3')
         # Stop Time consuming functions
+
+        try:
+            for x in range(total):
+                time.sleep(0.1)
+                bar.iter('')
+        except:
+            bar.stop()
+        bar.wait()
 
         # Extending the sorted 'passed in'-dataframe
         reconstructedDict:dict[str,any]={
@@ -218,9 +249,6 @@ class DataframeReconstruction:
         pass
 
 # =========================================================================================
-
-# total = 10
-# bar = ProgressBar(total,bar_length=39)
 
 # Calling class
 print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
@@ -272,12 +300,5 @@ if doWrite:
 else:
     print('\r\n\r\n====== File writing switched OFF ======')
 
-# try:
-#     for x in range(total):
-#         time.sleep(0.1)
-#         bar.iter('')
 
-# except:
-#     bar.stop()
-# bar.wait()
 # print('Bar is done')
