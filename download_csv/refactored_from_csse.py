@@ -1,11 +1,3 @@
-# //type: ignore
-# ========================================================
-# Above line tells Pylance to ignore this file
-# > At the top of the file to ignore the file
-# > At the end of a line to ignore the line
-# ========================================================
-
-# Downloading the csv file from CSSE
 print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__file__,__name__,str(__package__)))
 
 import numpy as np
@@ -22,7 +14,6 @@ from pandas.core.frame import DataFrame
 from typing import Match, Union
 from awesome_progress_bar import ProgressBar
 
-
 # Local module(s)
 from isoCountryCodes import CountryCodes
 
@@ -30,6 +21,83 @@ from isoCountryCodes import CountryCodes
 def convertToWindowsPath(string: Union[str, pathlib.Path]):
     path=pathlib.Path(string)
     return path
+
+# =========================================================================================
+
+# Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
+# country-specific objects like {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
+# which resides in a local static json-like structure in 'isoCountryCodes.py'
+def getIsoCodeForCountry(stateNames:list,iso:str):
+    codes=[]
+    # missingIsoCodesStateNames=[]
+
+    # noneExistingCountryNames = ['Diamond Princess','Grand Princess','Repatriated Travellers']
+    # Countries With Overseas Areas = ['Denmark','France','Netherlands','United Kingdom']
+    # (US in not taken into account)
+    # These 'Overseas areas' listed in Province/State column having their own Iso2 & Iso3 codes
+
+    # print('Overseas areas with own Isocode', provinceStateNames)
+
+    for stateName in stateNames:
+        pair=mapStateNamewithIsoCodesObject(stateName)
+        # 'None' equivalent to 'null'
+        if pair!=None:
+            # ...either 'Iso2' or 'Iso3'
+            isoCode=pair[iso]
+            codes.append(isoCode)
+        else:
+            # Missing codes
+            # if stateName not in missingIsoCodesStateNames:
+            #     missingIsoCodesStateNames.append(stateName)
+
+            if iso=='Iso2':
+                codes.append('--')
+            else:
+                codes.append('---')
+
+            # On Python version 3.10 and up it will be possible
+            # match iso
+            #     case 'Iso2':
+            #         codes.append('--')
+            #     case 'Iso3':
+            #         codes.append('---')
+
+    # print('X',missingIsoCodesStateNames)
+    return codes
+
+# Definition to iterate over the CountryCodes Json-structure
+# {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
+# to return the iso codes object for a certain country name
+def  mapStateNamewithIsoCodesObject(stateName:str):
+    for key, value in CountryCodes.items():
+        if key==stateName:
+            return value
+
+# Definition to concatenate two dataframe columns containing string values
+def combineTextColumns(col1:list,col2:list):
+    dfCol1=pd.DataFrame(col1)
+    dfCol2=pd.DataFrame(col2)
+    dfCol2=dfCol2.fillna('')
+    df=dfCol1.astype(str)+"|"+dfCol2
+    dfValues=df.values
+    finalList=[]
+    for item in dfValues:
+        if str(item)[2:len(str(item))-2][-1] == '|':
+            finalList.append(str(item)[2:len(str(item))-3])
+        else:
+            finalList.append(str(item)[2:len(str(item))-2].replace('|', ' '))
+    # print(distinctList(finalList))
+    return finalList
+
+# Creating a distinct list
+def distinctList(items:list):
+    list=[]
+    for item in items:
+        if item not in list and not pd.isna(item):
+            list.append(item)
+    return list
+
+# =========================================================================================
 
 # Reading the data for the Covid-19 repository which itself has been
 # forked from the publicly accessible CSSEGISandDATA repository supplied by JHU US
@@ -67,87 +135,16 @@ class Csse:
         # function to show current status
         pass
 
+# =========================================================================================
+
 #
 class DataframeReconstruction:
     goal = 'Dataframe construction'
     format_str='%m/%d/%y' # The original date format
-    sortOrder = ['Country_Region','Province_State','Date']
+    sortOrder = ['Country_Region','Province_State']
 
     # def __init__(self):
         # print(self.goal)
-
-    # Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
-    # country-specific objects like {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
-    # which resides in a local static json-like structure in 'isoCountryCodes.py'
-    def getIsoCodeForCountry(stateNames:list,iso:str):
-        codes=[]
-        # missingIsoCodesStateNames=[]
-
-        # noneExistingCountryNames = ['Diamond Princess','Grand Princess','Repatriated Travellers']
-        # Countries With Overseas Areas = ['Denmark','France','Netherlands','United Kingdom']
-        # (US in not taken into account)
-        # These 'Overseas areas' listed in Province/State column having their own Iso2 & Iso3 codes
-
-        # print('Overseas areas with own Isocode', provinceStateNames)
-
-        for stateName in stateNames:
-            pair=DataframeReconstruction.mapStateNamewithIsoCodesObject(stateName)
-            # 'None' equivalent to 'null'
-            if pair!=None:
-                # ...either 'Iso2' or 'Iso3'
-                isoCode=pair[iso]
-                codes.append(isoCode)
-            else:
-                # Missing codes
-                # if stateName not in missingIsoCodesStateNames:
-                #     missingIsoCodesStateNames.append(stateName)
-
-                if iso=='Iso2':
-                    codes.append('--')
-                else:
-                    codes.append('---')
-
-                # On Python version 3.10 and up it will be possible
-                # match iso
-                #     case 'Iso2':
-                #         codes.append('--')
-                #     case 'Iso3':
-                #         codes.append('---')
-
-        # print('X',missingIsoCodesStateNames)
-        return codes
-
-    # Definition to iterate over the CountryCodes Json-structure
-    # {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
-    # to return the iso codes object for a certain country name
-    def  mapStateNamewithIsoCodesObject(stateName:str):
-        for key, value in CountryCodes.items():
-            if key==stateName:
-                return value
-
-    # Definition to concatenate two dataframe columns containing string values
-    def combineTextColumns(col1:list,col2:list):
-        dfCol1=pd.DataFrame(col1)
-        dfCol2=pd.DataFrame(col2)
-        dfCol2 = dfCol2.fillna('')
-        df = dfCol1.astype(str)+"|"+dfCol2
-        dfValues = df.values
-        finalList=[]
-        for item in dfValues:
-            if str(item)[2:len(str(item))-2][-1] == '|':
-                finalList.append(str(item)[2:len(str(item))-3])
-            else:
-                finalList.append(str(item)[2:len(str(item))-2].replace('|', ' '))
-        # print(distinctList(finalList))
-        return finalList
-
-    # Creating a distinct list
-    def distinctList(items:list):
-        list=[]
-        for item in items:
-            if item not in list and not pd.isna(item):
-                list.append(item)
-        return list
 
     def reconstruct (self, set:str, df:DataFrame):
         print(f'\r\n\r\n= Reconstruction of {set} Dataset =')
@@ -167,15 +164,37 @@ class DataframeReconstruction:
             set: transposedDf[set]
         }
         df:DataFrame=pd.DataFrame(dict)
-        # Sorting first on 'Country_Region' thereafter 'Province_Region' as third 'Date'
-        df:DataFrame=df.sort_values(by=self.sortOrder)
+
+        # =================================================
+
+        dfWorldwide= df.groupby(['Date']).sum()
+        print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
+        del dfWorldwide['Latitude']
+        del dfWorldwide['Longitude']
+        # dfWorldwide.info()
+        dfWorldwide.transpose()
+        dfWorldwide['Date'] = dfWorldwide.index
+        print(dfWorldwide.head(4))
+        dfWorldwide.reset_index(drop=True, inplace=True)
+        print(dfWorldwide.head(4))
+        dfWorldwide['Country_Region']='Worldwide'
+        dfWorldwide['Province_State']='Worldwide'
+        dfWorldwide['Latitude']=None
+        dfWorldwide['Longitude']=None
+        dfWorldwide=dfWorldwide.reindex(columns=['Date','Country_Region','Province_State','Latitude','Longitude',set])
+        print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
+
+        df_row_reindex = pd.concat([dfWorldwide, df], ignore_index=True)
+        df:DataFrame=df_row_reindex.sort_values(by=self.sortOrder)
         # Again sorting on 'Date'
         df.sort_values(by=['Date'])
 
+        # print(f'\r\ndf\r\n{df}')
+
         # Start Time consuming functions
-        stateNames:list=DataframeReconstruction.combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
-        iso2Codes:list=DataframeReconstruction.getIsoCodeForCountry(stateNames,'Iso2')
-        iso3Codes:list=DataframeReconstruction.getIsoCodeForCountry(stateNames,'Iso3')
+        stateNames:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
+        iso2Codes:list=getIsoCodeForCountry(stateNames,'Iso2')
+        iso3Codes:list=getIsoCodeForCountry(stateNames,'Iso3')
         # Stop Time consuming functions
 
         # Extending the sorted 'passed in'-dataframe
@@ -200,8 +219,8 @@ class DataframeReconstruction:
 
 # =========================================================================================
 
-total = 10
-bar = ProgressBar(total,bar_length=39)
+# total = 10
+# bar = ProgressBar(total,bar_length=39)
 
 # Calling class
 print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
@@ -209,20 +228,19 @@ csse=Csse()
 # Keys of the dictionary
 print('\r\n\r\n', csse.data.keys())
 
-confirmed='Confirmed'
 dfReconstruction = DataframeReconstruction()
+
+confirmed='Confirmed'
 dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed, csse.data[confirmed])
 # print('\r\n',dfConfirmedExtended.head(1))
 print('\r\n',dfConfirmedExtended.tail(1))
 
 deceased='Deceased'
-dfReconstruction = DataframeReconstruction()
 dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased, csse.data[deceased])
 # print('\r\n',dfDeceasedExtended.head(1))
 print('\r\n',dfDeceasedExtended.tail(1))
 
 recovered='Recovered'
-dfReconstruction = DataframeReconstruction()
 dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered, csse.data[recovered])
 # print('\r\n',dfRecoveredExtended.head(1))
 print('\r\n',dfRecoveredExtended.tail(1))
@@ -254,12 +272,12 @@ if doWrite:
 else:
     print('\r\n\r\n====== File writing switched OFF ======')
 
-try:
-    for x in range(total):
-        time.sleep(0.1)
-        bar.iter('')
+# try:
+#     for x in range(total):
+#         time.sleep(0.1)
+#         bar.iter('')
 
-except:
-    bar.stop()
-bar.wait()
+# except:
+#     bar.stop()
+# bar.wait()
 # print('Bar is done')
