@@ -158,7 +158,7 @@ class DataframeReconstruction:
         # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
         # thru creating a new dictionary
         dict:dict[str,any]={
-            'Date':pd.to_datetime(transposedDf['Updated'], format=self.format_str),
+            'Updated':pd.to_datetime(transposedDf['Updated'], format=self.format_str),
             'Country_Region':transposedDf['Country/Region'],
             'Province_State':transposedDf['Province/State'],
             'Latitude':transposedDf['Lat'],
@@ -171,7 +171,7 @@ class DataframeReconstruction:
         # Create a new dataframe from the current 'df'-dataframe by grouping on the
         # 'Date'-column which causes that in the new dfWorldwide-dataframe the entity (in this case 'Date')
         # on which is aggregated is set as the index of on new created dfWorldwide-dataframe
-        dfWorldwide:DataFrame= df.groupby(['Date']).sum()
+        dfWorldwide:DataFrame= df.groupby(['Updated']).sum()
         # dfWorldwide.info()
         # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
         # For each row where the sum is shown for a particular 'Date'-set of rows aggregation on
@@ -189,7 +189,7 @@ class DataframeReconstruction:
         #   0   jjjj-mm-dd      0
         #   1   jjjj-mm-dd+1    1
         # Create a new column and copy the existing 'index'-labels into it
-        dfWorldwide['Date']= dfWorldwide.index
+        dfWorldwide['Updated']= dfWorldwide.index
         # Reset the index of the current dfWorldwide-dataframe
         dfWorldwide.reset_index(drop=True, inplace=True)
         # The aggregation of 'set' for a particular date means 'set' for all countries actually 'Worldwide'
@@ -199,7 +199,7 @@ class DataframeReconstruction:
         dfWorldwide['Latitude']=None
         dfWorldwide['Longitude']=None
         # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
-        dfWorldwide=dfWorldwide.reindex(columns=['Date','Country_Region','Province_State','Latitude','Longitude',set])
+        dfWorldwide=dfWorldwide.reindex(columns=['Updated',set,'Latitude','Longitude','Country_Region','Province_State'])
         # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
         # Concatenate the created dfWorldwide-dataframe with the 'passed-in'-dataframe
         # (relying on the fact, columns of both dataframe have the same order on the moment of concatenation)
@@ -209,7 +209,7 @@ class DataframeReconstruction:
         # re-order the resetted dataframe (df) first on 'Country/Region', thereafter on 'Province/State'
         df:DataFrame=dfWorldwideExtendedWithDf.sort_values(by=self.sortOrder)
         # At last separately sorting on 'Date' (why separately sorting is needed is not understood)
-        df.sort_values(by=['Date'])
+        df.sort_values(by=['Updated'])
 
         total = 10
         bar = ProgressBar(total,bar_length=39)
@@ -228,15 +228,17 @@ class DataframeReconstruction:
             bar.stop()
         bar.wait()
 
-        # Extending the sorted 'passed in'-dataframe
+        # Extending the sorted 'df'-dataframe
+        # Updated
+        # Confirmed ConfirmedChange / Deaths DeathsChange / Recovered RecoveredChange
+        # Latitude
+        # Longitude
+        # ISO2
+        # ISO3
+        # Country_Region
+        # Province_State
         reconstructedDict:dict[str,any]={
-            'Date':df['Date'],
-            'Country_Region':df['Country_Region'],
-            'Province_State':df['Province_State'],
-            'Latitude':df['Latitude'],
-            'Longitude':df['Longitude'],
-            'ISO2':iso2Codes,
-            'ISO3':iso3Codes,
+            'Updated':df['Updated'],
             set:df[set],
             # TODO
             # Figure out how to calculate the difference between the row value for df[set]
@@ -244,6 +246,12 @@ class DataframeReconstruction:
             # starting from the first df['Date'] to the last df['Date']
             # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
             set+'Change':[num for num in df[set].diff().where(df[set]>0)],
+            'Latitude':df['Latitude'],
+            'Longitude':df['Longitude'],
+            'ISO2':iso2Codes,
+            'ISO3':iso3Codes,
+            'Country_Region':df['Country_Region'],
+            'Province_State':df['Province_State'],
         }
 
         return pd.DataFrame(reconstructedDict)
