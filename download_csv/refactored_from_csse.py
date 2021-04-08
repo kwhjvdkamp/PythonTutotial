@@ -38,6 +38,8 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
 
     # print('Overseas areas with own Isocode', provinceStateNames)
 
+
+
     for stateName in stateNames:
         pair=mapStateNamewithIsoCodesObject(stateName)
         # 'None' equivalent to 'null'
@@ -74,20 +76,21 @@ def  mapStateNamewithIsoCodesObject(stateName:str):
             return value
 
 # Definition to concatenate two dataframe columns containing string values
-def combineTextColumns(col1:list,col2:list):
-    dfCol1=pd.DataFrame(col1)
-    dfCol2=pd.DataFrame(col2)
-    dfCol2=dfCol2.fillna('')
-    df=dfCol1.astype(str)+"|"+dfCol2
-    dfValues=df.values
-    finalList=[]
-    for item in dfValues:
-        if str(item)[2:len(str(item))-2][-1] == '|':
-            finalList.append(str(item)[2:len(str(item))-3])
+def combineTextColumns(x:list,y:list):
+    dfX=pd.DataFrame(x)
+    dfY=pd.DataFrame(y)
+    dfY=dfY.fillna('')
+    dfXY=dfX.astype(str)+"|"+dfY
+    dfXYValues=dfXY.values
+    listXY=[]
+    for dfXYValue in dfXYValues:
+        if str(dfXYValue)[2:len(str(dfXYValue))-2][-1] == '|':
+            listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-3])
         else:
-            finalList.append(str(item)[2:len(str(item))-2].replace('|', ' '))
-    # print(distinctList(finalList))
-    return finalList
+            listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-2].replace('|', ' '))
+
+    # print(distinctList(listXY))
+    return listXY
 
 # Creating a distinct list
 def distinctList(items:list):
