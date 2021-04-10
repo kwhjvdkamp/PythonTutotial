@@ -100,6 +100,16 @@ def distinctList(items:list):
             list.append(item)
     return list
 
+def convertCalculatedSeriesForDistinctCountry(lstFloats:list, dfCountries:DataFrame):
+
+    countries=distinctList(dfCountries.values)
+    print(f'{len(countries)}, {countries}')
+
+    listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
+    # print(f'{listWithoutNans}')
+    roundedListWithoutNans =[round(num) for num in listWithoutNans]
+    return roundedListWithoutNans
+
 # =========================================================================================
 
 # Reading the data for the Covid-19 repository which itself has been
@@ -248,7 +258,7 @@ class DataframeReconstruction:
             # with the previous row value of df[set] within the list of same df['Country_Region'] values
             # starting from the first df['Date'] to the last df['Date']
             # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
-            set+'Change':[num for num in df[set].diff().where(df[set]>0)],
+            set+'Change':convertCalculatedSeriesForDistinctCountry([num for num in df[set].diff().where(df[set]>0)],df['Country_Region']),
             'Latitude':df['Latitude'],
             'Longitude':df['Longitude'],
             'ISO2':iso2Codes,
@@ -291,7 +301,7 @@ print('\r\n',dfRecoveredExtended.tail(1))
 
 # =========================================================================================
 
-doWrite=True
+doWrite=False
 if doWrite:
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)

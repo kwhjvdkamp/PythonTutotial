@@ -1,5 +1,14 @@
 import pandas as pd
 import numpy as np
+
+
+def convertCalculatedSeries(lstFloats:list):
+    listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
+    # print(f'{listWithoutNans}')
+    roundedListWithoutNans =[round(num) for num in listWithoutNans]
+    return roundedListWithoutNans
+
+
 # List of Tuples
 employees_salary = [('Jan', 2000, 2010, 2050, 2134, 2111),
                     ('Piet', 3000, 3022, 3456, 3111, 2109),
@@ -25,7 +34,7 @@ total = df.sum()
 total.name = 'Total (All)'
 # Assign sum of all rows of DataFrame as a new Row
 df = df.append(total.transpose())
-print(df)
+print(f'Transposed {df}')
 
 # Get sum of 3 DataFrame rows (selected by index labels)
 subtotal = df.loc[['Klaas', 'Piet', 'Mark']].sum()
@@ -38,3 +47,15 @@ subtotal = df.loc[['Klaas', 'Piet', 'Mark']].sum()
 subtotal.name = 'subtotal (Klaas, Piet, Mark)'
 df = df.append(subtotal.transpose())
 print(df)
+
+reconstructedDict:dict[str,any]={
+    'Jan':df['Jan'],
+    'Feb':df['Feb'],
+    'March':df['March'],
+    'April':df['April'],
+    'May':df['May'],
+    'MayChange':convertCalculatedSeries([num for num in df['May'].diff()]),
+}
+
+df_new = pd.DataFrame(reconstructedDict)
+print(df_new)
