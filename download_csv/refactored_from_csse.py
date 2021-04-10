@@ -100,15 +100,35 @@ def distinctList(items:list):
             list.append(item)
     return list
 
-def convertCalculatedSeriesForDistinctCountry(lstFloats:list, dfCountries:DataFrame):
+# def convertCalculatedSeriesForDistinctCountry(lstFloats:list, dfCountries:DataFrame):
 
-    countries=distinctList(dfCountries.values)
-    print(f'{len(countries)}, {countries}')
+#     countries=distinctList(dfCountries.values)
+#     print(f'{len(countries)}, {countries}')
 
-    listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
-    # print(f'{listWithoutNans}')
-    roundedListWithoutNans =[round(num) for num in listWithoutNans]
-    return roundedListWithoutNans
+#     listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
+#     # print(f'{listWithoutNans}')
+#     roundedListWithoutNans=[round(num) for num in listWithoutNans]
+#     return roundedListWithoutNans
+
+def convertCalculatedSeriesForDistinctCountry(set:str,df:DataFrame):
+    dfCountries = df
+    countries=distinctList(df['Country_Region'].values)
+    # print(f'{len(countries)}, {countries}')
+    # listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
+    calculatedSeriesForDistinctCountry=[]
+    for country in countries:
+        for c in dfCountries.groupby('Country_Region'):
+            if c[0]==country:
+                # print(c[0]) # The current 'Country'
+                # print(c[1]) # The corresponding dataFrame for 'Country'
+                # valuesPerCountry = dfCountry.values
+                # print(c[1]['Confirmed'])
+                delta=[num for num in c[1][set].diff().where(c[1][set]>0)]
+                seriesWithoutNansPerCountry=pd.Series(delta, dtype=object).fillna(0).tolist()
+                seriesRoundedWithoutNansPerCountry=[round(num) for num in seriesWithoutNansPerCountry]
+                calculatedSeriesForDistinctCountry.extend(seriesRoundedWithoutNansPerCountry)
+
+    return calculatedSeriesForDistinctCountry
 
 # =========================================================================================
 
@@ -242,14 +262,15 @@ class DataframeReconstruction:
         bar.wait()
 
         # Extending the sorted 'df'-dataframe
-        # Updated
-        # Confirmed ConfirmedChange / Deaths DeathsChange / Recovered RecoveredChange
-        # Latitude
-        # Longitude
-        # ISO2
-        # ISO3
-        # Country_Region
-        # Province_State
+        # print('1',len(df['Updated']))
+        # print('2',len(df[set]))
+        # print('3',len(convertCalculatedSeriesForDistinctCountry(set,df)))
+        # print('4',len(df['Latitude']))
+        # print('5',len(df['Longitude']))
+        # print('6',len(iso2Codes))
+        # print('7',len(iso3Codes))
+        # print('8',len(df['Country_Region']))
+        # print('9',len(df['Province_State']))
         reconstructedDict:dict[str,any]={
             'Updated':df['Updated'],
             set:df[set],
@@ -258,7 +279,8 @@ class DataframeReconstruction:
             # with the previous row value of df[set] within the list of same df['Country_Region'] values
             # starting from the first df['Date'] to the last df['Date']
             # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
-            set+'Change':convertCalculatedSeriesForDistinctCountry([num for num in df[set].diff().where(df[set]>0)],df['Country_Region']),
+            set+'Change':convertCalculatedSeriesForDistinctCountry(set,df),
+            # set+'Change':convertCalculatedSeriesForDistinctCountry([num for num in df[set].diff().where(df[set]>0)],df['Country_Region']),
             'Latitude':df['Latitude'],
             'Longitude':df['Longitude'],
             'ISO2':iso2Codes,
@@ -301,7 +323,7 @@ print('\r\n',dfRecoveredExtended.tail(1))
 
 # =========================================================================================
 
-doWrite=False
+doWrite=True
 if doWrite:
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)
