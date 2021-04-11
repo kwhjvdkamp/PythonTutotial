@@ -32,13 +32,10 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
     # missingIsoCodesStateNames=[]
 
     # noneExistingCountryNames=['Diamond Princess','Grand Princess','Repatriated Travellers']
-    # Countries With Overseas Areas=['Denmark','France','Netherlands','United Kingdom']
-    # (US in not taken into account)
-    # These 'Overseas areas' listed in Province/State column having their own Iso2 & Iso3 codes
-
-    # print('Overseas areas with own Isocode',provinceStateNames)
-
-
+    # Countries with overseas '(semi) independent' areas are
+    # 'Denmark', 'France', 'Netherlands' and 'United Kingdom' (US in not taken into account)
+    # These so called '(semi) independent' overseas areas' are
+    # listed in the Province/State column having their own Iso2 & Iso3 codes
 
     for stateName in stateNames:
         pair=mapStateNamewithIsoCodesObject(stateName)
@@ -100,10 +97,13 @@ def distinctList(items:list):
             list.append(item)
     return list
 
+# 
 def convertCalculatedSeriesForDistinctCountry(csseDataKey:str,df:DataFrame):
     dfCountries=df
     countries=distinctList(df['Country_Region'].values)
     # print(f'{len(countries)},{countries}')
+    stateEntities=distinctList(df['Province_State'].values)
+    print(f'{len(stateEntities)},{stateEntities}')
     # listWithoutNans = pd.Series(lstFloats,dtype=object).fillna(0).tolist()
     calculatedSeriesForDistinctCountry=[]
     for country in countries:
@@ -313,7 +313,7 @@ print('\r\n',dfRecoveredExtended.tail(1))
 
 # =========================================================================================
 
-doWrite=True
+doWrite=False
 if doWrite:
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)
@@ -340,4 +340,3 @@ else:
 
 
 # print('Bar is done')
-
