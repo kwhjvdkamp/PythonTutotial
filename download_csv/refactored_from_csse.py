@@ -17,39 +17,39 @@ from awesome_progress_bar import ProgressBar
 # Local module(s)
 from isoCountryCodes import CountryCodes
 
-# Definition to convert a string to a Path-typed structure (if already a Path, nothing changes)
+# Function accepts convert a string to a Path-typed structure (if already a Path, nothing changes)
 def convertToWindowsPath(string: Union[str,pathlib.Path]):
     path=pathlib.Path(string)
     return path
 
 # =========================================================================================
 
-# Definition to retrieve Alpha-2 and -3 (Iso 3661) codes from
+# Function accepts list of country names and retrieve Alpha-2 and -3 (Iso 3661) codes from
 # country-specific objects like {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
 # which resides in a local static json-like structure in 'isoCountryCodes.py'
-def getIsoCodeForCountry(stateNames:list,iso:str):
+# return a list of code according isoLabe; two- or three letter list of codes
+def getIsoCodeForCountry(countries:list,isoLabel:str):
     codes=[]
-    # missingIsoCodesStateNames=[]
+    # missingIsoCodesForCountries=[]
 
-    # noneExistingCountryNames=['Diamond Princess','Grand Princess','Repatriated Travellers']
+    # Non existing countries: 'Diamond Princess','Grand Princess' and 'Repatriated Travellers'
     # Countries with overseas '(semi) independent' areas are
     # 'Denmark', 'France', 'Netherlands' and 'United Kingdom' (US in not taken into account)
     # These so called '(semi) independent' overseas areas' are
-    # listed in the Province/State column having their own Iso2 & Iso3 codes
+    # listed in the Province/State column some having their own Iso2 & Iso3 codes
 
-    for stateName in stateNames:
-        pair=mapStateNamewithIsoCodesObject(stateName)
+    for country in countries:
+        pair=mapStateNamewithIsoCodesObject(country)
         # 'None' equivalent to 'null'
         if pair!=None:
             # ...either 'Iso2' or 'Iso3'
-            isoCode=pair[iso]
+            isoCode=pair[isoLabel]
             codes.append(isoCode)
         else:
             # Missing codes
-            # if stateName not in missingIsoCodesStateNames:
-            #     missingIsoCodesStateNames.append(stateName)
-
-            if iso=='Iso2':
+            # if country not in missingIsoCodesForCountries:
+            #     missingIsoCodesForCountries.append(country)
+            if isoLabel=='Iso2':
                 codes.append('--')
             else:
                 codes.append('---')
@@ -64,15 +64,18 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
     # print('X',missingIsoCodesStateNames)
     return codes
 
-# Definition to iterate over the CountryCodes Json-structure
+# Function accepts a country name to iterate over the CountryCodes Json-structure
+# to map the Iso-codes for that country
+# Functions return iso code object for a certain country name
 # {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
-# to return the iso codes object for a certain country name
-def  mapStateNamewithIsoCodesObject(stateName:str):
+def  mapStateNamewithIsoCodesObject(country:str):
     for key,value in CountryCodes.items():
-        if key==stateName:
+        if key==country:
             return value
 
-# Definition to concatenate two dataframe columns containing string values
+# Function accepts two list of dataframe column values from which
+# row values of each column should to be concatenated,
+# Function returns a list of concatenated row values
 def combineTextColumns(x:list,y:list):
     dfX=pd.DataFrame(x)
     dfY=pd.DataFrame(y)
@@ -85,8 +88,7 @@ def combineTextColumns(x:list,y:list):
             listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-3])
         else:
             listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-2].replace('|',' '))
-
-    # print(distinctList(listXY))
+    print(f'\r\nDistinct list of values of the concatenated columns \'Country_Region\' and \'Province_Region\'\r\n{distinctList(listXY)}')
     return listXY
 
 # Creating a distinct list
@@ -97,13 +99,17 @@ def distinctList(items:list):
             list.append(item)
     return list
 
-# 
+# Three achievements
+# 1) Calculation the difference between a row value and the previous row value on the same column 'Confirmed'
+# 2) Occuring NaN-values, the first value in the part of the column for a set of a country (.groupby('Country_Region')
+#    converting to float (0.0) values
+# 3) Converting the calculated float values to int (0)
 def convertCalculatedSeriesForDistinctCountry(csseDataKey:str,df:DataFrame):
     dfCountries=df
     countries=distinctList(df['Country_Region'].values)
-    # print(f'{len(countries)},{countries}')
+    # print(f'Countries Regions{len(countries)},{countries}')
     stateEntities=distinctList(df['Province_State'].values)
-    print(f'{len(stateEntities)},{stateEntities}')
+    # print(f'Provinces States {len(stateEntities)},{stateEntities}')
     # listWithoutNans = pd.Series(lstFloats,dtype=object).fillna(0).tolist()
     calculatedSeriesForDistinctCountry=[]
     for country in countries:
@@ -236,11 +242,10 @@ class DataframeReconstruction:
         # At last separately sorting on 'Date' (why separately sorting is needed is not understood)
         df.sort_values(by=['Updated'])
 
-
         # Start Time consuming functions
-        stateNames:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
-        iso2Codes:list=getIsoCodeForCountry(stateNames,'Iso2')
-        iso3Codes:list=getIsoCodeForCountry(stateNames,'Iso3')
+        countryProvince:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
+        iso2Codes:list=getIsoCodeForCountry(countryProvince,'Iso2')
+        iso3Codes:list=getIsoCodeForCountry(countryProvince,'Iso3')
         # Stop Time consuming functions
 
         try:
