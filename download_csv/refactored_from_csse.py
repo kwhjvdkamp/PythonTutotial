@@ -18,7 +18,7 @@ from awesome_progress_bar import ProgressBar
 from isoCountryCodes import CountryCodes
 
 # Definition to convert a string to a Path-typed structure (if already a Path, nothing changes)
-def convertToWindowsPath(string: Union[str, pathlib.Path]):
+def convertToWindowsPath(string: Union[str,pathlib.Path]):
     path=pathlib.Path(string)
     return path
 
@@ -31,12 +31,12 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
     codes=[]
     # missingIsoCodesStateNames=[]
 
-    # noneExistingCountryNames = ['Diamond Princess','Grand Princess','Repatriated Travellers']
-    # Countries With Overseas Areas = ['Denmark','France','Netherlands','United Kingdom']
+    # noneExistingCountryNames=['Diamond Princess','Grand Princess','Repatriated Travellers']
+    # Countries With Overseas Areas=['Denmark','France','Netherlands','United Kingdom']
     # (US in not taken into account)
     # These 'Overseas areas' listed in Province/State column having their own Iso2 & Iso3 codes
 
-    # print('Overseas areas with own Isocode', provinceStateNames)
+    # print('Overseas areas with own Isocode',provinceStateNames)
 
 
 
@@ -71,7 +71,7 @@ def getIsoCodeForCountry(stateNames:list,iso:str):
 # {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
 # to return the iso codes object for a certain country name
 def  mapStateNamewithIsoCodesObject(stateName:str):
-    for key, value in CountryCodes.items():
+    for key,value in CountryCodes.items():
         if key==stateName:
             return value
 
@@ -87,7 +87,7 @@ def combineTextColumns(x:list,y:list):
         if str(dfXYValue)[2:len(str(dfXYValue))-2][-1] == '|':
             listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-3])
         else:
-            listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-2].replace('|', ' '))
+            listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-2].replace('|',' '))
 
     # print(distinctList(listXY))
     return listXY
@@ -100,21 +100,11 @@ def distinctList(items:list):
             list.append(item)
     return list
 
-# def convertCalculatedSeriesForDistinctCountry(lstFloats:list, dfCountries:DataFrame):
-
-#     countries=distinctList(dfCountries.values)
-#     print(f'{len(countries)}, {countries}')
-
-#     listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
-#     # print(f'{listWithoutNans}')
-#     roundedListWithoutNans=[round(num) for num in listWithoutNans]
-#     return roundedListWithoutNans
-
-def convertCalculatedSeriesForDistinctCountry(set:str,df:DataFrame):
-    dfCountries = df
+def convertCalculatedSeriesForDistinctCountry(csseDataKey:str,df:DataFrame):
+    dfCountries=df
     countries=distinctList(df['Country_Region'].values)
-    # print(f'{len(countries)}, {countries}')
-    # listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
+    # print(f'{len(countries)},{countries}')
+    # listWithoutNans = pd.Series(lstFloats,dtype=object).fillna(0).tolist()
     calculatedSeriesForDistinctCountry=[]
     for country in countries:
         for c in dfCountries.groupby('Country_Region'):
@@ -123,8 +113,8 @@ def convertCalculatedSeriesForDistinctCountry(set:str,df:DataFrame):
                 # print(c[1]) # The corresponding dataFrame for 'Country'
                 # valuesPerCountry = dfCountry.values
                 # print(c[1]['Confirmed'])
-                delta=[num for num in c[1][set].diff().where(c[1][set]>0)]
-                seriesWithoutNansPerCountry=pd.Series(delta, dtype=object).fillna(0).tolist()
+                delta=[num for num in c[1][csseDataKey].diff().where(c[1][csseDataKey]>0)]
+                seriesWithoutNansPerCountry=pd.Series(delta,dtype=object).fillna(0).tolist()
                 seriesRoundedWithoutNansPerCountry=[round(num) for num in seriesWithoutNansPerCountry]
                 calculatedSeriesForDistinctCountry.extend(seriesRoundedWithoutNansPerCountry)
 
@@ -161,7 +151,7 @@ class Csse:
             'Recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
         }
 
-        self.data={case:pd.read_csv(url, header=0, escapechar='\\') for case, url in self.URLS.items()}
+        self.data={case:pd.read_csv(url,header=0,escapechar='\\') for case,url in self.URLS.items()}
 
     # create other useful functions to work with data
     def current_status(self):
@@ -179,24 +169,28 @@ class DataframeReconstruction:
     # def __init__(self):
         # print(self.goal)
 
-    def reconstruct (self, set:str, df:DataFrame):
-        print(f'\r\n\r\n= Reconstruction of {set} Dataset =')
+    def reconstruct (self,csseDataKey:str,df:DataFrame):
+        print(f'\r\n\r\n= Reconstruction of {csseDataKey} Dataset =')
+
+        total = 10
+        bar = ProgressBar(total,bar_length=109)
+
         # Pivoting the 'passed-in'-dataframe (columns to rows)
         transposedDf:DataFrame=pd.melt(df,
                                     id_vars=df.columns[:4],
                                     value_vars=df.columns[4:],
                                     var_name='Updated',
-                                    value_name=set)
+                                    value_name=csseDataKey)
         # Sorting the transposed 'passed-in'-dataframe
         # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
         # thru creating a new dictionary
         dict:dict[str,any]={
-            'Updated':pd.to_datetime(transposedDf['Updated'], format=self.format_str),
+            'Updated':pd.to_datetime(transposedDf['Updated'],format=self.format_str),
             'Country_Region':transposedDf['Country/Region'],
             'Province_State':transposedDf['Province/State'],
             'Latitude':transposedDf['Lat'],
             'Longitude':transposedDf['Long'],
-            set: transposedDf[set]
+            csseDataKey: transposedDf[csseDataKey]
         }
         # Reset the 'passed-in'-dataframe with the just created dictionary
         df:DataFrame=pd.DataFrame(dict)
@@ -204,48 +198,44 @@ class DataframeReconstruction:
         # Create a new dataframe from the current 'df'-dataframe by grouping on the
         # 'Date'-column which causes that in the new dfWorldwide-dataframe the entity (in this case 'Date')
         # on which is aggregated is set as the index of on new created dfWorldwide-dataframe
-        dfWorldwide:DataFrame= df.groupby(['Updated']).sum()
+        dfWorldwide:DataFrame=df.groupby(['Updated']).sum()
         # dfWorldwide.info()
         # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
-        # For each row where the sum is shown for a particular 'Date'-set of rows aggregation on
-        # the entities 'Latitude' and 'Longitude' is meaningless and therefore needs to be deleted
-        # on the dfWorldwide-dataframe
+        # The .sum() calculation on columns 'Latitude' and 'Longitude'
+        # in the 'dfWorldwide'-dataframe turns out to be meaningless, therefore...
         del dfWorldwide['Latitude']
         del dfWorldwide['Longitude']
         # dfWorldwide.info()
-        # The current dfWorldwide-dataframe contains at this stage only the 'Date' and the 'sum' of 'set'
-        # for all listed countries for that specific date meaning that 'set' is the total of all 'set' of all countries
-        # Call transpose()-method
+        # The current 'dfWorldwide'-dataframe contains at this stage only the
+        # columns 'Date' and the 'sum' of the 'csseDataKey' for all listed countries for that specific date
         dfWorldwide.transpose()
         # Output:
-        #       (index)         'set' is 'Confirmed', 'Deceased' or 'Recovered'
+        #       (index)         'csseDataKey' (<='Confirmed', 'Deceased' or 'Recovered')
         #   0   jjjj-mm-dd      0
         #   1   jjjj-mm-dd+1    1
         # Create a new column and copy the existing 'index'-labels into it
-        dfWorldwide['Updated']= dfWorldwide.index
+        dfWorldwide['Updated']=dfWorldwide.index
         # Reset the index of the current dfWorldwide-dataframe
-        dfWorldwide.reset_index(drop=True, inplace=True)
-        # The aggregation of 'set' for a particular date means 'set' for all countries actually 'Worldwide'
+        dfWorldwide.reset_index(drop=True,inplace=True)
+        # The aggregation of 'csseDataKey' for a particular date means 'csseDataKey' for all countries actually 'Worldwide'
         dfWorldwide['Country_Region']='Worldwide'
         dfWorldwide['Province_State']=None
         # Worldwide does not have a 'Latitude' or 'Longitude'
         dfWorldwide['Latitude']=None
         dfWorldwide['Longitude']=None
         # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
-        dfWorldwide=dfWorldwide.reindex(columns=['Updated',set,'Latitude','Longitude','Country_Region','Province_State'])
+        dfWorldwide=dfWorldwide.reindex(columns=['Updated',csseDataKey,'Latitude','Longitude','Country_Region','Province_State'])
         # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
-        # Concatenate the created dfWorldwide-dataframe with the 'passed-in'-dataframe
-        # (relying on the fact, columns of both dataframe have the same order on the moment of concatenation)
-        # ignoring the index on both dataframe
-        dfWorldwideExtendedWithDf = pd.concat([dfWorldwide, df], ignore_index=True)
+        # Relying on the fact, the columns of both dataframes do have the same order
+        # create a new dataframe on which the created dfWorldwide-dataframe is concatenated with
+        # the 'passed-in'-dataframe ignoring the index on both dataframe
+        dfWorldwideExtendedWithDf=pd.concat([dfWorldwide,df],ignore_index=True)
         # Reset the 'passed-in'-dataframe with concatenated dataframes and
         # re-order the resetted dataframe (df) first on 'Country/Region', thereafter on 'Province/State'
         df:DataFrame=dfWorldwideExtendedWithDf.sort_values(by=self.sortOrder)
         # At last separately sorting on 'Date' (why separately sorting is needed is not understood)
         df.sort_values(by=['Updated'])
 
-        total = 10
-        bar = ProgressBar(total,bar_length=39)
 
         # Start Time consuming functions
         stateNames:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
@@ -263,8 +253,8 @@ class DataframeReconstruction:
 
         # Extending the sorted 'df'-dataframe
         # print('1',len(df['Updated']))
-        # print('2',len(df[set]))
-        # print('3',len(convertCalculatedSeriesForDistinctCountry(set,df)))
+        # print('2',len(df[csseDataKey]))
+        # print('3',len(convertCalculatedSeriesForDistinctCountry(csseDataKey,df)))
         # print('4',len(df['Latitude']))
         # print('5',len(df['Longitude']))
         # print('6',len(iso2Codes))
@@ -273,14 +263,14 @@ class DataframeReconstruction:
         # print('9',len(df['Province_State']))
         reconstructedDict:dict[str,any]={
             'Updated':df['Updated'],
-            set:df[set],
+            csseDataKey:df[csseDataKey],
             # TODO
-            # Figure out how to calculate the difference between the row value for df[set]
-            # with the previous row value of df[set] within the list of same df['Country_Region'] values
+            # Figure out how to calculate the difference between the row value for df[csseDataKey]
+            # with the previous row value of df[csseDataKey] within the list of same df['Country_Region'] values
             # starting from the first df['Date'] to the last df['Date']
             # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
-            set+'Change':convertCalculatedSeriesForDistinctCountry(set,df),
-            # set+'Change':convertCalculatedSeriesForDistinctCountry([num for num in df[set].diff().where(df[set]>0)],df['Country_Region']),
+            csseDataKey+'Change':convertCalculatedSeriesForDistinctCountry(csseDataKey,df),
+            # csseDataKey+'Change':convertCalculatedSeriesForDistinctCountry([num for num in df[csseDataKey].diff().where(df[csseDataKey]>0)],df['Country_Region']),
             'Latitude':df['Latitude'],
             'Longitude':df['Longitude'],
             'ISO2':iso2Codes,
@@ -302,22 +292,22 @@ class DataframeReconstruction:
 print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
 csse=Csse()
 # Keys of the dictionary
-print('\r\n\r\n', csse.data.keys())
+print('\r\n\r\n',csse.data.keys())
 
-dfReconstruction = DataframeReconstruction()
+dfReconstruction=DataframeReconstruction()
 
 confirmed='Confirmed'
-dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed, csse.data[confirmed])
+dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed,csse.data[confirmed])
 # print('\r\n',dfConfirmedExtended.head(1))
 print('\r\n',dfConfirmedExtended.tail(1))
 
 deceased='Deceased'
-dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased, csse.data[deceased])
+dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased,csse.data[deceased])
 # print('\r\n',dfDeceasedExtended.head(1))
 print('\r\n',dfDeceasedExtended.tail(1))
 
 recovered='Recovered'
-dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered, csse.data[recovered])
+dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered,csse.data[recovered])
 # print('\r\n',dfRecoveredExtended.head(1))
 print('\r\n',dfRecoveredExtended.tail(1))
 
@@ -331,22 +321,23 @@ if doWrite:
     # current working folder
     if path.__contains__('HomeProjects'):
         # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
-        pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
-        print('\r\n=========== File writing to ===========')
-        print('Laptop:', pathToWriteTo)
+        pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
+        print('\r\n=============================================================================================================')
+        print('File writing to Laptop:',pathToWriteTo)
     elif path.__contains__('GitHubRepositories'):
         # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
-        pathToWriteTo=convertToWindowsPath(path.replace('PythonTutorial\download_csv', 'COVID-19-Data\\csse-data\\'))
-        print('Desktop:', pathToWriteTo)
+        pathToWriteTo=convertToWindowsPath(path.replace('PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
+        print('Desktop:',pathToWriteTo)
     else:
-        print('Wrong:', path)
+        print('Wrong:',path)
 
-    dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_confirmed.csv'))
-    dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo, r'csse_deceased.csv'))
-    dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo, r'csse_recovered.csv'))
+    dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo,r'csse_confirmed.csv'))
+    dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo,r'csse_deceased.csv'))
+    dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo,r'csse_recovered.csv'))
 
 else:
     print('\r\n\r\n====== File writing switched OFF ======')
 
 
 # print('Bar is done')
+
