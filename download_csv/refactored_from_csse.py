@@ -186,7 +186,6 @@ class DataframeReconstruction:
         # print(self.goal)
 
     def reconstruct (self,csseDataKey:str,df:DataFrame):
-        print(f'\r\n\r\n==================================== Reconstruction of {csseDataKey} Dataset ====================================')
 
         total = 10
         bar = ProgressBar(total,bar_length=109)
@@ -286,11 +285,6 @@ class DataframeReconstruction:
         reconstructedDict:dict[str,any]={
             columnUpdated:df[columnUpdated],
             csseDataKey:df[csseDataKey],
-            # TODO
-            # Figure out how to calculate the difference between the row value for df[csseDataKey]
-            # with the previous row value of df[csseDataKey] within the list of same df['Country_Region'] values
-            # starting from the first df['Date'] to the last df['Date']
-            # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
             csseDataKey+'Change':diffPerDayForDataKey,
             columnLatitude:df[columnLatitude],
             columnLongitude:df[columnLongitude],
@@ -320,25 +314,26 @@ class DataframeReconstruction:
 # Calling class
 print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++ Downloading CSSE JHE Datasets +++++++++++++++++++++++++++++++++++++++')
 csse=Csse()
-# Keys of the dictionary
-print('\r\n\r\n',csse.data.keys())
 
-dfReconstruction=DataframeReconstruction()
+# Keys of the dictionary
+print(csse.data.keys())
 
 confirmed='Confirmed'
-dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed,csse.data[confirmed])
-# print('\r\n',dfConfirmedExtended.head(1))
-print('\r\n',dfConfirmedExtended.tail(1))
-
 deceased='Deceased'
-dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased,csse.data[deceased])
-# print('\r\n',dfDeceasedExtended.head(1))
-print('\r\n',dfDeceasedExtended.tail(1))
-
 recovered='Recovered'
+
+dfReconstruction=DataframeReconstruction()
+print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
+dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed,csse.data[confirmed])
+print(f'{dfConfirmedExtended.tail(1)}')
+
+print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
+dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased,csse.data[deceased])
+print(f'{dfDeceasedExtended.tail(1)}')
+
+print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
 dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered,csse.data[recovered])
-# print('\r\n',dfRecoveredExtended.head(1))
-print('\r\n',dfRecoveredExtended.tail(1))
+print(f'{dfRecoveredExtended.tail(1)}')
 
 # =========================================================================================
 
