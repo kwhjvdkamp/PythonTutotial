@@ -186,7 +186,7 @@ class DataframeReconstruction:
         # print(self.goal)
 
     def reconstruct (self,csseDataKey:str,df:DataFrame):
-        print(f'\r\n\r\n= Reconstruction of {csseDataKey} Dataset =')
+        print(f'\r\n\r\n==================================== Reconstruction of {csseDataKey} Dataset ====================================')
 
         total = 10
         bar = ProgressBar(total,bar_length=109)
@@ -318,7 +318,7 @@ class DataframeReconstruction:
 # =========================================================================================
 
 # Calling class
-print('\r\n\r\n++++ Downloading CSSE JHE Datasets ++++')
+print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++ Downloading CSSE JHE Datasets +++++++++++++++++++++++++++++++++++++++')
 csse=Csse()
 # Keys of the dictionary
 print('\r\n\r\n',csse.data.keys())
@@ -342,7 +342,7 @@ print('\r\n',dfRecoveredExtended.tail(1))
 
 # =========================================================================================
 
-doWrite=False
+doWrite=True
 if doWrite:
     currentContainer=pathlib.Path(__file__).parent.absolute()
     path=str(currentContainer)
