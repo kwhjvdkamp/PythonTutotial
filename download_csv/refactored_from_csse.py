@@ -17,6 +17,14 @@ from awesome_progress_bar import ProgressBar
 # Local module(s)
 from isoCountryCodes import CountryCodes
 
+# Defining columns
+columnUpdated:str='Updated'
+columnLatitude:str='Latitude'
+columnLongitude:str='Longitude'
+columnCountryRegion:str='Country_Region'
+columnProvinceState:str='Province_State'
+columnCountriesProvinces:str='Country_Region_Province_State'
+
 # Function accepts convert a string to a Path-typed structure (if already a Path, nothing changes)
 def convertToWindowsPath(string: Union[str,pathlib.Path]):
     path=pathlib.Path(string)
@@ -88,7 +96,7 @@ def combineTextColumns(x:list,y:list):
             listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-3])
         else:
             listXY.append(str(dfXYValue)[2:len(str(dfXYValue))-2].replace('|',' '))
-    print(f'\r\nDistinct list of values of the concatenated columns \'Country_Region\' and \'Province_Region\'\r\n{distinctList(listXY)}')
+    # print(f'\r\nDistinct list of values of the concatenated columns \'Country_Region\' and \'Province_Region\'\r\n{distinctList(listXY)}')
     return listXY
 
 # Creating a distinct list
@@ -101,30 +109,31 @@ def distinctList(items:list):
 
 # Three achievements
 # 1) Calculation the difference between a row value and the previous row value on the same column 'Confirmed'
-# 2) Occuring NaN-values, the first value in the part of the column for a set of a country (.groupby('Country_Region')
+# 2) Occuring NaN-values, the first value in the part of the column for a set of a country (.groupby(columnCountryRegion)
 #    converting to float (0.0) values
 # 3) Converting the calculated float values to int (0)
-def convertCalculatedSeriesForDistinctCountry(csseDataKey:str,df:DataFrame):
-    dfCountries=df
-    countries=distinctList(df['Country_Region'].values)
+def diffPerDayForCsseDataKey(csseDataKey:str,df:DataFrame):
+
+    countriesProvinces=distinctList(df[columnCountriesProvinces])
+    countries=distinctList(df[columnCountryRegion].values)
     # print(f'Countries Regions{len(countries)},{countries}')
-    stateEntities=distinctList(df['Province_State'].values)
+    provincesStates=distinctList(df[columnProvinceState].values)
     # print(f'Provinces States {len(stateEntities)},{stateEntities}')
-    # listWithoutNans = pd.Series(lstFloats,dtype=object).fillna(0).tolist()
-    calculatedSeriesForDistinctCountry=[]
-    for country in countries:
-        for c in dfCountries.groupby('Country_Region'):
-            if c[0]==country:
+    # countriesProvinces=combineTextColumns(countries,provincesStates)
+    calculatedSeriesForDistinctCountryProvince=[]
+    for countryProvince in countriesProvinces:
+        for c in df.groupby(columnCountriesProvinces):
+            if c[0]==countryProvince:
                 # print(c[0]) # The current 'Country'
                 # print(c[1]) # The corresponding dataFrame for 'Country'
                 # valuesPerCountry = dfCountry.values
                 # print(c[1]['Confirmed'])
                 delta=[num for num in c[1][csseDataKey].diff().where(c[1][csseDataKey]>0)]
-                seriesWithoutNansPerCountry=pd.Series(delta,dtype=object).fillna(0).tolist()
-                seriesRoundedWithoutNansPerCountry=[round(num) for num in seriesWithoutNansPerCountry]
-                calculatedSeriesForDistinctCountry.extend(seriesRoundedWithoutNansPerCountry)
-
-    return calculatedSeriesForDistinctCountry
+                seriesWithoutNansPerCountryProvince=pd.Series(delta,dtype=object).fillna(0).tolist()
+                seriesRoundedWithoutNansPerCountryProvince=[round(num) for num in seriesWithoutNansPerCountryProvince]
+                calculatedSeriesForDistinctCountryProvince.extend(seriesRoundedWithoutNansPerCountryProvince)
+    # print(f'X{calculatedSeriesForDistinctCountryProvince}')
+    return calculatedSeriesForDistinctCountryProvince
 
 # =========================================================================================
 
@@ -168,9 +177,10 @@ class Csse:
 
 #
 class DataframeReconstruction:
+
     goal = 'Dataframe construction'
     format_str='%m/%d/%y' # The original date format
-    sortOrder = ['Country_Region','Province_State']
+    sortOrder = [columnCountryRegion,columnProvinceState]
 
     # def __init__(self):
         # print(self.goal)
@@ -181,22 +191,24 @@ class DataframeReconstruction:
         total = 10
         bar = ProgressBar(total,bar_length=109)
 
+        # Start Time consuming functions
+
         # Pivoting the 'passed-in'-dataframe (columns to rows)
         transposedDf:DataFrame=pd.melt(df,
                                     id_vars=df.columns[:4],
                                     value_vars=df.columns[4:],
-                                    var_name='Updated',
+                                    var_name=columnUpdated,
                                     value_name=csseDataKey)
         # Sorting the transposed 'passed-in'-dataframe
         # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
         # thru creating a new dictionary
         dict:dict[str,any]={
-            'Updated':pd.to_datetime(transposedDf['Updated'],format=self.format_str),
-            'Country_Region':transposedDf['Country/Region'],
-            'Province_State':transposedDf['Province/State'],
-            'Latitude':transposedDf['Lat'],
-            'Longitude':transposedDf['Long'],
-            csseDataKey: transposedDf[csseDataKey]
+            columnUpdated:pd.to_datetime(transposedDf[columnUpdated],format=self.format_str),
+            csseDataKey: transposedDf[csseDataKey],
+            columnLatitude:transposedDf['Lat'],
+            columnLongitude:transposedDf['Long'],
+            columnCountryRegion:transposedDf['Country/Region'],
+            columnProvinceState:transposedDf['Province/State'],
         }
         # Reset the 'passed-in'-dataframe with the just created dictionary
         df:DataFrame=pd.DataFrame(dict)
@@ -204,13 +216,13 @@ class DataframeReconstruction:
         # Create a new dataframe from the current 'df'-dataframe by grouping on the
         # 'Date'-column which causes that in the new dfWorldwide-dataframe the entity (in this case 'Date')
         # on which is aggregated is set as the index of on new created dfWorldwide-dataframe
-        dfWorldwide:DataFrame=df.groupby(['Updated']).sum()
+        dfWorldwide:DataFrame=df.groupby([columnUpdated]).sum()
         # dfWorldwide.info()
         # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
         # The .sum() calculation on columns 'Latitude' and 'Longitude'
         # in the 'dfWorldwide'-dataframe turns out to be meaningless, therefore...
-        del dfWorldwide['Latitude']
-        del dfWorldwide['Longitude']
+        del dfWorldwide[columnLatitude]
+        del dfWorldwide[columnLongitude]
         # dfWorldwide.info()
         # The current 'dfWorldwide'-dataframe contains at this stage only the
         # columns 'Date' and the 'sum' of the 'csseDataKey' for all listed countries for that specific date
@@ -220,17 +232,17 @@ class DataframeReconstruction:
         #   0   jjjj-mm-dd      0
         #   1   jjjj-mm-dd+1    1
         # Create a new column and copy the existing 'index'-labels into it
-        dfWorldwide['Updated']=dfWorldwide.index
+        dfWorldwide[columnUpdated]=dfWorldwide.index
         # Reset the index of the current dfWorldwide-dataframe
         dfWorldwide.reset_index(drop=True,inplace=True)
         # The aggregation of 'csseDataKey' for a particular date means 'csseDataKey' for all countries actually 'Worldwide'
-        dfWorldwide['Country_Region']='Worldwide'
-        dfWorldwide['Province_State']=None
+        dfWorldwide[columnCountryRegion]='Worldwide'
+        dfWorldwide[columnProvinceState]=None
         # Worldwide does not have a 'Latitude' or 'Longitude'
-        dfWorldwide['Latitude']=None
-        dfWorldwide['Longitude']=None
+        dfWorldwide[columnLatitude]=None
+        dfWorldwide[columnLongitude]=None
         # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
-        dfWorldwide=dfWorldwide.reindex(columns=['Updated',csseDataKey,'Latitude','Longitude','Country_Region','Province_State'])
+        dfWorldwide=dfWorldwide.reindex(columns=[columnUpdated,csseDataKey,columnLatitude,columnLongitude,columnCountryRegion,columnProvinceState])
         # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
         # Relying on the fact, the columns of both dataframes do have the same order
         # create a new dataframe on which the created dfWorldwide-dataframe is concatenated with
@@ -240,12 +252,14 @@ class DataframeReconstruction:
         # re-order the resetted dataframe (df) first on 'Country/Region', thereafter on 'Province/State'
         df:DataFrame=dfWorldwideExtendedWithDf.sort_values(by=self.sortOrder)
         # At last separately sorting on 'Date' (why separately sorting is needed is not understood)
-        df.sort_values(by=['Updated'])
+        df.sort_values(by=[columnUpdated])
 
-        # Start Time consuming functions
-        countryProvince:list=combineTextColumns(df['Country_Region'].values,df['Province_State'].values)
-        iso2Codes:list=getIsoCodeForCountry(countryProvince,'Iso2')
-        iso3Codes:list=getIsoCodeForCountry(countryProvince,'Iso3')
+        combinedColumnCountryProvince:list=combineTextColumns(df[columnCountryRegion].values,df[columnProvinceState].values)
+        df[columnCountriesProvinces]=combinedColumnCountryProvince
+        iso2Codes:list=getIsoCodeForCountry(combinedColumnCountryProvince,'Iso2')
+        iso3Codes:list=getIsoCodeForCountry(combinedColumnCountryProvince,'Iso3')
+
+        diffPerDayForDataKey=diffPerDayForCsseDataKey(csseDataKey,df)
         # Stop Time consuming functions
 
         try:
@@ -256,33 +270,43 @@ class DataframeReconstruction:
             bar.stop()
         bar.wait()
 
+        # Test calls checking if each constructed dataframe has the same length of items
+        # print(f'1  {len(df[columnUpdated])}')
+        # print(f'2  {len(df[csseDataKey])}')
+        # print(f'3a {len(combinedColumnCountryProvince)}')
+        # print(f'3b {len(diffPerDayForDataKey)}')
+        # print(f'4  {len(df[columnLatitude])}')
+        # print(f'5  {len(df[columnLongitude])}')
+        # print(f'6  {len(iso2Codes)}')
+        # print(f'7  {len(iso3Codes)}')
+        # print(f'8  {len(df[columnCountryRegion])}')
+        # print(f'9  {len(df[columnProvinceState])}')
+
         # Extending the sorted 'df'-dataframe
-        # print('1',len(df['Updated']))
-        # print('2',len(df[csseDataKey]))
-        # print('3',len(convertCalculatedSeriesForDistinctCountry(csseDataKey,df)))
-        # print('4',len(df['Latitude']))
-        # print('5',len(df['Longitude']))
-        # print('6',len(iso2Codes))
-        # print('7',len(iso3Codes))
-        # print('8',len(df['Country_Region']))
-        # print('9',len(df['Province_State']))
         reconstructedDict:dict[str,any]={
-            'Updated':df['Updated'],
+            columnUpdated:df[columnUpdated],
             csseDataKey:df[csseDataKey],
             # TODO
             # Figure out how to calculate the difference between the row value for df[csseDataKey]
             # with the previous row value of df[csseDataKey] within the list of same df['Country_Region'] values
             # starting from the first df['Date'] to the last df['Date']
             # One option is to add extra row on each list of the same df['Country_Region'] as a sort of T=0 row
-            csseDataKey+'Change':convertCalculatedSeriesForDistinctCountry(csseDataKey,df),
-            # csseDataKey+'Change':convertCalculatedSeriesForDistinctCountry([num for num in df[csseDataKey].diff().where(df[csseDataKey]>0)],df['Country_Region']),
-            'Latitude':df['Latitude'],
-            'Longitude':df['Longitude'],
+            csseDataKey+'Change':diffPerDayForDataKey,
+            columnLatitude:df[columnLatitude],
+            columnLongitude:df[columnLongitude],
             'ISO2':iso2Codes,
             'ISO3':iso3Codes,
-            'Country_Region':df['Country_Region'],
-            'Province_State':df['Province_State'],
+            columnCountryRegion:df[columnCountryRegion],
+            columnProvinceState:df[columnProvinceState],
         }
+
+        try:
+            for x in range(total):
+                time.sleep(0.1)
+                bar.iter('')
+        except:
+            bar.stop()
+        bar.wait()
 
         return pd.DataFrame(reconstructedDict)
 
