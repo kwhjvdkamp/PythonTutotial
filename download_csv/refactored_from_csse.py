@@ -74,7 +74,7 @@ def getIsoCodeForCountry(countries:list,isoLabel:str):
 
 # Function accepts a country name to iterate over the CountryCodes Json-structure
 # to map the Iso-codes for that country
-# Functions return iso code object for a certain country name
+# Function returns and iso code object for that certain country name
 # {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
 def  mapStateNamewithIsoCodesObject(country:str):
     for key,value in CountryCodes.items():
@@ -176,7 +176,7 @@ class Csse:
 # =========================================================================================
 
 #
-class DataframeReconstruction:
+class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
     goal = 'Dataframe construction'
     format_str='%m/%d/%y' # The original date format
@@ -190,7 +190,7 @@ class DataframeReconstruction:
         total = 10
         bar = ProgressBar(total,bar_length=109)
 
-        # Start Time consuming functions
+        # ===== Start Time consuming functions =====
 
         # Pivoting the 'passed-in'-dataframe (columns to rows)
         transposedDf:DataFrame=pd.melt(df,
@@ -259,7 +259,8 @@ class DataframeReconstruction:
         iso3Codes:list=getIsoCodeForCountry(combinedColumnCountryProvince,'Iso3')
 
         diffPerDayForDataKey=diffPerDayForCsseDataKey(csseDataKey,df)
-        # Stop Time consuming functions
+
+        # ===== Stop Time consuming functions =====
 
         try:
             for x in range(total):
@@ -322,17 +323,17 @@ confirmed='Confirmed'
 deceased='Deceased'
 recovered='Recovered'
 
-dfReconstruction=DataframeReconstruction()
+dfReconstructedAndExtended=DfReconstructionAndExtentionWithAggregatedGroupWorldwide()
 print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
-dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed,csse.data[confirmed])
+dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstruct(confirmed,csse.data[confirmed])
 print(f'{dfConfirmedExtended.tail(1)}')
 
 print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
-dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased,csse.data[deceased])
+dfDeceasedExtended:DataFrame=dfReconstructedAndExtended.reconstruct(deceased,csse.data[deceased])
 print(f'{dfDeceasedExtended.tail(1)}')
 
 print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
-dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered,csse.data[recovered])
+dfRecoveredExtended:DataFrame=dfReconstructedAndExtended.reconstruct(recovered,csse.data[recovered])
 print(f'{dfRecoveredExtended.tail(1)}')
 
 # =========================================================================================
