@@ -141,11 +141,11 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         currentContainer=pathlib.Path(__file__).parent.absolute()
         path=str(currentContainer)
         pathToWriteTo=''
+        print('=============================================================================================================')
         # current working folder
         if path.__contains__('HomeProjects'):
             # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
             pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
-            print('\r\n=============================================================================================================')
             print(f'File \'{fileName}\' written to Laptop:',pathToWriteTo)
         elif path.__contains__('GitHubRepositories'):
             # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
@@ -155,10 +155,6 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
             print('Wrong:',path)
 
         df.to_csv(os.path.join(pathToWriteTo,f'{fileName}'))
-        # dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo,r'csse_confirmed.csv'))
-        # dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo,r'csse_deceased.csv'))
-        # dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo,r'csse_recovered.csv'))
-
     else:
         print('\r\n=============================================================================================================')
         print('File writing switched OFF')
@@ -355,12 +351,13 @@ csse=Csse()
 # Check keys of the 'data' dictionary
 # print(csse.data.keys())
 dfReconstructedAndExtended=DfReconstructionAndExtentionWithAggregatedGroupWorldwide()
-confirmed='Confirmed'
-deceased='Deceased'
-recovered='Recovered'
-print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
+
 countries=['Netherlands','Worldwide']
 for country in countries:
+    confirmed='Confirmed'
+    deceased='Deceased'
+    recovered='Recovered'
+    print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
     dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(confirmed,csse.data[confirmed],country)
     # dfConfirmedExtendedForCountry:DataFrame=dfReconstructedAndExtended.splitForCountry(dfConfirmedExtended, countries)
     print(f'{dfConfirmedExtended.tail(1)}')
