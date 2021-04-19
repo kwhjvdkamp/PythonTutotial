@@ -160,6 +160,11 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
 
         # JSON file writing
         dateFormatIso='%Y-%m-%d'
+        # Till so far the dtype of column df['Updated'] is 'datetime64[ns]'
+        # In order to achieve having only the ISO-date-part (YYYY-MM-DD) as dtype 'str'
+        # instead of the dtype 'datetime64[ns]' (yyyy-mm-ddThh-mm-ssZ)
+        # the entire column 'Updated' needs to be converted to dtype 'str'
+        print(df.Updated.dtype)
         df['Updated'] = df['Updated'].dt.strftime(dateFormatIso)
         # json_records=df.to_json(orient='records',date_format='iso')
         # print(f'Orientation: json_records {json_records}\r\n')
