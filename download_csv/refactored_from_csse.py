@@ -141,16 +141,17 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         currentContainer=pathlib.Path(__file__).parent.absolute()
         path=str(currentContainer)
         pathToWriteTo=''
+        device=''
         print('=============================================================================================================')
         # current working folder
         if path.__contains__('HomeProjects'):
             # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
             pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
-            print(f'File \'{fileName}\' written to Laptop:',pathToWriteTo)
+            device='LAPTOP'
         elif path.__contains__('GitHubRepositories'):
             # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
             pathToWriteTo=convertToWindowsPath(path.replace('PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
-            print(f'File \'{fileName}\' written to Desktop:',pathToWriteTo)
+            device='DESKTOP'
         else:
             print('Wrong:',path)
 
@@ -160,9 +161,11 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         # JSON file writing
         dateFormatIso='%Y-%m-%d'
         df['Updated'] = df['Updated'].dt.strftime(dateFormatIso)
-        json_records=df.to_json(orient='records',date_format='iso')
-        print(f'Orientation: json_records {json_records}\r\n')
-        # df.to_json(path_or_buf=os.path.join(pathToWriteTo,f'{fileName}'+'.json'),orient='records',date_format='iso')
+        # json_records=df.to_json(orient='records',date_format='iso')
+        # print(f'Orientation: json_records {json_records}\r\n')
+        df.to_json(path_or_buf=os.path.join(pathToWriteTo,f'{fileName}'+'.json'),orient='records',date_format='iso')
+
+        print(f'File \'{fileName}\' written to {device}:',pathToWriteTo)
 
     else:
         print('\r\n=============================================================================================================')
