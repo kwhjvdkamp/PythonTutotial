@@ -154,7 +154,16 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         else:
             print('Wrong:',path)
 
-        df.to_csv(os.path.join(pathToWriteTo,f'{fileName}'))
+        # CSV file writing
+        df.to_csv(os.path.join(pathToWriteTo,f'{fileName}'+'.csv'))
+
+        # JSON file writing
+        dateFormatIso='%Y-%m-%d'
+        df['Updated'] = df['Updated'].dt.strftime(dateFormatIso)
+        json_records=df.to_json(orient='records',date_format='iso')
+        print(f'Orientation: json_records {json_records}\r\n')
+        # df.to_json(path_or_buf=os.path.join(pathToWriteTo,f'{fileName}'+'.json'),orient='records',date_format='iso')
+
     else:
         print('\r\n=============================================================================================================')
         print('File writing switched OFF')
@@ -202,7 +211,7 @@ class Csse:
 class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
     goal = 'Dataframe construction'
-    format_str='%m/%d/%y' # The original date format
+    dateFormatUs='%m/%d/%y' # The original date format
     sortOrder = [columnCountryRegion,columnProvinceState]
 
     # def __init__(self):
@@ -225,7 +234,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
         # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
         # thru creating a new dictionary
         dict:dict[str,any]={
-            columnUpdated:pd.to_datetime(transposedDf[columnUpdated],format=self.format_str),
+            columnUpdated:pd.to_datetime(transposedDf[columnUpdated],format=self.dateFormatUs),
             csseDataKey: transposedDf[csseDataKey],
             columnLatitude:transposedDf['Lat'],
             columnLongitude:transposedDf['Long'],
@@ -361,16 +370,16 @@ for country in countries:
     dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(confirmed,csse.data[confirmed],country)
     # dfConfirmedExtendedForCountry:DataFrame=dfReconstructedAndExtended.splitForCountry(dfConfirmedExtended, countries)
     print(f'{dfConfirmedExtended.tail(1)}')
-    writeObjects(doWrite, 'csse_confirmed'+'_'+str(country)+'.csv',dfConfirmedExtended)
+    writeObjects(doWrite, 'csse_confirmed'+'_'+str(country),dfConfirmedExtended)
 
     print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
     dfDeceasedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(deceased,csse.data[deceased],country)
     print(f'{dfDeceasedExtended.tail(1)}')
-    writeObjects(doWrite,'csse_deceased'+'_'+str(country)+'.csv',dfDeceasedExtended)
+    writeObjects(doWrite,'csse_deceased'+'_'+str(country),dfDeceasedExtended)
 
     print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
     dfRecoveredExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(recovered,csse.data[recovered],country)
     print(f'{dfRecoveredExtended.tail(1)}')
-    writeObjects(doWrite,'csse_recovered'+'_'+str(country)+'.csv',dfRecoveredExtended)
+    writeObjects(doWrite,'csse_recovered'+'_'+str(country),dfRecoveredExtended)
 
 # =========================================================================================
