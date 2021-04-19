@@ -157,6 +157,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
 
         # CSV file writing
         df.to_csv(os.path.join(pathToWriteTo,f'{fileName}'+'.csv'))
+        print(f'File \'{fileName}.csv\' written to {device}:',pathToWriteTo)
 
         # JSON file writing
         dateFormatIso='%Y-%m-%d'
@@ -164,13 +165,13 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         # In order to achieve having only the ISO-date-part (YYYY-MM-DD) as dtype 'str'
         # instead of the dtype 'datetime64[ns]' (yyyy-mm-ddThh-mm-ssZ)
         # the entire column 'Updated' needs to be converted to dtype 'str'
-        print(df.Updated.dtype)
+        # print(df.Updated.dtype)
         df['Updated'] = df['Updated'].dt.strftime(dateFormatIso)
         # json_records=df.to_json(orient='records',date_format='iso')
         # print(f'Orientation: json_records {json_records}\r\n')
         df.to_json(path_or_buf=os.path.join(pathToWriteTo,f'{fileName}'+'.json'),orient='records',date_format='iso')
 
-        print(f'File \'{fileName}\' written to {device}:',pathToWriteTo)
+        print(f'File \'{fileName}.json\' written to {device}:',pathToWriteTo)
 
     else:
         print('\r\n=============================================================================================================')
@@ -376,18 +377,29 @@ for country in countries:
     recovered='Recovered'
     print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
     dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(confirmed,csse.data[confirmed],country)
-    # dfConfirmedExtendedForCountry:DataFrame=dfReconstructedAndExtended.splitForCountry(dfConfirmedExtended, countries)
-    print(f'{dfConfirmedExtended.tail(1)}')
-    writeObjects(doWrite, 'csse_confirmed'+'_'+str(country),dfConfirmedExtended)
 
     print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
     dfDeceasedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(deceased,csse.data[deceased],country)
-    print(f'{dfDeceasedExtended.tail(1)}')
-    writeObjects(doWrite,'csse_deceased'+'_'+str(country),dfDeceasedExtended)
+
+    # Merge dataframes having identical (for instance the index or in this case 'Updated' column) columns
+    # and drop the duplicate columns after merge
+    dfConfirmedExtendedDeceasedExtended=pd.merge(dfConfirmedExtended,dfDeceasedExtended,how='inner',left_on='Updated',right_on='Updated',suffixes=('', '_drop'))
+    dfConfirmedExtendedDeceasedExtended.drop([col for col in dfConfirmedExtendedDeceasedExtended.columns if 'drop' in col], axis=1, inplace=True)
+    # print(f'Column names order\n{dfConfirmedExtendedDeceasedExtended.keys()}')
+    dfConfirmedExtendedDeceasedExtended=dfConfirmedExtendedDeceasedExtended.reindex(columns=['Updated','Confirmed','ConfirmedChange','Deceased','DeceasedChange','Latitude','Longitude','ISO2','ISO3','Country_Region','Province_State'])
+    # print(f'Reordered columns\n{dfConfirmedExtendedDeceasedExtended.keys()}')
 
     print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
     dfRecoveredExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(recovered,csse.data[recovered],country)
-    print(f'{dfRecoveredExtended.tail(1)}')
-    writeObjects(doWrite,'csse_recovered'+'_'+str(country),dfRecoveredExtended)
+
+    dfConfirmedExtendedDeceasedExtendedRecoveredExtended=pd.merge(dfConfirmedExtendedDeceasedExtended,dfDeceasedExtended,how='inner',left_on='Updated',right_on='Updated',suffixes=('', '_drop'))
+    dfConfirmedExtendedDeceasedExtendedRecoveredExtended.drop([col for col in dfConfirmedExtendedDeceasedExtendedRecoveredExtended.columns if 'drop' in col], axis=1, inplace=True)
+    # print(f'Column names order\n{dfConfirmedExtendedDeceasedExtendedRecoveredExtended.keys()}')
+    dfConfirmedExtendedDeceasedExtendedRecoveredExtended=dfConfirmedExtendedDeceasedExtendedRecoveredExtended.reindex(columns=['Updated','Confirmed','ConfirmedChange','Deceased','DeceasedChange','Recovered','RecoveredChange','Latitude','Longitude','ISO2','ISO3','Country_Region','Province_State'])
+    # print(f'Reordered columns\n{dfConfirmedExtendedDeceasedExtendedRecoveredExtended.keys()}')
+
+    print(f'{dfConfirmedExtendedDeceasedExtendedRecoveredExtended.tail(1)}')
+
+    writeObjects(doWrite,'CSSE_'+str(country),dfConfirmedExtendedDeceasedExtendedRecoveredExtended)
 
 # =========================================================================================
