@@ -1,5 +1,6 @@
 print('__file__={0:<35} \r\n__name__={1:<20} \r\n__package__={2:<20}'.format(__file__,__name__,str(__package__)))
 
+from pickle import TRUE
 import numpy as np
 import os
 import pathlib
@@ -24,13 +25,6 @@ columnLongitude:str='Longitude'
 columnCountryRegion:str='Country_Region'
 columnProvinceState:str='Province_State'
 columnCountriesProvinces:str='Country_Region_Province_State'
-
-# Function accepts convert a string to a Path-typed structure (if already a Path, nothing changes)
-def convertToWindowsPath(string: Union[str,pathlib.Path]):
-    path=pathlib.Path(string)
-    return path
-
-# =========================================================================================
 
 # Function accepts list of country names and retrieve Alpha-2 and -3 (Iso 3661) codes from
 # country-specific objects like {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
@@ -74,7 +68,7 @@ def getIsoCodeForCountry(countries:list,isoLabel:str):
 
 # Function accepts a country name to iterate over the CountryCodes Json-structure
 # to map the Iso-codes for that country
-# Functions return iso code object for a certain country name
+# Function returns and iso code object for that certain country name
 # {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
 def  mapStateNamewithIsoCodesObject(country:str):
     for key,value in CountryCodes.items():
@@ -84,7 +78,7 @@ def  mapStateNamewithIsoCodesObject(country:str):
 # Function accepts two list of dataframe column values from which
 # row values of each column should to be concatenated,
 # Function returns a list of concatenated row values
-def combineTextColumns(x:list,y:list):
+def combineColumns(x:list,y:list):
     dfX=pd.DataFrame(x)
     dfY=pd.DataFrame(y)
     dfY=dfY.fillna('')
@@ -119,7 +113,7 @@ def diffPerDayForCsseDataKey(csseDataKey:str,df:DataFrame):
     # print(f'Countries Regions{len(countries)},{countries}')
     provincesStates=distinctList(df[columnProvinceState].values)
     # print(f'Provinces States {len(stateEntities)},{stateEntities}')
-    # countriesProvinces=combineTextColumns(countries,provincesStates)
+    # countriesProvinces=combineColumns(countries,provincesStates)
     calculatedSeriesForDistinctCountryProvince=[]
     for countryProvince in countriesProvinces:
         for c in df.groupby(columnCountriesProvinces):
@@ -135,6 +129,53 @@ def diffPerDayForCsseDataKey(csseDataKey:str,df:DataFrame):
     # print(f'X{calculatedSeriesForDistinctCountryProvince}')
     return calculatedSeriesForDistinctCountryProvince
 
+# =========================================================================================
+
+# Function accepts convert a string to a Path-typed structure (if already a Path, nothing changes)
+def convertToWindowsPath(string: Union[str,pathlib.Path]):
+    path=pathlib.Path(string)
+    return path
+
+def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
+    if doWrite:
+        currentContainer=pathlib.Path(__file__).parent.absolute()
+        path=str(currentContainer)
+        pathToWriteTo=''
+        device=''
+        print('=============================================================================================================')
+        # current working folder
+        if path.__contains__('HomeProjects'):
+            # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
+            pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
+            device='LAPTOP'
+        elif path.__contains__('GitHubRepositories'):
+            # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
+            pathToWriteTo=convertToWindowsPath(path.replace('PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
+            device='DESKTOP'
+        else:
+            print('Wrong:',path)
+
+        # CSV file writing
+        df.to_csv(os.path.join(pathToWriteTo,f'{fileName}'+'.csv'))
+        print(f'File \'{fileName}.csv\' written to {device}:',pathToWriteTo)
+
+        # JSON file writing
+        dateFormatIso='%Y-%m-%d'
+        # Till so far the dtype of column df['Updated'] is 'datetime64[ns]'
+        # In order to achieve having only the ISO-date-part (YYYY-MM-DD) as dtype 'str'
+        # instead of the dtype 'datetime64[ns]' (yyyy-mm-ddThh-mm-ssZ)
+        # the entire column 'Updated' needs to be converted to dtype 'str'
+        # print(df.Updated.dtype)
+        df['Updated'] = df['Updated'].dt.strftime(dateFormatIso)
+        # json_records=df.to_json(orient='records',date_format='iso')
+        # print(f'Orientation: json_records {json_records}\r\n')
+        df.to_json(path_or_buf=os.path.join(pathToWriteTo,f'{fileName}'+'.json'),orient='records',date_format='iso')
+
+        print(f'File \'{fileName}.json\' written to {device}:',pathToWriteTo)
+
+    else:
+        print('\r\n=============================================================================================================')
+        print('File writing switched OFF')
 # =========================================================================================
 
 # Reading the data for the Covid-19 repository which itself has been
@@ -176,21 +217,21 @@ class Csse:
 # =========================================================================================
 
 #
-class DataframeReconstruction:
+class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
     goal = 'Dataframe construction'
-    format_str='%m/%d/%y' # The original date format
+    dateFormatUs='%m/%d/%y' # The original date format
     sortOrder = [columnCountryRegion,columnProvinceState]
 
     # def __init__(self):
         # print(self.goal)
 
-    def reconstruct (self,csseDataKey:str,df:DataFrame):
+    def reconstructAndExtend(self,csseDataKey:str,df:DataFrame,country:str):
 
         total = 10
         bar = ProgressBar(total,bar_length=109)
 
-        # Start Time consuming functions
+        # ===== Start Time consuming functions =====
 
         # Pivoting the 'passed-in'-dataframe (columns to rows)
         transposedDf:DataFrame=pd.melt(df,
@@ -202,29 +243,29 @@ class DataframeReconstruction:
         # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
         # thru creating a new dictionary
         dict:dict[str,any]={
-            columnUpdated:pd.to_datetime(transposedDf[columnUpdated],format=self.format_str),
+            columnUpdated:pd.to_datetime(transposedDf[columnUpdated],format=self.dateFormatUs),
             csseDataKey: transposedDf[csseDataKey],
             columnLatitude:transposedDf['Lat'],
             columnLongitude:transposedDf['Long'],
             columnCountryRegion:transposedDf['Country/Region'],
             columnProvinceState:transposedDf['Province/State'],
         }
-        # Reset the 'passed-in'-dataframe with the just created dictionary
+        # Reset the 'passed-in'-dataframe with the transposed dictionary
         df:DataFrame=pd.DataFrame(dict)
 
-        # Create a new dataframe from the current 'df'-dataframe by grouping on the
-        # 'Date'-column which causes that in the new dfWorldwide-dataframe the entity (in this case 'Date')
-        # on which is aggregated is set as the index of on new created dfWorldwide-dataframe
+        # Create a copy dataframe from the current 'df'-dataframe by grouping on the 'Date'-column
+        # meaning all data for all countries can be summed for the same date
         dfWorldwide:DataFrame=df.groupby([columnUpdated]).sum()
         # dfWorldwide.info()
         # print(f'\r\ndfWorldwide Columns {dfWorldwide.columns}')
         # The .sum() calculation on columns 'Latitude' and 'Longitude'
-        # in the 'dfWorldwide'-dataframe turns out to be meaningless, therefore...
+        # in the 'dfWorldwide'-dataframe is meaningless, so delete those columns
         del dfWorldwide[columnLatitude]
         del dfWorldwide[columnLongitude]
         # dfWorldwide.info()
         # The current 'dfWorldwide'-dataframe contains at this stage only the
-        # columns 'Date' and the 'sum' of the 'csseDataKey' for all listed countries for that specific date
+        # columns 'Date' and the 'summage' of the 'csseDataKey'
+        # for all listed countries for that specific date
         dfWorldwide.transpose()
         # Output:
         #       (index)         'csseDataKey' (<='Confirmed', 'Deceased' or 'Recovered')
@@ -253,13 +294,14 @@ class DataframeReconstruction:
         # At last separately sorting on 'Date' (why separately sorting is needed is not understood)
         df.sort_values(by=[columnUpdated])
 
-        combinedColumnCountryProvince:list=combineTextColumns(df[columnCountryRegion].values,df[columnProvinceState].values)
+        combinedColumnCountryProvince:list=combineColumns(df[columnCountryRegion].values,df[columnProvinceState].values)
         df[columnCountriesProvinces]=combinedColumnCountryProvince
         iso2Codes:list=getIsoCodeForCountry(combinedColumnCountryProvince,'Iso2')
         iso3Codes:list=getIsoCodeForCountry(combinedColumnCountryProvince,'Iso3')
 
         diffPerDayForDataKey=diffPerDayForCsseDataKey(csseDataKey,df)
-        # Stop Time consuming functions
+
+        # ===== Stop Time consuming functions =====
 
         try:
             for x in range(total):
@@ -294,15 +336,24 @@ class DataframeReconstruction:
             columnProvinceState:df[columnProvinceState],
         }
 
-        try:
-            for x in range(total):
-                time.sleep(0.1)
-                bar.iter('')
-        except:
-            bar.stop()
-        bar.wait()
+        dfReconstructed=pd.DataFrame(reconstructedDict)
 
-        return pd.DataFrame(reconstructedDict)
+        maskCountry=dfReconstructed['Country_Region']==country
+
+        if country == 'Netherlands':
+            # TODO For now only 'Netherlands' is filtered,
+            # 'Netherlands' is one of the few countries in the retrieved CSSEdataframe
+            # having so called 'overseas' areas (like Denmark, France or UK) or is a country so large it has been divided by its provinces
+            # ['Province_State']
+            # like Australia, Canada, China (US is not in this dataframe enclosed)
+            dfReconstructed=dfReconstructed[maskCountry]
+            maskIso2=dfReconstructed['ISO2']=='NL'
+            dfReconstructed=dfReconstructed[maskIso2]
+        else:
+            print(country)
+            dfReconstructed=dfReconstructed[maskCountry]
+
+        return dfReconstructed
 
     # create other useful functions to work with data
     def current_status(self):
@@ -312,53 +363,43 @@ class DataframeReconstruction:
 # =========================================================================================
 
 # Calling class
+doWrite=TRUE
 print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++ Downloading CSSE JHE Datasets +++++++++++++++++++++++++++++++++++++++')
 csse=Csse()
+# Check keys of the 'data' dictionary
+# print(csse.data.keys())
+dfReconstructedAndExtended=DfReconstructionAndExtentionWithAggregatedGroupWorldwide()
 
-# Keys of the dictionary
-print(csse.data.keys())
+countries=['Netherlands','Worldwide']
+for country in countries:
+    confirmed='Confirmed'
+    deceased='Deceased'
+    recovered='Recovered'
+    print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
+    dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(confirmed,csse.data[confirmed],country)
 
-confirmed='Confirmed'
-deceased='Deceased'
-recovered='Recovered'
+    print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
+    dfDeceasedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(deceased,csse.data[deceased],country)
 
-dfReconstruction=DataframeReconstruction()
-print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
-dfConfirmedExtended:DataFrame=dfReconstruction.reconstruct(confirmed,csse.data[confirmed])
-print(f'{dfConfirmedExtended.tail(1)}')
+    # Merge dataframes having identical (for instance the index or in this case 'Updated' column) columns
+    # and drop the duplicate columns after merge
+    dfConfirmedExtendedDeceasedExtended=pd.merge(dfConfirmedExtended,dfDeceasedExtended,how='inner',left_on='Updated',right_on='Updated',suffixes=('', '_drop'))
+    dfConfirmedExtendedDeceasedExtended.drop([col for col in dfConfirmedExtendedDeceasedExtended.columns if 'drop' in col], axis=1, inplace=True)
+    # print(f'Column names order\n{dfConfirmedExtendedDeceasedExtended.keys()}')
+    dfConfirmedExtendedDeceasedExtended=dfConfirmedExtendedDeceasedExtended.reindex(columns=['Updated','Confirmed','ConfirmedChange','Deceased','DeceasedChange','Latitude','Longitude','ISO2','ISO3','Country_Region','Province_State'])
+    # print(f'Reordered columns\n{dfConfirmedExtendedDeceasedExtended.keys()}')
 
-print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
-dfDeceasedExtended:DataFrame=dfReconstruction.reconstruct(deceased,csse.data[deceased])
-print(f'{dfDeceasedExtended.tail(1)}')
+    print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
+    dfRecoveredExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(recovered,csse.data[recovered],country)
 
-print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
-dfRecoveredExtended:DataFrame=dfReconstruction.reconstruct(recovered,csse.data[recovered])
-print(f'{dfRecoveredExtended.tail(1)}')
+    dfConfirmedExtendedDeceasedExtendedRecoveredExtended=pd.merge(dfConfirmedExtendedDeceasedExtended,dfDeceasedExtended,how='inner',left_on='Updated',right_on='Updated',suffixes=('', '_drop'))
+    dfConfirmedExtendedDeceasedExtendedRecoveredExtended.drop([col for col in dfConfirmedExtendedDeceasedExtendedRecoveredExtended.columns if 'drop' in col], axis=1, inplace=True)
+    # print(f'Column names order\n{dfConfirmedExtendedDeceasedExtendedRecoveredExtended.keys()}')
+    dfConfirmedExtendedDeceasedExtendedRecoveredExtended=dfConfirmedExtendedDeceasedExtendedRecoveredExtended.reindex(columns=['Updated','Confirmed','ConfirmedChange','Deceased','DeceasedChange','Recovered','RecoveredChange','Latitude','Longitude','ISO2','ISO3','Country_Region','Province_State'])
+    # print(f'Reordered columns\n{dfConfirmedExtendedDeceasedExtendedRecoveredExtended.keys()}')
+
+    print(f'{dfConfirmedExtendedDeceasedExtendedRecoveredExtended.tail(1)}')
+
+    writeObjects(doWrite,'CSSE_'+str(country),dfConfirmedExtendedDeceasedExtendedRecoveredExtended)
 
 # =========================================================================================
-
-doWrite=True
-if doWrite:
-    currentContainer=pathlib.Path(__file__).parent.absolute()
-    path=str(currentContainer)
-    pathToWriteTo=''
-    # current working folder
-    if path.__contains__('HomeProjects'):
-        # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
-        pathToWriteTo=convertToWindowsPath(path.replace('Python\PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
-        print('\r\n=============================================================================================================')
-        print('File writing to Laptop:',pathToWriteTo)
-    elif path.__contains__('GitHubRepositories'):
-        # On Desktop write to >>> C:\GithubRepositories\COVID-19-Data\bing-data\accumulation\csv-data-bing
-        pathToWriteTo=convertToWindowsPath(path.replace('PythonTutorial\download_csv','COVID-19-Data\\csse-data\\'))
-        print('Desktop:',pathToWriteTo)
-    else:
-        print('Wrong:',path)
-
-    dfConfirmedExtended.to_csv(os.path.join(pathToWriteTo,r'csse_confirmed.csv'))
-    dfDeceasedExtended.to_csv(os.path.join(pathToWriteTo,r'csse_deceased.csv'))
-    dfRecoveredExtended.to_csv(os.path.join(pathToWriteTo,r'csse_recovered.csv'))
-
-else:
-    print('\r\n=============================================================================================================')
-    print('File writing switched OFF')

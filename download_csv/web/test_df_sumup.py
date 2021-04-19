@@ -1,13 +1,11 @@
 import pandas as pd
 import numpy as np
 
-
 def convertCalculatedSeries(lstFloats:list):
     listWithoutNans = pd.Series(lstFloats, dtype=object).fillna(0).tolist()
     # print(f'{listWithoutNans}')
     roundedListWithoutNans =[round(num) for num in listWithoutNans]
     return roundedListWithoutNans
-
 
 # List of Tuples
 employees_salary = [('Jan', 2000, 2010, 2050, 2134, 2111),
@@ -17,10 +15,12 @@ employees_salary = [('Jan', 2000, 2010, 2050, 2134, 2111),
                     ('Koen', 2023, 2232, 3050, 2112, 1099),
                     ('Freek', 2123, 2510, np.NaN, 3134, 2122),
                     ('Mark', 4000, 2000, 2050, 2122, 2111)]
+
 # Create a DataFrame object from list of tuples
 df = pd.DataFrame(employees_salary,
                   columns=['Name', 'Jan', 'Feb', 'March', 'April', 'May'])
-# Set column Name as the index of dataframe
+
+# Set column name as the index of dataframe
 df.set_index('Name', inplace=True)
 print(df)
 
@@ -59,3 +59,29 @@ reconstructedDict:dict[str,any]={
 
 df_new = pd.DataFrame(reconstructedDict)
 print(df_new)
+
+print('===\r\n')
+
+data = np.array([['1', '2'], ['3', '4']])
+
+dataFrame = pd.DataFrame(df_new, columns = df_new.keys())
+json = dataFrame.to_json()
+print(f'Straight {json}\r\n')
+
+json_split = dataFrame.to_json(orient ='split')
+print(f'Orientation: json_split {json_split}\r\n')
+
+json_records = dataFrame.to_json(orient ='records')
+print(f'Orientation: json_records {json_records}\r\n')
+
+json_index = dataFrame.to_json(orient ='index')
+print(f'Orientation: json_index {json_index}\r\n')
+
+json_columns = dataFrame.to_json(orient ='columns')
+print(f'Orientation: json_columns {json_columns}\r\n')
+
+json_values = dataFrame.to_json(orient ='values')
+print(f'Orientation: json_values {json_values}\r\n')
+
+json_table = dataFrame.to_json(orient ='table')
+print(f'Orientation: json_table {json_table}\r\n')
