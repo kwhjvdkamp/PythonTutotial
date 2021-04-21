@@ -364,7 +364,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
 # Calling class
 doWrite=TRUE
-print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++ Downloading CSSE JHE Datasets +++++++++++++++++++++++++++++++++++++++')
+print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++ Downloading JHE CSSE Datasets +++++++++++++++++++++++++++++++++++++++')
 csse=Csse()
 # Check keys of the 'data' dictionary
 # print(csse.data.keys())
