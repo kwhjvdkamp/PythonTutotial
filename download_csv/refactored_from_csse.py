@@ -39,7 +39,6 @@ def getIsoCodeForCountry(countries:list,isoLabel:str):
     # 'Denmark', 'France', 'Netherlands' and 'United Kingdom' (US in not taken into account)
     # These so called '(semi) independent' overseas areas' are
     # listed in the Province/State column some having their own Iso2 & Iso3 codes
-
     for country in countries:
         pair=mapStateNamewithIsoCodesObject(country)
         # 'None' equivalent to 'null'
@@ -136,6 +135,7 @@ def convertToWindowsPath(string: Union[str,pathlib.Path]):
     path=pathlib.Path(string)
     return path
 
+# Function writes dataframe either to *.csv file or *.json file
 def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
     if doWrite:
         currentContainer=pathlib.Path(__file__).parent.absolute()
@@ -176,6 +176,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
     else:
         print('\r\n=============================================================================================================')
         print('File writing switched OFF')
+
 # =========================================================================================
 
 # Reading the data for the Covid-19 repository which itself has been
@@ -216,7 +217,7 @@ class Csse:
 
 # =========================================================================================
 
-#
+# Dataframe reconstruction and extention with aggregated group 'Worldwide'
 class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
     goal = 'Dataframe construction'
@@ -277,10 +278,10 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
         dfWorldwide.reset_index(drop=True,inplace=True)
         # The aggregation of 'csseDataKey' for a particular date means 'csseDataKey' for all countries actually 'Worldwide'
         dfWorldwide[columnCountryRegion]='Worldwide'
-        dfWorldwide[columnProvinceState]=None
+        dfWorldwide[columnProvinceState]=''
         # Worldwide does not have a 'Latitude' or 'Longitude'
-        dfWorldwide[columnLatitude]=None
-        dfWorldwide[columnLongitude]=None
+        dfWorldwide[columnLatitude]=''
+        dfWorldwide[columnLongitude]=''
         # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
         dfWorldwide=dfWorldwide.reindex(columns=[columnUpdated,csseDataKey,columnLatitude,columnLongitude,columnCountryRegion,columnProvinceState])
         # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
@@ -349,6 +350,9 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
             dfReconstructed=dfReconstructed[maskCountry]
             maskIso2=dfReconstructed['ISO2']=='NL'
             dfReconstructed=dfReconstructed[maskIso2]
+            maskIso3=dfReconstructed['ISO3']=='NLD'
+            dfReconstructed=dfReconstructed[maskIso3]
+            dfReconstructed['Province_State']=''
         else:
             print(country)
             dfReconstructed=dfReconstructed[maskCountry]
