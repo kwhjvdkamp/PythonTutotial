@@ -39,7 +39,6 @@ def getIsoCodeForCountry(countries:list,isoLabel:str):
     # 'Denmark', 'France', 'Netherlands' and 'United Kingdom' (US in not taken into account)
     # These so called '(semi) independent' overseas areas' are
     # listed in the Province/State column some having their own Iso2 & Iso3 codes
-
     for country in countries:
         pair=mapStateNamewithIsoCodesObject(country)
         # 'None' equivalent to 'null'
@@ -136,13 +135,14 @@ def convertToWindowsPath(string: Union[str,pathlib.Path]):
     path=pathlib.Path(string)
     return path
 
+# Function writes dataframe either to *.csv file or *.json file
 def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
     if doWrite:
         currentContainer=pathlib.Path(__file__).parent.absolute()
         path=str(currentContainer)
         pathToWriteTo=''
         device=''
-        print('=============================================================================================================')
+        print('============================================================================================================================================================')
         # current working folder
         if path.__contains__('HomeProjects'):
             # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
@@ -174,8 +174,9 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         print(f'File \'{fileName}.json\' written to {device}:',pathToWriteTo)
 
     else:
-        print('\r\n=============================================================================================================')
+        print('\r\n============================================================================================================================================================')
         print('File writing switched OFF')
+
 # =========================================================================================
 
 # Reading the data for the Covid-19 repository which itself has been
@@ -216,7 +217,7 @@ class Csse:
 
 # =========================================================================================
 
-#
+# Dataframe reconstruction and extention with aggregated group 'Worldwide'
 class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
     goal = 'Dataframe construction'
@@ -229,7 +230,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
     def reconstructAndExtend(self,csseDataKey:str,df:DataFrame,country:str):
 
         total = 10
-        bar = ProgressBar(total,bar_length=109)
+        bar = ProgressBar(total,bar_length=156)
 
         # ===== Start Time consuming functions =====
 
@@ -277,10 +278,10 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
         dfWorldwide.reset_index(drop=True,inplace=True)
         # The aggregation of 'csseDataKey' for a particular date means 'csseDataKey' for all countries actually 'Worldwide'
         dfWorldwide[columnCountryRegion]='Worldwide'
-        dfWorldwide[columnProvinceState]=None
+        dfWorldwide[columnProvinceState]=''
         # Worldwide does not have a 'Latitude' or 'Longitude'
-        dfWorldwide[columnLatitude]=None
-        dfWorldwide[columnLongitude]=None
+        dfWorldwide[columnLatitude]=''
+        dfWorldwide[columnLongitude]=''
         # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
         dfWorldwide=dfWorldwide.reindex(columns=[columnUpdated,csseDataKey,columnLatitude,columnLongitude,columnCountryRegion,columnProvinceState])
         # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
@@ -340,7 +341,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
         maskCountry=dfReconstructed['Country_Region']==country
 
-        if country == 'Netherlands':
+        if country=='Netherlands':
             # TODO For now only 'Netherlands' is filtered,
             # 'Netherlands' is one of the few countries in the retrieved CSSEdataframe
             # having so called 'overseas' areas (like Denmark, France or UK) or is a country so large it has been divided by its provinces
@@ -349,6 +350,9 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
             dfReconstructed=dfReconstructed[maskCountry]
             maskIso2=dfReconstructed['ISO2']=='NL'
             dfReconstructed=dfReconstructed[maskIso2]
+            maskIso3=dfReconstructed['ISO3']=='NLD'
+            dfReconstructed=dfReconstructed[maskIso3]
+            dfReconstructed['Province_State']=''
         else:
             print(country)
             dfReconstructed=dfReconstructed[maskCountry]
@@ -364,7 +368,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
 # Calling class
 doWrite=TRUE
-print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++ Downloading JHE CSSE Datasets +++++++++++++++++++++++++++++++++++++++')
+print('\r\n\r\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Downloading JHE CSSE Datasets +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 csse=Csse()
 # Check keys of the 'data' dictionary
 # print(csse.data.keys())
@@ -375,10 +379,10 @@ for country in countries:
     confirmed='Confirmed'
     deceased='Deceased'
     recovered='Recovered'
-    print(f'\r\n==================================== Reconstruction of {confirmed} Dataset ====================================')
+    print(f'\r\n=========================================================== Reconstruction of {confirmed} Dataset ============================================================')
     dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(confirmed,csse.data[confirmed],country)
 
-    print(f'\r\n==================================== Reconstruction of {deceased} Dataset ====================================')
+    print(f'\r\n=========================================================== Reconstruction of {deceased} Dataset =============================================================')
     dfDeceasedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(deceased,csse.data[deceased],country)
 
     # Merge dataframes having identical (for instance the index or in this case 'Updated' column) columns
@@ -389,7 +393,7 @@ for country in countries:
     dfConfirmedExtendedDeceasedExtended=dfConfirmedExtendedDeceasedExtended.reindex(columns=['Updated','Confirmed','ConfirmedChange','Deceased','DeceasedChange','Latitude','Longitude','ISO2','ISO3','Country_Region','Province_State'])
     # print(f'Reordered columns\n{dfConfirmedExtendedDeceasedExtended.keys()}')
 
-    print(f'\r\n==================================== Reconstruction of {recovered} Dataset ====================================')
+    print(f'\r\n=========================================================== Reconstruction of {recovered} Dataset ============================================================')
     dfRecoveredExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(recovered,csse.data[recovered],country)
 
     dfConfirmedExtendedDeceasedExtendedRecoveredExtended=pd.merge(dfConfirmedExtendedDeceasedExtended,dfDeceasedExtended,how='inner',left_on='Updated',right_on='Updated',suffixes=('', '_drop'))
