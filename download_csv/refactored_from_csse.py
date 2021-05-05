@@ -280,8 +280,8 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
         dfWorldwide[columnCountryRegion]='Worldwide'
         dfWorldwide[columnProvinceState]=''
         # Worldwide does not have a 'Latitude' or 'Longitude'
-        dfWorldwide[columnLatitude]=''
-        dfWorldwide[columnLongitude]=''
+        dfWorldwide[columnLatitude]=None
+        dfWorldwide[columnLongitude]=None
         # Reindex existing columns on the dfWorldwide-dataframe in the same order as expected on the original 'passed-in' dataset
         dfWorldwide=dfWorldwide.reindex(columns=[columnUpdated,csseDataKey,columnLatitude,columnLongitude,columnCountryRegion,columnProvinceState])
         # print(f'\r\nColumns {dfWorldwide.columns}\r\ndfWorldwide (rows):{len(dfWorldwide)}')
