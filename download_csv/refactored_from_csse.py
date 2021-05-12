@@ -128,7 +128,7 @@ def diffPerDayForCsseDataKey(csseDataKey:str,df:DataFrame):
     # print(f'X{calculatedSeriesForDistinctCountryProvince}')
     return calculatedSeriesForDistinctCountryProvince
 
-# =========================================================================================
+# ===========================================================================================
 
 # Function accepts convert a string to a Path-typed structure (if already a Path, nothing changes)
 def convertToWindowsPath(string: Union[str,pathlib.Path]):
@@ -142,7 +142,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         path=str(currentContainer)
         pathToWriteTo=''
         device=''
-        print('============================================================================================================================================================')
+        print('===============================================================================================================================================================')
         # current working folder
         if path.__contains__('HomeProjects'):
             # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
@@ -174,10 +174,10 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         print(f'File \'{fileName}.json\' written to {device}:',pathToWriteTo)
 
     else:
-        print('\r\n============================================================================================================================================================')
+        print('\r\n===============================================================================================================================================================')
         print('File writing switched OFF')
 
-# =========================================================================================
+# ==========================================================================================
 
 # Reading the data for the Covid-19 repository which itself has been
 # forked from the publicly accessible CSSEGISandDATA repository supplied by JHU US
@@ -215,7 +215,7 @@ class Csse:
         # function to show current status
         pass
 
-# =========================================================================================
+# ==========================================================================================
 
 # Dataframe reconstruction and extention with aggregated group 'Worldwide'
 class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
@@ -364,7 +364,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
         # function to show current status
         pass
 
-# =========================================================================================
+# ==========================================================================================
 
 # Calling class
 doWrite=TRUE
@@ -406,4 +406,4 @@ for country in countries:
 
     writeObjects(doWrite,'CSSE_'+str(country),dfConfirmedExtendedDeceasedExtendedRecoveredExtended)
 
-# =========================================================================================
+# ==========================================================================================
