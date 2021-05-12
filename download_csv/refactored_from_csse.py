@@ -142,7 +142,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         path=str(currentContainer)
         pathToWriteTo=''
         device=''
-        print('===============================================================================================================================================================')
+        print('=============================================================================================================================================================')
         # current working folder
         if path.__contains__('HomeProjects'):
             # On Laptop write to >>> C:\HomeProjects\COVID-19-Data\bing-data\accumulation\csv-data-bing
@@ -174,7 +174,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         print(f'File \'{fileName}.json\' written to {device}:',pathToWriteTo)
 
     else:
-        print('\r\n===============================================================================================================================================================')
+        print('\r\n=============================================================================================================================================================')
         print('File writing switched OFF')
 
 # ==========================================================================================
@@ -230,7 +230,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
     def reconstructAndExtend(self,csseDataKey:str,df:DataFrame,country:str):
 
         total = 10
-        bar = ProgressBar(total,bar_length=156)
+        bar = ProgressBar(total,bar_length=157)
 
         # ===== Start Time consuming functions =====
 
@@ -368,7 +368,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
 
 # Calling class
 doWrite=TRUE
-print('\r\n\r\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Downloading JHE CSSE Datasets +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+print('\r\n\r\n+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ Downloading JHE CSSE Datasets +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 csse=Csse()
 # Check keys of the 'data' dictionary
 # print(csse.data.keys())
@@ -379,10 +379,10 @@ for country in countries:
     confirmed='Confirmed'
     deceased='Deceased'
     recovered='Recovered'
-    print(f'\r\n=========================================================== Reconstruction of {confirmed} Dataset ============================================================')
+    print(f'\r\n============================================================ Reconstruction of {confirmed} Dataset ============================================================')
     dfConfirmedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(confirmed,csse.data[confirmed],country)
 
-    print(f'\r\n=========================================================== Reconstruction of {deceased} Dataset =============================================================')
+    print(f'\r\n============================================================ Reconstruction of {deceased} Dataset =============================================================')
     dfDeceasedExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(deceased,csse.data[deceased],country)
 
     # Merge dataframes having identical (for instance the index or in this case 'Updated' column) columns
@@ -393,7 +393,7 @@ for country in countries:
     dfConfirmedExtendedDeceasedExtended=dfConfirmedExtendedDeceasedExtended.reindex(columns=['Updated','Confirmed','ConfirmedChange','Deceased','DeceasedChange','Latitude','Longitude','ISO2','ISO3','Country_Region','Province_State'])
     # print(f'Reordered columns\n{dfConfirmedExtendedDeceasedExtended.keys()}')
 
-    print(f'\r\n=========================================================== Reconstruction of {recovered} Dataset ============================================================')
+    print(f'\r\n============================================================ Reconstruction of {recovered} Dataset ============================================================')
     dfRecoveredExtended:DataFrame=dfReconstructedAndExtended.reconstructAndExtend(recovered,csse.data[recovered],country)
 
     dfConfirmedExtendedDeceasedExtendedRecoveredExtended=pd.merge(dfConfirmedExtendedDeceasedExtended,dfDeceasedExtended,how='inner',left_on='Updated',right_on='Updated',suffixes=('', '_drop'))
