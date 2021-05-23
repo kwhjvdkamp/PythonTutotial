@@ -12,7 +12,7 @@ import time
 from datetime import datetime
 from pandas.core import indexing
 from pandas.core.frame import DataFrame
-from typing import Match, Union
+from typing import Dict, Match, Union
 from awesome_progress_bar import ProgressBar
 
 # Local module(s)
@@ -243,7 +243,7 @@ class DfReconstructionAndExtentionWithAggregatedGroupWorldwide:
         # Sorting the transposed 'passed-in'-dataframe
         # Converting the US-(m/d/yy)-date-format to the ISO-standard-date-(jjjj-mm-dd)-format
         # thru creating a new dictionary
-        dict:dict[str,any]={
+        dict:Dict[str,any]={
             columnUpdated:pd.to_datetime(transposedDf[columnUpdated],format=self.dateFormatUs),
             csseDataKey: transposedDf[csseDataKey],
             columnLatitude:transposedDf['Lat'],
