@@ -208,7 +208,11 @@ class Csse:
             'Recovered':f'{URL_PATH}/time_series_covid19_recovered_global.csv',
         }
 
-        self.data={case:pd.read_csv(url,header=0,escapechar='\\') for case,url in self.URLS.items()}
+        # 1/22/20 is an American date notation equivalent to 22 jan 2020 or 2020-01-22 (ISO data)
+        # 6/8/21 should be equivalent to june 8th 2021 of 2021-06-08
+        fixedColumns=['Province/State','Country/Region','Lat','Long']
+        dateColumns=['2/6/21','3/6/21','4/6/21','5/6/21','6/6/21','7/6/21','8/6/21']
+        self.data={case:pd.read_csv(url,header=0,escapechar='\\', usecols=fixedColumns+dateColumns) for case,url in self.URLS.items()}
 
     # create other useful functions to work with data
     def current_status(self):
