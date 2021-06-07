@@ -13,7 +13,6 @@ import numpy as np
 
 # Answer('no', 'yes').breakup()
 
-
 # y = print(float('6'))
 # print (type(y))
 # help('Nonetype')
@@ -63,8 +62,11 @@ import numpy as np
 # x = [7, 'D', 'E', 8, 9, 'F']
 # strings = [y for y in x if type(y) == str]
 # print(strings)
-sample = np.random.choice([5,6,7,8,9], size=5)
-print (sample, np.median(sample))
+# sample = np.random.choice([5,6,7,8,9], size=5)
+# print (sample, np.median(sample))
 
-random_number = np.random.random()
-print(random_number)
+# random_number = np.random.random()
+# print(random_number)
+
+
+print('HELLO Pythonista')
