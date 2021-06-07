@@ -192,6 +192,8 @@ class Csse:
         # In case an image needs to be retrieved from GitHub
         # add '?raw=true' at the end of the link to the file
 
+        # John Hopkins Institute https://github.com/CSSEGISandData
+
         # Dataframe forked
         # from 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master
         # into 'https://raw.github.com/kwhjvdkamp/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/'
@@ -211,7 +213,7 @@ class Csse:
         # 1/22/20 is an American date notation equivalent to 22 jan 2020 or 2020-01-22 (ISO data)
         # 6/8/21 should be equivalent to june 8th 2021 of 2021-06-08
         fixedColumns=['Province/State','Country/Region','Lat','Long']
-        dateColumns=['2/6/21','3/6/21','4/6/21','5/6/21','6/6/21','7/6/21','8/6/21']
+        dateColumns=['2/6/21','3/6/21','4/6/21','5/6/21']
         self.data={case:pd.read_csv(url,header=0,escapechar='\\', usecols=fixedColumns+dateColumns) for case,url in self.URLS.items()}
 
     # create other useful functions to work with data
