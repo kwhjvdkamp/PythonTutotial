@@ -69,7 +69,7 @@ def getIsoCodeForCountry(countries:list,isoLabel:str):
 # to map the Iso-codes for that country
 # Function returns and iso code object for that certain country name
 # {'Country':{'Iso2':'CC', 'Iso3', 'CCC'}, ...}
-def  mapStateNamewithIsoCodesObject(country:str):
+def mapStateNamewithIsoCodesObject(country:str):
     for key,value in CountryCodes.items():
         if key==country:
             return value
@@ -106,11 +106,10 @@ def distinctList(items:list):
 #    converting to float (0.0) values
 # 3) Converting the calculated float values to int (0)
 def diffPerDayForCsseDataKey(csseDataKey:str,df:DataFrame):
-
     countriesProvinces=distinctList(df[columnCountriesProvinces])
-    countries=distinctList(df[columnCountryRegion].values)
+    # countries=distinctList(df[columnCountryRegion].values)
     # print(f'Countries Regions{len(countries)},{countries}')
-    provincesStates=distinctList(df[columnProvinceState].values)
+    # provincesStates=distinctList(df[columnProvinceState].values)
     # print(f'Provinces States {len(stateEntities)},{stateEntities}')
     # countriesProvinces=combineColumns(countries,provincesStates)
     calculatedSeriesForDistinctCountryProvince=[]
@@ -170,9 +169,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
         # json_records=df.to_json(orient='records',date_format='iso')
         # print(f'Orientation: json_records {json_records}\r\n')
         df.to_json(path_or_buf=os.path.join(pathToWriteTo,f'{fileName}'+'.json'),orient='records',date_format='iso')
-
         print(f'File \'{fileName}.json\' written to {device}:',pathToWriteTo)
-
     else:
         print('\r\n=============================================================================================================================================================')
         print('File writing switched OFF')
@@ -182,9 +179,7 @@ def writeObjects(doWrite:bool,fileName:str,df:DataFrame):
 # Reading the data for the Covid-19 repository which itself has been
 # forked from the publicly accessible CSSEGISandDATA repository supplied by JHU US
 class Csse:
-
     def __init__(self):
-
         # =============================================================
         # Returns data as dictionary with DataFrames as Values
         # Make sure the url is the raw version of the file on GitHub
@@ -213,8 +208,12 @@ class Csse:
         # 1/22/20 is an American date notation equivalent to 22 jan 2020 or 2020-01-22 (ISO data)
         # 6/8/21 should be equivalent to june 8th 2021 of 2021-06-08
         fixedColumns=['Province/State','Country/Region','Lat','Long']
-        dateColumns=['2/6/21','3/6/21','4/6/21','5/6/21']
-        self.data={case:pd.read_csv(url,header=0,escapechar='\\', usecols=fixedColumns+dateColumns) for case,url in self.URLS.items()}
+        dateColumns=['2/6/21','3/6/21','4/6/21','5/6/21','6/6/21']
+        dictionaryOfStringAndDataframe={case:pd.read_csv(url,header=0,escapechar='\\', usecols=fixedColumns+dateColumns) for case,url in self.URLS.items()}
+        for key,value in dictionaryOfStringAndDataframe.items():
+            print(key,'->', value.columns[0:4], value.columns[-3:])
+
+        self.data=dictionaryOfStringAndDataframe
 
     # create other useful functions to work with data
     def current_status(self):
