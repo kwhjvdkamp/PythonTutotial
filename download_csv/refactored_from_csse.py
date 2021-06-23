@@ -209,7 +209,8 @@ class Csse:
         # 6/8/21 should be equivalent to june 8th 2021 of 2021-06-08
         fixedColumns=['Province/State','Country/Region','Lat','Long']
         # US DATE FORMAT  'M/D/YY'
-        dateColumns=['6/2/21','6/3/21','6/4/21','6/5/21','6/6/21','6/7/21','6/8/21']
+        # dateColumns=['6/2/21','6/3/21','6/4/21','6/5/21','6/6/21','6/7/21','6/8/21']
+        dateColumns=['6/9/21','6/10/21','6/11/21','6/12/21','6/13/21','6/14/21','6/15/21']
         dictionaryOfStringAndDataframe={case:pd.read_csv(url,header=0,escapechar='\\', usecols=fixedColumns+dateColumns) for case,url in self.URLS.items()}
         # dictionaryOfStringAndDataframe={case:pd.read_csv(url,header=0,escapechar='\\') for case,url in self.URLS.items()}
         for key,value in dictionaryOfStringAndDataframe.items():
