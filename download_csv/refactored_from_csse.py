@@ -211,7 +211,8 @@ class Csse:
         # US DATE FORMAT  'M/D/YY'
         # dateColumns=['6/2/21','6/3/21','6/4/21','6/5/21','6/6/21','6/7/21','6/8/21']
         # dateColumns=['6/9/21','6/10/21','6/11/21','6/12/21','6/13/21','6/14/21','6/15/21']
-        dateColumns=['6/16/21','6/17/21','6/18/21','6/19/21','6/20/21','6/21/21','6/22/21']
+        # dateColumns=['6/16/21','6/17/21','6/18/21','6/19/21','6/20/21','6/21/21','6/22/21']
+        dateColumns=['6/23/21','6/24/21','6/25/21','6/26/21','6/27/21','6/28/21','6/29/21']
         dictionaryOfStringAndDataframe={case:pd.read_csv(url,header=0,escapechar='\\', usecols=fixedColumns+dateColumns) for case,url in self.URLS.items()}
         # dictionaryOfStringAndDataframe={case:pd.read_csv(url,header=0,escapechar='\\') for case,url in self.URLS.items()}
         for key,value in dictionaryOfStringAndDataframe.items():
