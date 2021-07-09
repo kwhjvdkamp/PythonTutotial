@@ -163,20 +163,128 @@ import re
 #     print("Lists of users found in this tweet: {}".format(email_matched))
 
 
-flight = "Here you have your boarding pass LA4214 AER-CDB 06NOV"
-# Write regex to capture information of the flight
-regex = r"([A-Z]{2})(\d{4})\s([A-Z]{3})-([A-Z]{3})\s(\d{2}[A-Z]{3})"
+# Complete the regular expression to match and capture all the flight information required. Only the first parenthesis were placed for you.
+# Find all the matches corresponding to each piece of information about the flight. Assign it to flight_matches.
+# Complete the format method with the elements contained in flight_matches. In the first line print the airline,and the flight number. In the second line, the departure and destination. In the third line, the date.
+# # Write regex to capture information of the flight
+# flight = "Here you have your boarding pass LA4214 AER-CDB 06NOV"
+# regex = r"([A-Z]{2})(\d{4})\s([A-Z]{3})-([A-Z]{3})\s(\d{2}[A-Z]{3})"
+# # Find all matches of the flight information
+# flight_matches = re.findall(regex, flight)
+# # print(flight_matches, type(flight_matches))
+# # OUTPUT: [('IB', '3723', 'AMS', 'MAD', '06OCT')]  object list containing one tuple
+# # Print the matches
+# print("Airline: {} Flight number: {}".format(flight_matches[0][0], flight_matches[0][1]))
+# print("Departure: {} Destination: {}".format(flight_matches[0][2], flight_matches[0][3]))
+# print("Date: {}".format(flight_matches[0][4]))
+# # OUTPUT:
+# # Airline: LA Flight number: 4214
+# # Departure: AER Destination: CDB
+# # Date: 06NOV
 
-# Find all matches of the flight information
-flight_matches = re.findall(regex, flight)
-# print(flight_matches, type(flight_matches))
-# OUTPUT: [('IB', '3723', 'AMS', 'MAD', '06OCT')]  object list containing one tuple
 
-#Print the matches
-print("Airline: {} Flight number: {}".format(flight_matches[0][0], flight_matches[0][1]))
-print("Departure: {} Destination: {}".format(flight_matches[0][2], flight_matches[0][3]))
-print("Date: {}".format(flight_matches[0][4]))
-# OUTPUT:
-# Airline: LA Flight number: 4214
-# Departure: AER Destination: CDB
-# Date: 06NOV
+# Complete the regular expression to capture the words love or like or enjoy. Match and capture the words movie or concert. Match and capture anything appearing until the ..
+# Find all matches of the regex in each element of sentiment_analysis. Assign them to positive_matches.
+# Complete the .format() method to print out the results contained in positive_matches for each element in sentiment_analysis.
+# sentiment_analysis = [
+#     'I totally love the concert The Book of Souls World Tour. It kinda amazing!'
+#     , 'I enjoy the movie Wreck-It Ralph. I watched with my boyfriend.'
+#     , "I still like the movie Wish Upon a Star. Too bad Disney doesn't show it anymore."
+# ]
+# # Write a regex that matches sentences with the optional words
+# regex_positive = r"(love|like|enjoy).+?(movie|concert)\s(.+?)\."
+# for tweet in sentiment_analysis:
+#     # Find all matches of regex in tweet
+#     positive_matches = re.findall(regex_positive, tweet)
+#     # Complete format to print out the results
+#     print("Positive comments found {}".format(positive_matches))
+
+
+# Complete the regular expression to capture the words hate or dislike or disapprove. Match but don't capture the words movie or concert. Match and capture anything appearing until the ..
+# Find all matches of the regex in each element of sentiment_analysis. Assign them to negative_matches.
+# Complete the .format() method to print out the results contained in negative_matches for each element in sentiment_analysis.
+# sentiment_analysis = ['That was horrible! I really dislike the movie The cabin and the ant. So boring.'
+# , "I disapprove the movie Honest with you. It's full of cliches."
+# , 'I dislike very much the concert After twelve Tour. The sound was horrible.'
+# ]
+# # Write a regex that matches sentences with the optional words
+# regex_negative = r"(hate|dislike|disapprove).+?(?:movie|concert)\s(.+?)\."
+# for tweet in sentiment_analysis:
+#     # Find all matches of regex in tweet
+#     negative_matches = re.findall(regex_negative, tweet)
+
+#     # Complete format to print out the results
+#     print("Negative comments found {}".format(negative_matches))
+
+
+# contract = "Provider will invoice Client for Services performed within 30 days of performance. "\
+#     "Client will pay Provider as set forth in each Statement of Work within 30 days of receipt and acceptance of such invoice. "\
+#     "It is understood that payments to Provider for services rendered shall be made in full as agreed, "\
+#     "without any deductions for taxes of any kind whatsoever, "\
+#     "in conformity with Provider’s status as an independent contractor. "\
+#     "Signed on 03/25/2001."
+# # Write a regex that captures the month, day, and year in which the contract was signed. Scan contract for matches.
+# #  Wants: The dates appear as Signed on 05/24/2016 (05 indicating the month, 24 the day). You decide to use capturing groups to extract this information.
+# # Write regex and scan contract to capture the dates described
+# regex_dates = r"Signed\son\s(\d{2})/(\d{2})/(\d{4})"
+# dates = re.search(regex_dates, contract)
+# print(dates)
+# # Assign to each key the corresponding match
+# signature = {
+#     "day": dates.group(2),
+#     "month": dates.group(1),
+#     "year": dates.group(3)
+# }
+# print(signature)
+
+
+# html_tags = [
+#     '<body>Welcome to our course! It would be an awesome experience</body>'
+#     , '<article>To be a data scientist, you need to have knowledge in statistics and mathematics</article>'
+#     , '<nav>About me Links Contact me!'
+# ]
+# Complete the regex in order to match closed HTML tags. Find if there is a match in each string of the list html_tags. Assign the result to match_tag.
+# If a match is found, print the first group captured and saved in match_tag.
+# If no match is found, complete the regex to match only the text inside the HTML tag. Assign it to notmatch_tag.
+# Print the first group captured by the regex and save it in notmatch_tag.
+# for string in html_tags:
+#     # Complete the regex and find if it matches a closed HTML tags
+#     match_tag =  re.match(r"<(\w+)>.*?</\1>", string)
+
+#     print(match_tag)
+
+#     if match_tag:
+#         # If it matches print the first group capture
+#         print("Your tag {} is closed".format(match_tag.group(1)))
+#     else:
+#         # If it doesn't match capture only the tag
+#         notmatch_tag = re.match(r"<(\w+)>", string)
+#         # Print the first group capture
+#         print("Close your {} tag!".format(notmatch_tag.group(1)))
+
+
+sentiment_analysis = [
+    '@marykatherine_q i know! I heard it this morning and wondered the same thing. Moscooooooow is so behind the times'
+    , 'Staying at a friends house...neighborrrrrrrs are so loud-having a party'
+    , 'Just woke up an already have read some e-mail'
+]
+# Complete the regular expression to match an elongated word as described.
+# Search the elements in sentiment_analysis list to find out if they contain elongated words. Assign the result to match_elongated.
+# Assign the captured group number zero to the variable elongated_word.
+# Print the result contained in the variable elongated_word.
+
+# Complete the regex to match an elongated word
+regex_elongated = r"\w*(\w)\1\w*"
+
+for tweet in sentiment_analysis:
+    # Find if there is a match in each tweet
+    match_elongated = re.search(regex_elongated, tweet)
+
+    if match_elongated:
+        # Assign the captured group zero
+        elongated_word = match_elongated.group(0)
+
+        # Complete the format method to print the word
+        print("Elongated word found: {word}".format(word=elongated_word))
+    else:
+        print("No elongated word found")
