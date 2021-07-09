@@ -274,17 +274,29 @@ sentiment_analysis = [
 # Print the result contained in the variable elongated_word.
 
 # Complete the regex to match an elongated word
-regex_elongated = r"\w*(\w)\1\w*"
+# regex_elongated = r"\w*(\w)\1\w*"
 
-for tweet in sentiment_analysis:
-    # Find if there is a match in each tweet
-    match_elongated = re.search(regex_elongated, tweet)
+# for tweet in sentiment_analysis:
+#     # Find if there is a match in each tweet
+#     match_elongated = re.search(regex_elongated, tweet)
 
-    if match_elongated:
-        # Assign the captured group zero
-        elongated_word = match_elongated.group(0)
+#     if match_elongated:
+#         # Assign the captured group zero
+#         elongated_word = match_elongated.group(0)
 
-        # Complete the format method to print the word
-        print("Elongated word found: {word}".format(word=elongated_word))
-    else:
-        print("No elongated word found")
+#         # Complete the format method to print the word
+#         print("Elongated word found: {word}".format(word=elongated_word))
+#     else:
+#         print("No elongated word found")
+
+# Get all the words that are followed by the word python in sentiment_analysis. Print out the word found.
+sentiment_analysis = "You need excellent python skills to be a data scientist. Must be! Excellent python"
+# Positive lookahead
+look_ahead = re.findall(r"\w+(?=\spython)", sentiment_analysis)
+# Print out
+print(look_ahead)
+# Get all the words that are preceded by the word python or Python in sentiment_analysis. Print out the words found.
+# Positive lookbehind
+look_behind = re.findall(r"(?<=[Pp]ython\s)\w+", sentiment_analysis)
+# Print out
+print(look_behind)
