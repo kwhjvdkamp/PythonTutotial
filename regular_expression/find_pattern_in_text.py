@@ -289,14 +289,29 @@ sentiment_analysis = [
 #     else:
 #         print("No elongated word found")
 
-# Get all the words that are followed by the word python in sentiment_analysis. Print out the word found.
-sentiment_analysis = "You need excellent python skills to be a data scientist. Must be! Excellent python"
-# Positive lookahead
-look_ahead = re.findall(r"\w+(?=\spython)", sentiment_analysis)
-# Print out
-print(look_ahead)
-# Get all the words that are preceded by the word python or Python in sentiment_analysis. Print out the words found.
-# Positive lookbehind
-look_behind = re.findall(r"(?<=[Pp]ython\s)\w+", sentiment_analysis)
-# Print out
-print(look_behind)
+
+# # Get all the words that are followed by the word python in sentiment_analysis. Print out the word found.
+# sentiment_analysis = "You need excellent python skills to be a data scientist. Must be! Excellent python"
+# # Positive lookahead
+# look_ahead = re.findall(r"\w+(?=\spython)", sentiment_analysis)
+# # Print out
+# print(look_ahead)
+# # Get all the words that are preceded by the word python or Python in sentiment_analysis. Print out the words found.
+# # Positive lookbehind
+# look_behind = re.findall(r"(?<=[Pp]ython\s)\w+", sentiment_analysis)
+# # Print out
+# print(look_behind)
+
+# Use .findall() and the non-capturing group's negative lookahead '?!' and negative lookbehind '?<!'.
+# 1) Get all cell phones numbers that are not preceded [negative lookbehind '?<!'] by the optional area code.
+cellphones = ['4564-646464-01', '345-5785-544245', '6476-579052-01']
+print(cellphones)
+for phone in cellphones:
+    # Get all phone numbers not preceded by area code
+    number = re.findall(r"(?<![0-9]{3}-)[0-9]{4}-[0-9]{6}-[0-9]{2}", phone)
+    print(number)
+# 2) Get all the cell phones numbers that are not followed [negative lookahead '?!'] by the optional extension.
+for phone in cellphones:
+    # Get all phone numbers not followed by optional extension
+    number = re.findall(r"[0-9]{3}-[0-9]{4}-[0-9]{6}(?!-[0-9]{2})", phone)
+    print(number)
