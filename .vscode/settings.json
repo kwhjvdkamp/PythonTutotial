@@ -5,7 +5,9 @@
     "python.formatting.provider": "black",
     "python.analysis.extraPaths": [
         "download_csv/",
-        "download_csv/web"
+        "download_csv/web",
+        "regular_expressions/",
+        "web_scraping/"
     ],
     "python.pythonPath": "C:\\Users\\info\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 }
