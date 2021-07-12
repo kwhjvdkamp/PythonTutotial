@@ -366,7 +366,6 @@ costs = np.column_stack(([2, 1, 2, 1],
 
 # ==================================
 
-# pip 19.2.2 from c:\xxx\xxx\appdata\local\programs\python\python37\lib\site-packages\pip (python 3.7)
 # class NewClass:
 #     num = 0
 #     def __init__(self, num):
@@ -447,8 +446,9 @@ costs = np.column_stack(([2, 1, 2, 1],
 # scarlet_speedster = iter('Barry Allen')
 # print(*scarlet_speedster)
 # # # prints the whole string stored in the iter-object at once,
-# # there is the next functioni called a StopIteration-error is returned
-# # when the preceding call on scarlet_speedster is prefixed with an asterix
+# # there is the next function
+# # a StopIteration-error is returned
+# # when the preceding call on scarlet_speedster is prefixed with an asterisk
 # print(next(scarlet_speedster))
 
 
@@ -483,4 +483,3 @@ print(names[1:5])   #['Jan', 'Karel', 'Kees', 'Koen']
 
 
 print(1+1)
-
