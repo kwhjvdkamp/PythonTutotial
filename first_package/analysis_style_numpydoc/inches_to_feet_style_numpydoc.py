@@ -6,8 +6,6 @@ UNITS = ("in", "ft", "yd")
 
 def inches_to_feet(x, reverse=False):
     """
-    [According documentation style 'numpydoc' at MODULE level]
-
     Terminal command | pyment -w -o numpydoc inches_to_feet.py
     Flags
     -w          | overwrite
@@ -27,6 +25,10 @@ def inches_to_feet(x, reverse=False):
     Returns
     -------
     numpy.ndarray
+
+
+    [According documentation style 'numpydoc' at MODULE level]
+
     """
     if reverse:
         return x * INCHES_PER_FOOT

@@ -20,6 +20,9 @@ def count_words(filepath, words_list):
     -------
     <type>
 
+
+    [According documentation style 'numpydoc' at MODULE level]
+
     """
 
     # Open the text file
