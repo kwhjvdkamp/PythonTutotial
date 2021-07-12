@@ -1,4 +1,4 @@
-from learning_package_impyrial.learning_package_impyrial.utils import (
+from packaging_according_impyrial.learning_package_impyrial.utils import (
     check_units
 )
 
