@@ -1,7 +1,7 @@
 # Use
 # $ pip freeze
 #  on the terminal to create a list of dependencies
-# OUTPUT 
+# OUTPUT
 
 attrs==21.2.0
 Automat==20.2.0

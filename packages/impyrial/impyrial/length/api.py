@@ -1,11 +1,12 @@
 """User-facing functions."""
-import numpy as np
+
 from impyrial.utils import check_units
-from learning_package_impyrial.learning_package_impyrial.length.core import (
+from impyrial.length.core import (
     UNITS,
     inches_to_feet,
     inches_to_yards,
 )
+
 
 def convert_unit(x, from_unit, to_unit):
     """Convert from one length unit to another.

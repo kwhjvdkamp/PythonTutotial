@@ -26,7 +26,6 @@ def ounces_to_pounds(x, reverse=False):
     else:
         return x / OUNCES_PER_POUND
 
-
 def ounces_to_stone(x, reverse=False):
     """Convert weights between ounces and stone.
 

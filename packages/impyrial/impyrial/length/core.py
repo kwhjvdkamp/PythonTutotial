@@ -49,4 +49,3 @@ def inches_to_yards(x, reverse=False):
         return x * INCHES_PER_YARD
     else:
         return x / INCHES_PER_YARD
-
