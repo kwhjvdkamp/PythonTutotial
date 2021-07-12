@@ -74,7 +74,7 @@ tqdm==4.59.0
 traitlets==5.0.5
 Twisted==21.2.0
 twisted-iocpsupport==1.0.1
-urllib3==1.26.4
+urllib3==1.26.5
 w3lib==1.22.0
 wcwidth==0.2.5
 zope.interface==5.4.0
