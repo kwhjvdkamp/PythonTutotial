@@ -7,7 +7,6 @@ from impyrial.weight.core import (
     ounces_to_stone,
 )
 
-
 def convert_unit(x, from_unit, to_unit):
     """Convert from one weight unit to another.
 
@@ -46,5 +45,3 @@ def convert_unit(x, from_unit, to_unit):
         value = ounces_to_stone(ounces)
 
     return value
-
-

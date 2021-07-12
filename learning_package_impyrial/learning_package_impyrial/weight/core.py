@@ -4,7 +4,6 @@ OUNCES_PER_STONE = OUNCES_PER_POUND * 14.0  # 14 pounds in a stone
 
 UNITS = ("oz", "lb", "st")
 
-
 def ounces_to_pounds(x, reverse=False):
     """Convert weights between ounces and pounds.
 
