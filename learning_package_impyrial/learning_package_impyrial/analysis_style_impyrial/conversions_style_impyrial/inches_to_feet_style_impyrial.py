@@ -8,8 +8,6 @@ def inches_to_feet(x, reverse=False):
     """
     Conversions between inches and larger imperial length units
 
-    [According documentation style 'impyrial' at MODULE level]
-
     """
     if reverse:
         return x * INCHES_PER_FOOT
