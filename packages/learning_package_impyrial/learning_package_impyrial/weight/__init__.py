@@ -1,5 +1,5 @@
 __doc__ = """
-impyrial.weight
+learning_package_impyrial.weight
 ===============
 Weight conversion between imperial units.
 """
