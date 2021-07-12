@@ -2,7 +2,7 @@ from learning_package_impyrial.learning_package_impyrial.length.api import (
     convert_unit
 )
 
-from learning_package_impyrial.learning_package_impyrial.length.core import (
+from learning_package_impyrial.length.core import (
     UNITS,
     inches_to_feet,
     inches_to_yards,
