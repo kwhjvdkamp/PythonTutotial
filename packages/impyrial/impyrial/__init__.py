@@ -1,5 +1,5 @@
 __doc__ = """
-learning_package_impyrial
+impyrial
 ========
 A package for converting between imperial measurements of length and weight.
 """

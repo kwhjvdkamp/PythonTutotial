@@ -1,5 +1,6 @@
 """Basic backend utility functions"""
 
+
 def check_units(from_unit, to_unit, valid_units):
     """Check whether two units are both in a set.
 

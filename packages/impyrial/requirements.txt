@@ -26,7 +26,7 @@ hpack==3.0.0
 hyperframe==5.2.0
 hyperlink==21.0.0
 idna==2.10
-learning_package_impyrial==0.1.0
+impyrial==0.1.0
 incremental==21.3.0
 ipython==7.25.0
 ipython-genutils==0.2.0

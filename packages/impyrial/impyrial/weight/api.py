@@ -1,11 +1,12 @@
 """User-facing functions."""
-import numpy as np
+
 from impyrial.utils import check_units
 from impyrial.weight.core import (
     UNITS,
     ounces_to_pounds,
     ounces_to_stone,
 )
+
 
 def convert_unit(x, from_unit, to_unit):
     """Convert from one weight unit to another.
