@@ -1,17 +1,11 @@
+__doc__ = """
+impyrial
+========
+A package for converting between imperial measurements of length and weight.
 """
 
-[Absolute Imports]
-Statement 'from <package_name>.<subpackage_name> import <package>' says
-> explicit importing <package> at this level
+__author__ = """James Fulton"""
+__version__ = "0.1.0"
 
-or
-
-[Relative Imports]
-Statement 'from . import <package>' says
-> start searching from the current file
-> from '.' the 'current' directory import <package>
-
-
-[According documentation style 'impyrial' at PACKAGE level]
-
-"""
+from . import length  # noqa : F401
+from . import weight  # noqa : F401
