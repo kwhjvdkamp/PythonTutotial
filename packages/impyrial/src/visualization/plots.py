@@ -4,11 +4,15 @@ import numpy as np
 
 def get_plot_for_best_fit_line(slope, intercept, x_array, y_array, title):
     """
-    slope: slope of best fit line
-    intercept: intercept of best fit line
-    x_array: array containing housing areas
-    y_array: array containing housing prices
-    title: title of the plot
+    Arguments:
+        slope: slope of best fit line
+        intercept: intercept of best fit line
+        x_array: array containing housing areas
+        y_array: array containing housing prices
+        title: title of the plot
+
+    Returns:
+        matplotlib.figure.Figure()
     """
     x_array_ndim = x_array.ndim
     if not x_array_ndim == 1:
