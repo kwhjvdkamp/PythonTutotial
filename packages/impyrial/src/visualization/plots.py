@@ -4,6 +4,10 @@ import numpy as np
 
 def get_plot_for_best_fit_line(slope, intercept, x_array, y_array, title):
     """
+    Description:
+        The best fit line that the test will draw
+        follows the equation: y = 5x - 2.
+
     Arguments:
         slope: slope of best fit line
         intercept: intercept of best fit line
