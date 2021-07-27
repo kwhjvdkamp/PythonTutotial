@@ -1,4 +1,13 @@
 import numpy as np
+import pandas as pd
+
+from selectorlib import Extractor
+
+# pip install selectorlib possibility to solve 'ModuleNotFoundError: No module named \'Extractor\' '
+test = Extractor.extract('html','text.txt')
+print('Type of object \'Test\'', type(test))
+print('Type of object \'Test\'', test)
+
 
 # class Answer:
 #     def __init__(self, girl_ans, boy_ans):
