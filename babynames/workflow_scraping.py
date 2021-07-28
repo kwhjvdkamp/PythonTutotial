@@ -23,6 +23,7 @@ def parse_html_table(table):
         testRow = etree.HTML(str(tr))
         # Catch row containing div containing data only
         dataDivs = testRow.xpath('//*[@class=\'pCellBodyR\']')
+        repr(dataDivs)
         if len(dataDivs) == 14:
             my_row = []
             for dataDiv in dataDivs:
