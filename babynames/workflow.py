@@ -25,6 +25,7 @@
 # Let us download the zip file and extract the files into a directory so we can inspect the files.
 
 # Import modules and functions
+import os
 import numpy as np
 import pandas as pd
 from wquantiles import quantile
@@ -45,24 +46,45 @@ import shutil
 import wget
 from zipfile import ZipFile
 
-# Babynames
+cwd = os.getcwd()
+
+
+# **********************************************************************************************************
+# !!! Important !!!
+# !!! Clean up project by removing any assets that are no longer needed !!!
+# ? in sub directory /babynames/
+# ?     sub directory   > data-us
+# ?     zip file        > names.zip
+# ?     file            > names.csv.gz
+# ?     file            > lifetables.csv
+# **********************************************************************************************************
+
+
+pathSubDirDataUs = cwd + '\\babynames\\data-us'
+if os.path.exists(pathSubDirDataUs):
+     shutil.rmtree(pathSubDirDataUs, ignore_errors=True)
+
+pathFileNamesCsvGz = cwd + '\\babynames\\names.csv.gz'
+if os.path.exists(pathFileNamesCsvGz):
+  os.remove(pathFileNamesCsvGz)
+
 # Download the zip file from "https://www.ssa.gov/oact/babynames/names.zip"
 wget.download("https://www.ssa.gov/oact/babynames/names.zip")
 
 # Unzip data files to a directory named 'data-us'
-zip_names = ZipFile('names.zip')
-zip_names.extractall('data-us')
+zipName = 'names.zip'
+zip_names = ZipFile(zipName)
+zip_names.extractall(cwd + '\\babynames\\' + 'data-us')
 zip_names.close()
-# **********************************************************************************************************
 
+# Remove zip file after it has been downloaded and the content has been unzipped
+pathFileNamesZip = cwd + '\\' + zipName
+if os.path.exists(pathFileNamesZip):
+    os.remove(pathFileNamesZip)
 
-# **********************************************************************************************************
-# Let us now read the data for each year and combine them into a single data frame.
-# Resulting dataframe saved as a gzip compressed csv file for subsequent usage.
-
-# Read data for each year as a dataframe.
+# Read the data for each year and combine them into a single data frame.
 babynames = []
-for file in Path('data-us').iterdir():
+for file in Path(cwd + '\\babynames\\' + 'data-us').iterdir():
     if file.name.endswith('txt'):
       df = pd.read_csv(file, names=['name', 'sex', 'births'])
       df['year'] = int(file.name[3:7])
@@ -72,54 +94,7 @@ for file in Path('data-us').iterdir():
 babynames = pd.concat(babynames)
 
 # Save dataframe as csv.gz file with gzip compression
-babynames.to_csv('names.csv.gz', index=False, compression='gzip')
-# **********************************************************************************************************
+babynames.to_csv(pathFileNamesCsvGz, index=False, compression='gzip')
 
 
 # **********************************************************************************************************
-import requests
-import re
-
-from bs4 import BeautifulSoup
-import Extractor
-
-# Lifetables
-# The lifetables data is available as html files on the SSA website. We will scrape the data,
-# parse it and combine all lifetables into a single dataframe and save it as a csv file.
-
-def parse_lifetable(lifetable, year):
-    """Parse extracted lifetable into a pandas dataframe"""
-    df = pd.DataFrame(
-        [[float(re.sub('\n|,', '', x)) if x != u"\xa0" else None for x in y] for y in lifetable[4:]],
-        columns = [re.sub('\n|\s', '', x) for i, x in enumerate(lifetable[1])]
-    )
-    df_male = df.iloc[:,:7].assign(sex = 'M')
-    df_female = df.iloc[:,8:].assign(sex = 'F')
-    df = pd.concat([df_male, df_female]).rename(columns={"x": "age"})
-    return df.assign(year = year).dropna()
-
-def scrape_lifetable(year):
-    """Scrape lifetable into a list of lists"""
-    r = requests.get(f"https://www.ssa.gov/oact/NOTES/as120/LifeTables_Tbl_7_{year}.html")
-    doc = BeautifulSoup(r.content, 'html.parser')
-    tables = doc.find_all("table")
-    table = tables[1]
-    extractor = Extractor(table)
-    extractor.parse()
-    return extractor.return_list()
-
-def get_lifetable(year):
-    """Get lifetable for a given year"""
-    lifetable = scrape_lifetable(year)
-    df_lifetable = parse_lifetable(lifetable, year)
-    return df_lifetable
-
-def get_lifetables():
-    """Get lifetables for all years available"""
-    years = range(1900, 2100, 10)
-    lifetables = pd.concat([get_lifetable(year) for year in years])
-    lifetables.rename(columns={"": "ex"}, inplace=True)
-    return lifetables
-
-lifetables = get_lifetables()
-lifetables.to_csv('lifetables.csv', index=False)

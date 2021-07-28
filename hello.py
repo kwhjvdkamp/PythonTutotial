@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from selectorlib import Extractor
+# from selectorlib import Extractor
 
-# pip install selectorlib possibility to solve 'ModuleNotFoundError: No module named \'Extractor\' '
-test = Extractor.extract('html','text.txt')
-print('Type of object \'Test\'', type(test))
-print('Type of object \'Test\'', test)
+# # pip install selectorlib possibility to solve 'ModuleNotFoundError: No module named \'Extractor\' '
+# test = Extractor.extract('html','text.txt')
+# print('Type of object \'Test\'', type(test))
+# print('Type of object \'Test\'', test)
 
 
 # class Answer:
