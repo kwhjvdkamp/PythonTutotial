@@ -195,31 +195,73 @@ from datetime import datetime
 # print(indAddedCounts)
 
 
-class Employee:
-    def __init__(self, name, salary=30000):
-        self.name = name
-        self.salary = salary
+# class Employee:
+#     def __init__(self, name, salary=30000):
+#         self.name = name
+#         self.salary = salary
 
-    def give_raise(self, amount):
-        self.salary += amount
-
-
-class Manager(Employee):
-    def display(self):
-        print("Manager ", self.name)
-
-    def __init__(self, name, salary=50000, project=None):
-        Employee.__init__(self, name, salary)
-        self.project = project
-
-    # Add a give_raise method
-    def give_raise(self, amount, bonus=1.05):
-        new_amount = amount * bonus
-        Employee.give_raise(self, new_amount)
+#     def give_raise(self, amount):
+#         self.salary += amount
 
 
-mngr = Manager("Ashta Dunbar", 78500)
-mngr.give_raise(1000)
-print(mngr.salary)
-mngr.give_raise(2000, bonus=1.03)
-print(mngr.salary)
+# class Manager(Employee):
+#     def display(self):
+#         print("Manager ", self.name)
+
+#     def __init__(self, name, salary=50000, project=None):
+#         Employee.__init__(self, name, salary)
+#         self.project = project
+
+#     # Add a give_raise method
+#     def give_raise(self, amount, bonus=1.05):
+#         new_amount = amount * bonus
+#         Employee.give_raise(self, new_amount)
+
+# mngr = Manager("Ashta Dunbar", 78500)
+# mngr.give_raise(1000)
+# print(mngr.salary)
+# mngr.give_raise(2000, bonus=1.03)
+# print(mngr.salary)
+
+
+# # MODIFY the function to catch exceptions
+# def invert_at_index(x, ind):
+#     print('x:       ', x)
+#     print('ind:     ', ind)
+#     print('x[ind]:  ', x[ind])
+#     try:
+#         return 1/x[ind]
+#     except ZeroDivisionError:
+#         print("Cannot divide by zero!")
+#     except IndexError:
+#         print("Index out of range!")
+
+# a = [5,6,0,7]
+
+# # Works okay
+# print(invert_at_index(a, 1))
+
+# # Potential ZeroDivisionError
+# print(invert_at_index(a, 2))
+
+# # Potential IndexError
+# print(invert_at_index(a, 5))
+
+
+class Parent:
+    def talk(self):
+        print("Parent talking!")
+
+class Child(Parent):
+    def talk(self):
+        print("Child talking!")
+
+class TalkativeChild(Parent):
+    def talk(self):
+        print("TalkativeChild talking!")
+        Parent.talk(self)
+
+p, c, tc = Parent(), Child(), TalkativeChild()
+
+for obj in (p, c, tc):
+    obj.talk()
