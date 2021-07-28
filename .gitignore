@@ -131,3 +131,9 @@ dmypy.json
 # End of https://www.gitignore.io/api/python
 .vscode/settings.json
 .vscode/settings.json
+
+
+babynames/names.zip
+babynames/names.csv.gz
+babynames/lifetables.csv
+babynames/data-us/**
