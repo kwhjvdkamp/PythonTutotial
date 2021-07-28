@@ -1,4 +1,7 @@
 import numpy as np
+# import datetime from datetime
+from datetime import datetime
+
 
 # class MyCounter:
 #     def set_count(self,n):
@@ -83,14 +86,18 @@ import numpy as np
 # Write the class Point as outlined in the instructions
 # class Point:
 #     """ A point on a 2D plane
-
 #    Attributes
 #     ----------
 #     x : float, default 0.0. The x coordinate of the point
 #     y : float, default 0.0. The y coordinate of the point
 #     """
 
+#     # Class attributes are GLOBAL variables (constants), no self
+#     # CAP_ITAL = '<string>'or INT/FLOAT
+#     # To be used as: ClassName.CAP_ITAL
+
 #     def __init__(self, x=0.0, y=0.0):
+#       # Instance attributes (binding to 'self'; the current instance)
 #       self.x = x
 #       self.y = y
 
@@ -113,3 +120,106 @@ import numpy as np
 # print((pt.x, pt.y))
 # pt.y = 4.0
 # print(pt.distance_to_origin())
+
+
+# class Player:
+#     MAX_POSITION = 10
+
+#     def __init__(self):
+#         self.position = 0
+
+#     # Add a move() method with steps parameter
+#     def move(self, steps):
+#         if self.position + steps < Player.MAX_POSITION:
+#             self.position = self.position + steps
+#         else:
+#             self.position = Player.MAX_POSITION
+
+
+#     # This method provides a rudimentary visualization in the console
+#     def draw(self):
+#         drawing = "-" * self.position + "|" +"-"*(Player.MAX_POSITION - self.position)
+#         print(drawing)
+
+# p = Player(); p.draw()
+# p.move(4); p.draw() # moves 'pipe' 4 steps (if)
+# p.move(5); p.draw() # moves 'pipe' 5 steps (if)
+# p.move(3); p.draw() # moves 'pipe' 10 steps (else)
+
+
+# class BetterDate:
+#     def __init__(self, year, month, day):
+#       self.year, self.month, self.day = year, month, day
+
+#     @classmethod
+#     def from_str(cls, datestr):
+#       year, month, day = map(int, datestr.split("-"))
+#       return cls(year, month, day)
+
+#     # Define a class method from_datetime accepting a datetime object
+#     @classmethod
+#     def from_datetime(cls, datedatetime):
+#       return cls(datedatetime.year, datedatetime.month, datedatetime.day)
+
+
+# # You should be able to run the code below with no errors:
+# today = datetime.today()
+# now = datetime.now().isoformat()
+# print(now.split("T")[0]) # current date and time
+
+# bdStr = BetterDate.from_str(now.split("T")[0])
+# print(bdStr.year)
+# print(bdStr.month)
+# print(bdStr.day)
+# bdDatetime = BetterDate.from_datetime(today)
+# print(bdDatetime.year)
+# print(bdDatetime.month)
+# print(bdDatetime.day)
+
+
+# class Counter:
+#     def __init__(self, count=0):
+#        self.count = count
+
+#     def add_counts(self, n):
+#         print('self', self.count)
+#         print('n', n)
+#         self.count += n
+#         print('self', self.count)
+
+# class Indexer(Counter):
+#    pass
+
+# ind = Indexer()
+# indAddedCounts = ind.add_counts(5)
+# print(indAddedCounts)
+
+
+class Employee:
+    def __init__(self, name, salary=30000):
+        self.name = name
+        self.salary = salary
+
+    def give_raise(self, amount):
+        self.salary += amount
+
+
+class Manager(Employee):
+    def display(self):
+        print("Manager ", self.name)
+
+    def __init__(self, name, salary=50000, project=None):
+        Employee.__init__(self, name, salary)
+        self.project = project
+
+    # Add a give_raise method
+    def give_raise(self, amount, bonus=1.05):
+        new_amount = amount * bonus
+        Employee.give_raise(self, new_amount)
+
+
+mngr = Manager("Ashta Dunbar", 78500)
+mngr.give_raise(1000)
+print(mngr.salary)
+mngr.give_raise(2000, bonus=1.03)
+print(mngr.salary)

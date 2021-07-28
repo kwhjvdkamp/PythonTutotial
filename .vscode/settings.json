@@ -7,7 +7,8 @@
         "download_csv/",
         "download_csv/web",
         "regular_expressions/",
-        "web_scraping/"
+        "web_scraping/",
+        "babynames/"
     ],
     "python.pythonPath": "C:\\Users\\info\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
 }
