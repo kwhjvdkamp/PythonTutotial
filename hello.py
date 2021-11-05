@@ -55,13 +55,15 @@ import pandas as pd
 # area, perimeter = rectangle(15 ,3)
 # print ((area, perimeter))
 
-# team = ['Barry', 'Dr. Wells', 'Cisco', 'Caitlin']
-# flash = iter(team)
+team = ['Barry', 'Dr. Wells', 'Cisco', 'Caitlin']
+flash = iter(team)
+print(next(flash))
+print(next(flash))
 # print(next(flash))
 # print(next(flash))
-# # output
-# # Barry
-# # Dr. Wells
+# output
+# Barry
+# Dr. Wells
 
 # names = ['Thor Odinson', 'Steve Rogers']
 # avengers = list(enumerate(names, start = 2))
@@ -76,6 +78,5 @@ import pandas as pd
 
 # random_number = np.random.random()
 # print(random_number)
-
 
 print('HELLO Pythonista')
