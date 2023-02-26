@@ -63,10 +63,10 @@ import pandas as pd
 # # Barry
 # # Dr. Wells
 
-# names = ['Thor Odinson', 'Steve Rogers']
-# avengers = list(enumerate(names, start = 2))
+# names = ['Thor Olson, 'Steve Rogers']
+# avengers = list(enumerate(names, start = 2))s
 # # output
-# # [(2, 'Thor Odinson', (3, 'Steve Rogers'))]
+# # [(2, 'Thor Olson', (3, 'Steve Rogers'))]
 
 # x = [7, 'D', 'E', 8, 9, 'F']
 # strings = [y for y in x if type(y) == str]
