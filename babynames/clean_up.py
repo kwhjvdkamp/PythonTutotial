@@ -34,7 +34,7 @@ if os.path.exists(pathSubDirBabyNames):
     else:
         print(f'Compressed archive  \'{compressedArchive}\'     removed!')
 
-    # Remove compilated csv
+    # Remove compiled csv
     fileCsv='lifetables.csv'
     if os.path.exists(pathSubDirBabyNames+'\\'+fileCsv):
         os.remove(pathSubDirBabyNames+'\\'+fileCsv)
